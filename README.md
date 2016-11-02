@@ -7,7 +7,7 @@ My bash extensions.
 ------------
 installation
 ------------
-Add these lines into ~/.bashrc, replacing <<<you repo location>>> with the location of your repo
+Add these lines into ~/.bashrc, replacing ```<<<you repo location>>>``` with the location of your repo
 
 
 ```bash
