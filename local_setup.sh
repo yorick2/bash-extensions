@@ -137,6 +137,7 @@ function getVhostLocation() {
      return 1;
   fi
   url=$1
+  
   vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
   if [ ! -a "${vhost_file_location}" ]; then
   	vhost_folder_location='/etc/apache2/extra';
@@ -171,6 +172,9 @@ function update_localxml() {
    vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf';
     if [ ! -a "${vhost_file_location}" ]; then
       vhost_file_location = '/etc/apache2/extra/httpd-vhosts.conf';
+    fi
+    if [ ! -a "${vhost_file_location}" ]; then
+      vhost_file_location = '/etc/apache2/sites-enabled/httpd-vhosts.conf';
     fi  
    if [  -z $1  ] || [  -z $2 ] ; then
      echo ;
@@ -191,8 +195,11 @@ function mkvhost() {
     scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     # file locations
     httpdvhosts='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf';
-    if [ ! -a "${vhost_file_location}" ]; then
-      httpdvhosts = '/etc/apache2/extra/httpd-vhosts.conf';
+    if [ ! -e "${httpdvhosts}" ]; then
+      httpdvhosts='/etc/apache2/extra/httpd-vhosts.conf';
+    fi
+    if [ ! -e "${httpdvhosts}" ]; then
+      httpdvhosts='/etc/apache2/sites-enabled/httpd-vhosts.conf';
     fi
     hostsfile='/etc/hosts'
     setupfile='${scriptDir}/local_setup_files/vhost_template.txt'
