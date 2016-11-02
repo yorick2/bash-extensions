@@ -188,13 +188,14 @@ function update_localxml() {
 
 # make vhost but dont setup magento
 function mkvhost() {
+    scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
     # file locations
     httpdvhosts='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf';
     if [ ! -a "${vhost_file_location}" ]; then
       httpdvhosts = '/etc/apache2/extra/httpd-vhosts.conf';
     fi
     hostsfile='/etc/hosts'
-    setupfile='~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt'
+    setupfile='${scriptDir}/local_setup_files/vhost_template.txt'
     if [  -z $1  ] || [  -z $2 ] ; then
       echo ;
       echo 'sets up a vhost (adds to hotst file and httpd-vhosts.conf file)'
@@ -219,18 +220,18 @@ function mkvhost() {
           echo "--> no need to update vhosts file"
       else
           echo "--> updating vhosts file"
-          
+
           #vhostdefault=$( cat "${setupfile}" );
           
           #vhostdefault=$(cat ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt );
          # vhostdetails=$( echo "${vhostdefault}" | sed -e"s/myurl/${url}/" | sed -e"s/subfolder/${subfolder}/" );
           #echo  $vhostdetails >> ${httpdvhosts};
           
-          cp ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt.swp
-          sed -i "s/myurl/${url}/" ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt.swp
-          sed -i "s/subfolder/${regexSubfolder}/" ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt.swp
-          cat ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt.swp >> ${httpdvhosts};
-          rm ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt.swp
+          cp ${scriptDir}/local_setup_files/vhost_template.txt ${scriptDir}/local_setup_files/vhost_template.txt.swp
+          sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
+          sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
+          cat ${scriptDir}/local_setup_files/vhost_template.txt.swp >> ${httpdvhosts};
+          rm ${scriptDir}/local_setup_files/vhost_template.txt.swp
 
           restart="true";
       fi
@@ -292,10 +293,10 @@ function setupLocalMagento1() {
       if [ ! -z ${htdocsLocation} ] ; then
         cd ${htdocsLocation}
       fi
-      DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-      cp ${DIR}/local_setup_files/htaccess .htaccess
+      scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+      cp ${scriptDir}/local_setup_files/htaccess .htaccess
       echo "------- copying local.xml -------";
-      cp ${DIR}/local_setup_files/local.xml app/etc
+      cp ${scriptDir}/local_setup_files/local.xml app/etc
       echo "------- updating local.xml -------";
       update_localxml "${dbname}" "${url}";
       echo "------- flushing cache -------";
