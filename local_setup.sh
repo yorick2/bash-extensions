@@ -261,6 +261,7 @@ function setupLocalMagento1() {
       subfolder=$1;
       dbfile=$2;
       url=$3;
+
       if [ -z $4 ] ; then
         if [ -e "/Users/Paul/Documents/repositories/sites/${subfolder}/htdocs" ] ; then
             htdocsLocation="htdocs"
@@ -291,9 +292,10 @@ function setupLocalMagento1() {
       if [ ! -z ${htdocsLocation} ] ; then
         cd ${htdocsLocation}
       fi
-      cp ~/Documents/oh-my-zsh-extensions/local_setup_files/htaccess .htaccess
+      DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+      cp ${DIR}/local_setup_files/htaccess .htaccess
       echo "------- copying local.xml -------";
-      cp ~/Documents/oh-my-zsh-extensions/local_setup_files/local.xml app/etc
+      cp ${DIR}/local_setup_files/local.xml app/etc
       echo "------- updating local.xml -------";
       update_localxml "${dbname}" "${url}";
       echo "------- flushing cache -------";
