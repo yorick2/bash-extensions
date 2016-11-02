@@ -238,7 +238,11 @@ function mkvhost() {
           sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
           sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
           cat ${scriptDir}/local_setup_files/vhost_template.txt.swp >> ${httpdvhosts};
-          rm ${scriptDir}/local_setup_files/vhost_template.txt.swp
+          # rm ${scriptDir}/local_setup_files/vhost_template.txt.swp
+
+           echo ------
+           echo ${httpdvhosts}
+           echo ------
 
           restart="true";
       fi
