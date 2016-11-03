@@ -1,3 +1,6 @@
+# turn on auto change directory. so dont have to type cd when changing directory
+shopt -s autocd
+
 alias n98fl='echo running n98-magerun.phar cache:flush; n98-magerun.phar cache:flush'
 alias n98nu='echo running n98-magerun.phar admin:user:create; n98-magerun.phar admin:user:create'
 alias n98pass='echo running n98-magerun.phar admin:user:change-password; n98-magerun.phar admin:user:change-password'

@@ -1,3 +1,17 @@
+alias g='git'
+alias ga='git add'
+alias gc='git commit'
+alias gco='git checkout'
+alias gcm='git checkout master'
+alias gcd='git checkout develop'
+alias gcs='git checkout staging'
+alias gcp='git cherry-pick'
+alias gb='git branch'
+alias gst='git status'
+alias gl='git pull'
+alias gm='git merge'
+alias grup='git remote update'
+
 export PATH="/usr/local/mysql/bin:$PATH"
 
 alias gcd='git checkout develop'
