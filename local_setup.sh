@@ -275,7 +275,7 @@ function setupLocalMagento1() {
       url=$3;
 
       if [ -z $4 ] ; then
-        if [ -e "/Users/Paul/Documents/repositories/sites/${subfolder}/htdocs" ] ; then
+        if [ -e "/Users/Paul/Documents/Repositories/sites/${subfolder}/htdocs" ] ; then
             htdocsLocation="htdocs"
         fi
       else
