@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # n98-magerun.phar
+alias n98='echo running n98-magerun.phar; n98-magerun.phar'
 alias n98fl='echo running n98-magerun.phar cache:flush; n98-magerun.phar cache:flush'
 alias n98nu='echo running n98-magerun.phar admin:user:create; n98-magerun.phar admin:user:create'
 alias n98pass='echo running n98-magerun.phar admin:user:change-password; n98-magerun.phar admin:user:change-password'
