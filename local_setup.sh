@@ -215,6 +215,16 @@ function mkvhost() {
       url=$2;
       restart="false";
       regexSubfolder=${magentoSubfolder/\//\\\/}
+
+      if [ ! -w "${httpdvhosts}" ] ; then
+            echo "${httpdvhosts} is not writable"
+            return
+      fi
+      if [ ! -w "/etc/hosts" ] ; then
+            echo "/etc/hosts is not writable"
+            return
+      fi
+
       if grep -q "${url}" /etc/hosts ; then
          echo "--> no need to update hosts file"
       else
@@ -222,7 +232,9 @@ function mkvhost() {
          echo '127.0.0.1 '${url} >> ${hostsfile};
          restart="true";
       fi
-      
+
+
+
       if grep -q "${url}" ${httpdvhosts} ; then
           echo "--> no need to update vhosts file"
       else
