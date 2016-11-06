@@ -325,11 +325,8 @@ function setupLocalMagento1() {
 function listhosts(){
   hosts_file_location='/etc/hosts';
   string=$( grep '127.0.0.1' ${hosts_file_location} | sed -e"s/127\.0\.0\.1//g" | sort);
-  if [ -z $1 ] ; then
-    string=$(echo ${string} | sed -e"s/\s//g");
-  else
+  if [ ! -z $1 ] ; then
     string=$( echo ${string} | grep $1 );
-    string=$(echo ${string} | sed -e"s/\s//g");
   fi
   echo ${string};
 }
