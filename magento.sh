@@ -19,16 +19,19 @@ alias n982pass='echo running n98-magerun2.phar admin:user:change-password; n98-m
 alias n982re='echo running n98-magerun2.phar index:reindex:all; n98-magerun2.phar index:reindex:all'
 alias n982dis='echo running n98-magerun2.phar cache:disable; n98-magerun2.phar cache:disable'
 
-alias magento2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
-alias magento2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
+alias mage2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
+alias mage2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
 
-alias magento2UpgradeNStatic="echo 'php bin/magento setup:upgrade \
+alias mage2modules='php bin/magento module:status'
+
+
+alias mage2UpgradeNStatic="echo 'php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean' \
  ; php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean"
-alias magento2staticFlush="echo 'php bin/magento setup:static-content:deploy \
+alias mage2staticFlush="echo 'php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean' \
  ; php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean"
