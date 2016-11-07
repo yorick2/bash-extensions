@@ -184,7 +184,22 @@ function gb2b() {
     && echo "\n-------\npull changes from bitbucket \n-------"  \
     && git pull bitbucket $1 \
     && echo "\n-------\npush changes to bitbucket\n-------"  \
-    && git push beanstalk $1 
+    && git push beanstalk $1
   fi
 }
 
+# git autocompletes
+__git_complete g __git_main
+__git_complete ga _git_add
+__git_complete gc _git_commit
+__git_complete gco _git_checkout
+__git_complete gcp _git_cherry_pick
+__git_complete gb _git_branch
+__git_complete gst _git_status
+__git_complete gl _git_pull
+__git_complete gm _git_merge
+__git_complete gm2b _git_merge
+__git_complete gmmm _git_merge
+__git_complete gmmd _git_merge
+__git_complete gmb2b _git_merge
+__git_complete grup _git_remotes
