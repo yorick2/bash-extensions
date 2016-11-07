@@ -9,7 +9,7 @@ alias gcp='git cherry-pick'
 alias gb='git branch'
 alias gst='git status'
 alias gl='git pull'
-alias gm='git merge'
+alias gm='git merge --no-ff '
 alias grup='git remote update'
 
 export PATH="/usr/local/mysql/bin:$PATH"
@@ -93,7 +93,7 @@ function gmm (){
   BRANCH=$1;
   if [  -z $1  ] || [ "$1" = "." ] 
   then
-   git_merge_branchs $(git_current_branch) $currentBranch master;
+   git_merge_branchs $(git_current_branch) master;
   else
     if [ -z $2 ]
     then
