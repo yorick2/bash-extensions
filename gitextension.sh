@@ -34,17 +34,17 @@ function git_merge_branchs() {
     echo "e.g. git_merge_branchs branch1 master"
     return
   else
-    echo "\n-------\nremote update\n-------" \
+    echo "-------remote update-------" \
     && git remote update  \
-    && echo "\n-------\ncheckout $1\n-------"  \
+    && echo "-------checkout $1-------"  \
     && git checkout $1 \
-    && echo "\n-------\npull $1\n-------"  \
+    && echo "-------pull $1-------"  \
     && git pull \
-    && echo "\n-------\ncheckout $2\n-------"  \
+    && echo "-------checkout $2-------"  \
     && git checkout $2 \
-    && echo "\n-------\npull $2\n-------"  \
+    && echo "-------pull $2-------"  \
     && git pull   \
-    && echo "\n-------\nmerge $1 into $2\n-------"  \
+    && echo "-------merge $1 into $2-------"  \
     && git merge --no-ff $1
   fi
 }
@@ -138,7 +138,7 @@ function gk() {
   if [ -z $1 ]
   then
     git remote update \
-    && echo "git remote updated\n" \
+    && echo "git remote updated" \
     && echo "running gitk --all --branches" \
     && gitk --all --branches
   else
@@ -156,7 +156,7 @@ function gx() {
   if [ -z $1 ]
   then
     git remote update \
-    && echo "git remote updated\n" \
+    && echo "git remote updated" \
     && echo "running gitx --all" \
     && gitx --all
   else
@@ -177,13 +177,13 @@ function gb2b() {
     echo "gb2b <<<branch>>>"
     echo "e.g. gb2b master"
   else
-    echo "\n-------\nremote update\n-------" \
+    echo "-------remote update-------" \
     && git remote update  \
-    && echo "\n-------\ncheckout beanstalk/$1\n-------"  \
+    && echo "-------checkout beanstalk/$1-------"  \
     && git checkout beanstalk/$1 \
-    && echo "\n-------\npull changes from bitbucket \n-------"  \
+    && echo "-------pull changes from bitbucket -------"  \
     && git pull bitbucket $1 \
-    && echo "\n-------\npush changes to bitbucket\n-------"  \
+    && echo "-------push changes to bitbucket-------"  \
     && git push beanstalk $1
   fi
 }
