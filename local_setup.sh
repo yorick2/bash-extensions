@@ -270,79 +270,17 @@ function mkvhost() {
     fi  
 }
 
-# make vhost and setup magento
-######## needs work ########
-function setupLocalMagento1() {
-  if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
-      echo ;
-      echo 'import database, make into vhost, add .htaccess, copy local.xml'
-      echo "dosn't download git repo or create folder"
-      echo ''
-      echo 'arguments missing'
-      echo 'setupLocalMagento1 <<sub folder>> <<db file>> <<url>>'
-      echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>>'
-      echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>> <<db>>'
-      echo 'please try again'
-    else  
-      subfolder=$1;
-      dbfile=$2;
-      url=$3;
 
-      eval userDir=~$(whoami); # get user folder location
-
-      if [ -z $4 ] ; then
-        if [ -e "${userDir}/Documents/Repositories/sites/${subfolder}/htdocs" ] ; then
-            htdocsLocation="htdocs"
-        fi
-      else
-            htdocsLocation=$4
-      fi
-      if [  -z $5  ]; then
-        dbname=${dbfile%.*};
-        dbname=${dbname%.tar};
-        dbname=${dbname##*/};
-        dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
-      else
-        dbname=$5
-      fi
-      echo "------- importing database -------";
-      import2mysql ${dbfile} ${url} ${dbname};
-      echo "------- making vhost -------";
-      repo # move to repos folder
-      if [  -z ${htdocsLocation}  ] ; then
-          mkvhost ${subfolder} ${url};
-      else
-          mkvhost "${subfolder}/$htdocsLocation" ${url};
-      fi
-      echo "------- adding .htaccess -------";
-      sites; # move to repos folder
-      cd ${subfolder}
-      if [ ! -z ${htdocsLocation} ] ; then
-        cd ${htdocsLocation}
-      fi
-      scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-      cp ${scriptDir}/local_setup_files/htaccess .htaccess
-      echo "------- copying local.xml -------";
-      cp ${scriptDir}/local_setup_files/local.xml app/etc
-      echo "------- updating local.xml -------";
-      update_localxml "${dbname}" "${url}";
-      echo "------- flushing cache -------";
-      n98-magerun.phar cache:flush;
-      echo ran 'n98-magerun.phar cache:flush' here:
-      pwd
-      echo 'n98 sometimes throws an error on this line, just ignore it'
-      #echo "------- reindexing -------";
-      #n98-magerun.phar index:reindex:all;
-      echo 'mamp users: please restart mamp'
-    fi
-}
 
 # list all my vhosts in hosts file that are local
 function listhosts(){
   hosts_file_location='/etc/hosts';
   string=$( grep '127.0.0.1' ${hosts_file_location} | sed -e"s/127\.0\.0\.1//g" | sort);
-  if [ ! -z $1 ] ; then
+  if [ -z $1 ] ; then
+    string=$(echo ${string} | sed -e"s/\s/ /g");
+  else
     string=$( echo ${string} | grep $1 );
+    string=$(echo ${string} | sed -e"s/\s/ /g");
   fi
   echo ${string};
 }
