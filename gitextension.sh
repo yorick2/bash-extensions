@@ -197,7 +197,7 @@ __git_complete gst _git_status
 __git_complete gl _git_pull
 __git_complete gm _git_merge
 __git_complete gm2b _git_merge
-__git_complete gmmm _git_merge
-__git_complete gmmd _git_merge
+__git_complete gmm _git_merge
+__git_complete gmd _git_merge
 __git_complete gmb2b _git_merge
 __git_complete grup _git_remotes
