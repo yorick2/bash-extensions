@@ -11,6 +11,7 @@ alias gst='git status'
 alias gl='git pull'
 alias gm='git merge --no-ff '
 alias grup='git remote update'
+alias gmt='git mergetool'
 
 export PATH="/usr/local/mysql/bin:$PATH"
 
@@ -76,7 +77,6 @@ function gm2b(){
     git_merge_branchs ${target} ${destination};
   fi
 }
-# compdef _git gm2b=git-merge
 
 # pull branch specified and merge to master
 function gmm (){
@@ -104,7 +104,6 @@ function gmm (){
     fi
   fi
 }
-# compdef _git gmm=git-merge
 
 # pull branch specified and merge to develop
 function gmd (){
@@ -131,7 +130,6 @@ function gmd (){
     fi
   fi
 }
-# compdef _git gmd=git-merge
 
 # remote update and open gitk
 function gk() {
