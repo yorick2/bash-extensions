@@ -126,6 +126,19 @@ function import2mysql(){
   fi
 }
 
+
+function get_vhost_location_file(){
+  vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
+  if [ ! -a "${vhost_file_location}" ]; then
+    vhost_folder_location='/etc/apache2/extra';
+    if [ ! -d "${vhost_folder_location}" ]; then
+      vhost_folder_location='/etc/apache2/sites-available';
+    fi
+    vhost_file_location=$( grep --files-with-matches "${url}" $vhost_folder_location/* )
+  fi
+  echo ${vhost_file_location}
+}
+
 # get vhost location
 ######## needs work ########
 function getVhostLocation() {
@@ -138,14 +151,7 @@ function getVhostLocation() {
   fi
   url=$1
   
-  vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
-  if [ ! -a "${vhost_file_location}" ]; then
-  	vhost_folder_location='/etc/apache2/extra';
-  	if [ ! -d "${vhost_folder_location}" ]; then
-  		vhost_folder_location='/etc/apache2/sites-available';
-  	fi
-  	vhost_file_location=$( grep --files-with-matches "${url}" $vhost_folder_location/* )
-  fi
+  vhost_file_location=$(get_vhost_location_file)
   string=$(cat ${vhost_file_location})
   #
   # add ; to EOL and put into single line
@@ -169,13 +175,8 @@ function getVhostLocation() {
 
 # update local.xml with new db details (for magento 1.**)
 function update_localxml() {
-   vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf';
-    if [ ! -a "${vhost_file_location}" ]; then
-      vhost_file_location = '/etc/apache2/extra/httpd-vhosts.conf';
-    fi
-    if [ ! -a "${vhost_file_location}" ]; then
-      vhost_file_location = '/etc/apache2/sites-enabled/httpd-vhosts.conf';
-    fi  
+    vhost_file_location=$(get_vhost_location_file)
+
    if [  -z $1  ] || [  -z $2 ] ; then
      echo ;
      echo 'arguments missing'

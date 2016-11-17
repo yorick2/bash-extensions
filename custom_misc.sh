@@ -53,9 +53,9 @@ function listCustomCommands(){
           grep alias ${DIR}/local_setup.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
           grep alias ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
           grep alias ${DIR}/magento.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-        if [ -e ${DIR}/personal.sh ] ; then \       
-            grep alias ${DIR}/personal.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-        fi ; \
+          if [ -e ${DIR}/personal.sh ] ; then \
+              grep alias ${DIR}/personal.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
+          fi ; \
         } | grep "${1}" | tr '\n' ' ';
         echo
         echo
