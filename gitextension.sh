@@ -121,7 +121,7 @@ function gmm (){
       echo "merge ${target} into master? (y/n)";
       read sure;
       if  [[ $sure == "y" ]] ; then
-        git_merge_branchs $1 master;
+        git_merge_branchs ${target} master;
       fi
     else
       target=$(git_branch_name_without_remote ${1})
@@ -157,7 +157,7 @@ function gmd (){
       echo "merge ${target} into develop? (y/n)";
       read sure;
       if  [[ $sure == "y" ]] ; then
-        git_merge_branchs $1 develop;
+        git_merge_branchs ${target} develop;
       fi
     else
       target=$(git_branch_name_without_remote ${1})
