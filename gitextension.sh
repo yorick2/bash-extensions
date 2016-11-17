@@ -25,6 +25,27 @@ function git_current_branch(){
   git symbolic-ref --short HEAD
 }
 
+# remove remote from name and echo out result
+# expected formats :
+# remotes/origin/....
+# /remotes/origin/....
+# origin/....
+# /origin/....
+function git_branch_name_without_remote(){
+  if  [[ ${1} == \/remotes* ]] ; then
+    echo ${1/#\/remotes\/*\//}
+  elif  [[ ${1} == remotes* ]] ; then
+    echo ${1/#remotes\/*\//}
+  elif [[ ${1} == \/origin* ]] ; then
+    echo ${1/#\/origin\//}
+  elif [[ ${1} == origin* ]] ; then
+    echo ${1/#origin\//}
+  else
+    echo ${1}
+  fi
+}
+
+
 # pull and merge a branch into another branch
 function git_merge_branchs() {
   git rev-parse --show-toplevel #first line has to be a git command for auto complete o work
@@ -62,13 +83,13 @@ function gm2b(){
     then
       target=$(git_current_branch)
     else
-      target="${1}"
+      target=$(git_branch_name_without_remote ${1})
   fi
   if [ "${2}" = "." ]
     then
       destination=$(git_current_branch)
     else
-      destination="${2}"
+      destination=$(git_branch_name_without_remote ${2})
   fi
   echo "merge ${target} into ${destination}? (y/n)";
   read sure;
@@ -93,14 +114,24 @@ function gmm (){
   BRANCH=$1;
   if [  -z $1  ] || [ "$1" = "." ] 
   then
-   git_merge_branchs $(git_current_branch) master;
+    git_merge_branchs $(git_current_branch) master;
   else
-    if [ -z $2 ]
-    then
-      git_merge_branchs $1 master;
+    if [ -z $2 ] ; then
+      target=$(git_branch_name_without_remote ${1})
+      echo "merge ${target} into master? (y/n)";
+      read sure;
+      if  [[ $sure == "y" ]] ; then
+        git_merge_branchs $1 master;
+      fi
     else
-      git_merge_branchs $1 $2 \
-      && git_merge_branchs $2 master;
+      target=$(git_branch_name_without_remote ${1})
+      destination=$(git_branch_name_without_remote ${2})
+      echo "merge ${target} into ${destination} into master? (y/n)" ;
+      read sure;
+      if [[ ${sure} == "y" ]] ; then
+        git_merge_branchs ${target} ${destination} \
+        && git_merge_branchs ${destination} master;
+      fi
     fi
   fi
 }
@@ -121,12 +152,23 @@ function gmd (){
   then
      git_merge_branchs $(git_current_branch) develop;
   else
-    if [ -z $2 ]
-    then
-      git_merge_branchs $1 develop;
+    if [ -z $2 ] ; then
+      target=$(git_branch_name_without_remote ${1})
+      echo "merge ${target} into develop? (y/n)";
+      read sure;
+      if  [[ $sure == "y" ]] ; then
+        git_merge_branchs $1 develop;
+      fi
     else
-      git_merge_branchs $1 $2 \
-      && git_merge_branchs $2 develop;
+      target=$(git_branch_name_without_remote ${1})
+      target=$(git_branch_name_without_remote ${1})
+      destination=$(git_branch_name_without_remote ${2})
+      echo "merge ${target} into ${destination} into develop? (y/n)" ;
+      read sure;
+      if [[ ${sure} == "y" ]] ; then
+        git_merge_branchs ${target} ${destination} \
+        && git_merge_branchs ${destination} develop;
+      fi
     fi
   fi
 }
@@ -175,14 +217,19 @@ function gb2b() {
     echo "gb2b <<<branch>>>"
     echo "e.g. gb2b master"
   else
-    echo "-------remote update-------" \
-    && git remote update  \
-    && echo "-------checkout beanstalk/$1-------"  \
-    && git checkout beanstalk/$1 \
-    && echo "-------pull changes from bitbucket -------"  \
-    && git pull bitbucket $1 \
-    && echo "-------push changes to bitbucket-------"  \
-    && git push beanstalk $1
+    target=$(git_branch_name_without_remote ${1})
+    echo "transfer ${target}? (y/n)" ;
+    read sure;
+    if [[ ${sure} == "y" ]] ; then
+      echo "-------remote update-------" \
+      && git remote update  \
+      && echo "-------checkout beanstalk/${target}-------"  \
+      && git checkout beanstalk/${target} \
+      && echo "-------pull changes from bitbucket -------"  \
+      && git pull bitbucket ${target} \
+      && echo "-------push changes to bitbucket-------"  \
+      && git push beanstalk ${target}
+    fi
   fi
 }
 
