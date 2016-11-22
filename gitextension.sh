@@ -233,6 +233,23 @@ function gb2b() {
   fi
 }
 
+function gitMoveToNewRepo(){
+  if [ -z $2 ]
+  then
+    echo "transfer whole repo to new repo"
+    echo "Warning: it clones a repo in a subfolder of the current location"
+    echo "moveToNewRepo <<<old repo>>> <<<new repo>>>"
+    echo "e.g. moveToNewRepo git@bitbucket.org:yorick/myoldrepo.git git@bitbucket.org:yorick/myrepo.git"
+  else
+    oldRepo=${1}
+    newRepo=${2}
+    git clone --bare ${oldRepo} temp-repo
+    cd temp-repo
+    git remote add origin-new ${newRepo}
+    git push --mirror origin-new
+  fi
+}
+
 # git autocompletes
 __git_complete g __git_main
 __git_complete ga _git_add
@@ -248,3 +265,56 @@ __git_complete gmm _git_merge
 __git_complete gmd _git_merge
 __git_complete gmb2b _git_merge
 __git_complete grup _git_remotes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
