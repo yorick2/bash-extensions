@@ -10,9 +10,16 @@ alias n98dis='echo running n98-magerun.phar cache:disable; n98-magerun.phar cach
 
 
 alias rmcache='echo "rm -rf var/cache/* var/session/*"; rm -rf var/cache/* var/session/*'
-alias echoLocalXmlTemplate='scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"; cat ${scriptDir}/local_setup_files/local.xml'
-alias copyLocalXml='scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"; cat ${scriptDir}/local_setup_files/local.xml | xclip -selection clipboard'
 
+function echoLocalXmlTemplate() {
+  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  cat ${scriptDir}/local_setup_files/local.xml
+}
+
+function copyLocalXml() {
+  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  cat ${scriptDir}/local_setup_files/local.xml | xclip -selection clipboard
+}
 
 # update local.xml with new db details (for magento 1.**)
 function update_localxml() {
