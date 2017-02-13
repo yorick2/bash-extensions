@@ -5,6 +5,8 @@ function open(){
 	nautilus ${1} 
 }
 
+alias listcustomcommands="listCustomCommands"
+
 function listCustomCommands(){
   DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   if [ "${1}" = "git"  ] ; then

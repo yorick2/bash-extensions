@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+############ magento 1 #########
 # n98-magerun.phar
 alias n98='echo running n98-magerun.phar; n98-magerun.phar'
 alias n98fl='echo running n98-magerun.phar cache:flush; n98-magerun.phar cache:flush'
@@ -8,8 +8,31 @@ alias n98pass='echo running n98-magerun.phar admin:user:change-password; n98-mag
 alias n98re='echo running n98-magerun.phar index:reindex:all; n98-magerun.phar index:reindex:all'
 alias n98dis='echo running n98-magerun.phar cache:disable; n98-magerun.phar cache:disable'
 
-# magento 1
+
 alias rmcache='echo "rm -rf var/cache/* var/session/*"; rm -rf var/cache/* var/session/*'
+alias echoLocalXmlTemplate='scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"; cat ${scriptDir}/local_setup_files/local.xml'
+
+
+# update local.xml with new db details (for magento 1.**)
+function update_localxml() {
+    vhost_file_location=$(get_vhost_location_file)
+
+   if [  -z $1  ] || [  -z $2 ] ; then
+     echo ;
+     echo 'arguments missing'
+     echo 'update_localxml <<db>> <<url>>'
+     echo 'please try again'
+   else
+     database=$1
+     url=$2
+     grepped=$(grep -B 7 -A 8  "${url}" ${vhost_file_location})
+     location=$(getVhostLocation "${url}")
+     sed -i "s/<dbname>.*<\/dbname>/<dbname><\!\[CDATA\[${database}\]\]><\/dbname>/g" ${location}/app/etc/local.xml
+  fi
+}
+
+
+
 
 # make vhost and setup magento
 ######## needs work ########
@@ -68,9 +91,9 @@ function setupLocalMagento1() {
         cd ${htdocsLocation}
       fi
       scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-      cp ${scriptDir}/local_setup_files/htaccess .htaccess
+      cp ${scriptDir}/local_setup_files/htaccess .htaccess  ###### <<<<<<<<<<< location not always right, composer puts everything in htdocs folder
       echo "------- copying local.xml -------";
-      cp ${scriptDir}/local_setup_files/local.xml app/etc
+      cp ${scriptDir}/local_setup_files/local.xml app/etc   ###### <<<<<<<<<<< location not always right, composer puts everything in htdocs folder
       echo "------- updating local.xml -------";
       update_localxml "${dbname}" "${url}";
       echo "------- flushing cache -------";
@@ -83,6 +106,7 @@ function setupLocalMagento1() {
       echo 'mamp users: please restart mamp'
     fi
 }
+
 
 #########################################
 #             magento 2
@@ -176,11 +200,12 @@ function setupLocalMagento2() {
     fi
 }
 
+
 alias n982='echo running n98-magerun2.phar; n98-magerun2.phar'
 alias n982fl='echo running n98-magerun2.phar cache:flush; n98-magerun2.phar cache:flush'
 alias n982nu='echo running n98-magerun2.phar admin:user:create; n98-magerun2.phar admin:user:create'
 alias n982pass='echo running n98-magerun2.phar admin:user:change-password; n98-magerun2.phar admin:user:change-password'
-alias n982re='echo running n98-magerun2.phar index:reindex:all; n98-magerun2.phar index:reindex:all'
+alias n982re='echo running n98-magerun2.phar indexer:reindex; n98-magerun2.phar indexer:reindex'
 alias n982dis='echo running n98-magerun2.phar cache:disable; n98-magerun2.phar cache:disable'
 
 alias mage2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
