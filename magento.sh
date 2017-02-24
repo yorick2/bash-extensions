@@ -77,11 +77,13 @@ function setupLocalMagento1() {
       url=$3;
 
       if [ -z $4 ] ; then
-        if [ -e "/Users/Paul/Documents/Repositories/sites/${subfolder}/htdocs" ] ; then
+        if [ -d "/Users/Paul/Documents/Repositories/sites/${subfolder}/htdocs" ] ; then
             htdocsLocation="htdocs"
         fi
+      elif [[ "$4" = '.' ]] ; then
+          htdocsLocation='';
       else
-            htdocsLocation=$4
+          htdocsLocation=$4
       fi
       if [ -z ${dbname} ] ; then
           if [  -z $5  ]; then
