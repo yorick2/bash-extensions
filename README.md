@@ -22,6 +22,7 @@ make a vhosts file called httpd-vhosts.conf in your apache installation
 make the vhosts file and  /etc/hosts is editable by your user without sudo
 
 ####Git auto complete
+This is not written by me but is really useful
 
 To allow git autocomplete to work run
 ```
