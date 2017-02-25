@@ -194,6 +194,7 @@ function setupLocalMagento2() {
       composer install --no-dev
       echo "------- adding magento settings files -------";
       scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+      cp ${scriptDir}/local_setup_files/magento2/config.php app/etc/config.php
       cp ${scriptDir}/local_setup_files/magento2/env.php app/etc/env.php
       sed -i "s/<<<databasename>>>/${dbname}/g" app/etc/env.php
       echo "------- magento packages upgrade -------";
