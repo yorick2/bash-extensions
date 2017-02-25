@@ -196,8 +196,6 @@ function setupLocalMagento2() {
       scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
       cp ${scriptDir}/local_setup_files/magento2/env.php app/etc/env.php
       sed -i "s/<<<databasename>>>/${dbname}/g" app/etc/env.php
-      echo "------- set developer mode -------";
-      php bin/magento deploy:mode:set developer
       echo "------- magento packages upgrade -------";
       php bin/magento setup:upgrade
       echo "------- flushing cache -------";
