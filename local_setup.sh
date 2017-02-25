@@ -80,7 +80,9 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
         mysql -u${user} -p${password} -e"${cmd}"
-	echo "your database ${db} is imported"
+        cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        echo "your database ${db} is imported"
       else
         echo "error: database name ${db} used"
       fi
@@ -173,23 +175,7 @@ function getVhostLocation() {
   echo ${documentRoot};
 }
 
-# update local.xml with new db details (for magento 1.**)
-function update_localxml() {
-    vhost_file_location=$(get_vhost_location_file)
 
-   if [  -z $1  ] || [  -z $2 ] ; then
-     echo ;
-     echo 'arguments missing'
-     echo 'update_localxml <<db>> <<url>>'
-     echo 'please try again'
-   else
-     database=$1
-     url=$2
-     grepped=$(grep -B 7 -A 8  "${url}" ${vhost_file_location})
-     location=$(getVhostLocation "${url}")
-     sed -i "s/<dbname>.*<\/dbname>/<dbname><\!\[CDATA\[${database}\]\]><\/dbname>/g" ${location}/app/etc/local.xml
-  fi
-}
 
 # make vhost but dont setup magento
 function mkvhost() {

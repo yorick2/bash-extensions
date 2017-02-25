@@ -250,6 +250,11 @@ function gitMoveToNewRepo(){
   fi
 }
 
+# if git auto complete not set and is installed 
+if [ -z "$(type -t __git_complete)" ] && [ -f ~/.git-completion.bash ]; then
+  #set git auto complete
+  . ~/.git-completion.bash
+fi;
 # git autocompletes
 __git_complete g __git_main
 __git_complete ga _git_add
