@@ -20,7 +20,7 @@ return array (
       'default' => 
       array (
         'host' => '127.0.0.1',
-        'dbname' => '<<<dbname>>>',
+        'dbname' => '<<<databasename>>>',
         'username' => 'root',
         'password' => 'root',
         'active' => '1',

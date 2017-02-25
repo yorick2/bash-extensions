@@ -158,11 +158,12 @@ function setupLocalMagento2() {
       echo ''
       echo 'arguments missing'
       echo 'setupLocalMagento1 <<sub folder>> <<db file>> <<url>>'
-      echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>>'
-      echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>> <<db>>'
+      echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<db>>'
       echo 'please try again'
     else
+      unset dbname;
       subfolder=$1;
+      # if $2 is a filename, set db filename or set db name
       if [[ "${2}" == *'.'* ]] ; then
         echo dbfile
         dbfile=$2;
@@ -172,41 +173,31 @@ function setupLocalMagento2() {
       fi
       url=$3;
 
-      if [ -z $4 ] ; then
-        if [ -e "/Users/Paul/Documents/Repositories/sites/${subfolder}/htdocs" ] ; then
-            htdocsLocation="htdocs"
-        fi
-      else
-            htdocsLocation=$4
-      fi
       if [ -z ${dbname} ] ; then
-          if [  -z $5  ]; then
+          echo "------- importing database -------";
+          if [  -z $4  ]; then
             dbname=${dbfile%.*};
             dbname=${dbname%.tar};
             dbname=${dbname##*/};
             dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
           else
-            dbname=$5
+            dbname=$4
           fi
-          echo "------- importing database -------";
           import2mysql ${dbfile} ${url} ${dbname};
       fi
       echo "------- making vhost -------";
-      repo # move to repos folder
-      if [  -z ${htdocsLocation}  ] ; then
-          mkvhost ${subfolder} ${url};
-      else
-          mkvhost "${subfolder}/$htdocsLocation" ${url};
-      fi
-      echo "------- adding magento settings files -------";
+      sites # move to sites folder
+      mkvhost ${subfolder} ${url};
+      echo "------- composer install --no-dev -------";
       sites; # move to repos folder
       cd ${subfolder}
-      if [ ! -z ${htdocsLocation} ] ; then
-        cd ${htdocsLocation}
-      fi
+      composer install --no-dev
+      echo "------- adding magento settings files -------";
       scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
       cp ${scriptDir}/local_setup_files/magento2/env.php app/etc/env.php
-      sed -i "s/<<<database>>>>/${dbname}/g" app/etc/env.php
+      sed -i "s/<<<databasename>>>/${dbname}/g" app/etc/env.php
+      echo "------- set developer mode -------";
+      php bin/magento deploy:mode:set developer
       echo "------- magento packages upgrade -------";
       php bin/magento setup:upgrade
       echo "------- flushing cache -------";
