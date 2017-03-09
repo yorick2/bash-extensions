@@ -200,7 +200,7 @@ function setupLocalMagento2() {
       echo "------- magento packages upgrade -------";
       php bin/magento setup:upgrade
       echo "------- flushing cache -------";
-      n98-magerun2.phar cache:flush;
+      php bin/magento cache:flush;
       echo "------- removing generated folders -------";
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";
