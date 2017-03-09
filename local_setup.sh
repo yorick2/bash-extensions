@@ -1,4 +1,10 @@
-alias listdbs="mysql -uroot -proot -e'show databases'";
+function listdbs() {
+  if [  -z $1  ] ; then
+    mysql -uroot -proot -e'show databases'
+  else
+    mysql -uroot -proot -e'show databases' | grep "${1}"
+  fi
+}
 
 
 # import sql file inside a tar.gz file into sql database it creates
