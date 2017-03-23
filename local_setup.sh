@@ -86,6 +86,8 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
         mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='${url}' where path='web/cookie/cookie_domain';"
+        mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
         echo "your database ${db} is imported"
