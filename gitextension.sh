@@ -1,7 +1,6 @@
 alias g='git'
 alias ga='git add'
 alias gc='git commit'
-alias gco='git checkout'
 alias gcm='git checkout master'
 alias gcd='git checkout develop'
 alias gcs='git checkout staging'
@@ -45,6 +44,12 @@ function git_branch_name_without_remote(){
   fi
 }
 
+function gco () {
+  branch=$(git_branch_name_without_remote ${1});
+  echo git checkout ${branch};
+  echo ;
+  git checkout ${branch};
+}
 
 # pull and merge a branch into another branch
 function git_merge_branchs() {
@@ -253,7 +258,7 @@ function gitMoveToNewRepo(){
 # if git auto complete not set and is installed 
 if [ -z "$(type -t __git_complete)" ] && [ -f ~/.git-completion.bash ]; then
   #set git auto complete
-  . ~/.git-completion.bash
+  . ~/.git-completion.bash;
 fi;
 # git autocompletes
 __git_complete g __git_main
