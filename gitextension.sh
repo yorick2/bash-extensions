@@ -45,10 +45,17 @@ function git_branch_name_without_remote(){
 }
 
 function gco () {
-  branch=$(git_branch_name_without_remote ${1});
-  echo git checkout ${branch};
-  echo ;
-  git checkout ${branch};
+  arguments="";
+  lastArgument="";
+  for arg in "$@"
+  do
+    echo ${arg}
+    arguments="${arguments} ${lastArgument}"
+    lastArgument=${arg};
+  done;
+  branch=$(git_branch_name_without_remote ${lastArgument});
+  echo git checkout ${arguments} ${branch};
+  git checkout ${arguments} ${branch};
 }
 
 # pull and merge a branch into another branch
