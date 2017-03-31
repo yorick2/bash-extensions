@@ -216,7 +216,6 @@ function setupLocalMagento2() {
 
 alias n982='echo running n98-magerun2.phar; n98-magerun2.phar'
 alias n982fl='echo running n98-magerun2.phar cache:flush; n98-magerun2.phar cache:flush'
-alias n982nu='echo running n98-magerun2.phar admin:user:create; n98-magerun2.phar admin:user:create'
 alias n982pass='echo running n98-magerun2.phar admin:user:change-password; n98-magerun2.phar admin:user:change-password'
 alias n982re='echo running n98-magerun2.phar indexer:reindex; n98-magerun2.phar indexer:reindex'
 alias n982dis='echo running n98-magerun2.phar cache:disable; n98-magerun2.phar cache:disable'
@@ -237,3 +236,13 @@ alias mage2staticFlush="echo 'php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean' \
  ; php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean"
+
+function n982nu () {
+  if [  -z $1  ] ; then
+    echo 'arguments missing'
+    echo 'e.g.'
+    echo '  n98-magerun2.phar admin:user:create --admin-user="my_user_name" --admin-email="example@example.com" --admin-password="mypassword" --admin-firstname="paul" --admin-lastname="test"'
+  fi
+  echo running n98-magerun.phar admin:user:create "$@";
+  n98-magerun.phar admin:user:create "$@"
+}
