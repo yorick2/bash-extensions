@@ -188,7 +188,7 @@ function setupLocalMagento2() {
       fi
       echo "------- making vhost -------";
       sites # move to sites folder
-      mkvhost ${subfolder} ${url};
+      mkvhost ${subfolder}/pub ${url};
       echo "------- composer install --no-dev -------";
       sites; # move to repos folder
       cd ${subfolder}
