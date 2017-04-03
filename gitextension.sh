@@ -32,9 +32,9 @@ function git_current_branch(){
 # /origin/....
 function git_branch_name_without_remote(){
   if  [[ ${1} == \/remotes* ]] ; then
-    echo ${1/#\/remotes\/*\//}
+    echo ${1/#\/remotes\/.*\//}
   elif  [[ ${1} == remotes* ]] ; then
-    echo ${1/#remotes\/*\//}
+    echo ${1/#remotes\/.*\//}
   elif [[ ${1} == \/origin* ]] ; then
     echo ${1/#\/origin\//}
   elif [[ ${1} == origin* ]] ; then
