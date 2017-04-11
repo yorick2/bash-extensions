@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 function listdbs() {
   if [  -z $1  ] ; then
     mysql -uroot -proot -e'show databases'

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # turn on auto change directory. so dont have to type cd when changing directory
 shopt -s autocd
 

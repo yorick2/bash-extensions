@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 ############ magento 1 #########
 # n98-magerun.phar
 alias n98='echo running n98-magerun.phar; n98-magerun.phar'
