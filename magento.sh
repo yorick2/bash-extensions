@@ -214,6 +214,25 @@ function setupLocalMagento2() {
     fi
 }
 
+function echoConfigMage2() {
+  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  cat ${scriptDir}/local_setup_files/magento2/config.php
+}
+
+function copyConfigMage2() {
+  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  cat ${scriptDir}/local_setup_files/magento2/config.php | xclip -selection clipboard
+}
+
+function echoEnvMage2() {
+  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  cat ${scriptDir}/local_setup_files/magento2/env.php
+}
+
+function copyEnvMage2() {
+  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  cat ${scriptDir}/local_setup_files/magento2/env.php | xclip -selection clipboard
+}
 
 alias n982='echo running n98-magerun2.phar; n98-magerun2.phar'
 alias n982fl='echo running n98-magerun2.phar cache:flush; n98-magerun2.phar cache:flush'
