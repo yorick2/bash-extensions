@@ -29,10 +29,16 @@ function listCustomCommands(){
         grep alias ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
         echo
         echo
-  elif [ "${1}" = "mage" ] || [ "${1}" = "magento" ] ; then
+  elif [ "${1}" = "mage1" ] || [ "${1}" = "magento1" ] ; then
         echo
-        grep function ${DIR}/magento.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
-        grep alias ${DIR}/magento.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
+        grep function ${DIR}/magento1.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
+        grep alias ${DIR}/magento1.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
+        echo
+        echo
+  elif [ "${1}" = "mage2" ] || [ "${1}" = "magento2" ] ; then
+        echo
+        grep function ${DIR}/magento2.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
+        grep alias ${DIR}/magento2.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
         echo
         echo
   elif [ "${1}" = "personal"  ] ; then
@@ -58,10 +64,17 @@ function listCustomCommands(){
         } | grep "${1}" | tr '\n' ' ';
         echo
         echo
-        echo "-- Magento --"
+        echo "-- Magento 1 --"
         { \
-          grep function ${DIR}/magento.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
-          grep alias ${DIR}/magento.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
+          grep function ${DIR}/magento1.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
+          grep alias ${DIR}/magento1.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
+        } | grep "${1}" | tr '\n' ' ';
+        echo
+        echo
+        echo "-- Magento 2 --"
+        { \
+          grep function ${DIR}/magento2.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
+          grep alias ${DIR}/magento2.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
         } | grep "${1}" | tr '\n' ' ';
         echo
         echo
