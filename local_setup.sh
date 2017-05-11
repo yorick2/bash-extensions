@@ -76,11 +76,14 @@ function sql2mysql() {
       fi
         dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
+        filecopy="${filecopy}.sanitized"
+        cp ${file} ${filecopy}
+        sed -ie 's/ROW_FORMAT=FIXED//g' ${filecopy}
         echo '-->creating db'
         mysql -u${user} -p${password} -e"create database ${db}"
         echo '-->importing db'
-        mysql -u${user} -p${password} ${db} < $file
-        echo "mysql -u${user} -p${password} ${db} < $file"
+        mysql -u${user} -p${password} ${db} < ${filecopy}
+        echo "mysql -u${user} -p${password} ${db} < ${filecopy}"
         echo '-->updating db'
         table='core_config_data' 
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
@@ -92,6 +95,7 @@ function sql2mysql() {
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
         echo "your database ${db} is imported"
+        rm ${filecopy}
       else
         echo "error: database name ${db} used"
       fi
