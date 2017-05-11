@@ -76,9 +76,12 @@ function sql2mysql() {
       fi
         dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
-        filecopy="${filecopy}.sanitized"
-        cp ${file} ${filecopy}
-        sed -ie 's/ROW_FORMAT=FIXED//g' ${filecopy}
+        if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
+          filecopy="${filecopy}.sanitized"
+          cp ${file} ${filecopy}
+          sed -ie 's/ROW_FORMAT=FIXED//g' ${filecopy}
+          file=${filecopy}
+        fi
         echo '-->creating db'
         mysql -u${user} -p${password} -e"create database ${db}"
         echo '-->importing db'
