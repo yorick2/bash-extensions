@@ -78,6 +78,7 @@ function sql2mysql() {
         dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
         if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
+          echo 'creating sanitised file'
           filecopy="${file}.sanitized"
           cp ${file} ${filecopy}
           sed -ie 's/ROW_FORMAT=FIXED//g' ${filecopy}
@@ -100,6 +101,7 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         echo "your database ${db} is imported"
         if [ -n "${filecopy}" ]; then
+          echo 'removing sanitised file'
           rm ${filecopy}
         fi
       else
