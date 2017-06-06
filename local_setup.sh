@@ -51,7 +51,7 @@ function gz2mysql() {
     file=${file##*/} &&
     sql2mysql ${file}.sql ${url} ${db} &&
     echo '-->removing sql' &&
-    rm ${file} # $file redefined in sql2mysql()
+    rm ${file}.sql
   fi
 }
 
@@ -65,7 +65,7 @@ function sql2mysql() {
     else
       user=root
       password=root
-      file=$1;
+      local file=$1;
       url=$2;
       filecopy=""
       if [  -z $3  ]; then
