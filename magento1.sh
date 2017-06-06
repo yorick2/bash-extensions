@@ -4,6 +4,7 @@
 # n98-magerun.phar
 alias n98='echo running n98-magerun.phar; n98-magerun.phar'
 alias n98fl='echo running n98-magerun.phar cache:flush; n98-magerun.phar cache:flush'
+alias n98list='echo running n98-magerun.phar admin:user:list; n98-magerun.phar admin:user:list'
 alias n98nu='echo running n98-magerun.phar admin:user:create; n98-magerun.phar admin:user:create'
 alias n98pass='echo running n98-magerun.phar admin:user:change-password; n98-magerun.phar admin:user:change-password'
 alias n98re='echo running n98-magerun.phar index:reindex:all; n98-magerun.phar index:reindex:all'

@@ -55,18 +55,19 @@ function gz2mysql() {
   fi
 }
 
-# inport sql file into sql database it creates
+# import sql file into sql database it creates
 function sql2mysql() {
-    user=root
-    password=root
     if [  -z $1  ] || [  -z $2 ] ; then
       echo ;
       echo 'arguments missing'
       echo 'sql2mysql <<file>> <<url>>  or sql2mysql <<file>> <<url>> <<db>>'
       echo 'please try again'
     else
+      user=root
+      password=root
       file=$1;
       url=$2;
+      filecopy=""
       if [  -z $3  ]; then
         db=${file%.sql};
         db=${db##*/};
@@ -74,13 +75,20 @@ function sql2mysql() {
       else
         db=$3;
       fi
-        dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
+      dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
+        if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
+          echo 'creating sanitised file'
+          filecopy="${file}.sanitized"
+          cp ${file} ${filecopy}
+          sed -i -e 's/ROW_FORMAT=FIXED//g' ${filecopy} ; # use -i -e not -ie, as -i uses next character if set.
+          local file=${filecopy}
+        fi
         echo '-->creating db'
         mysql -u${user} -p${password} -e"create database ${db}"
         echo '-->importing db'
-        mysql -u${user} -p${password} ${db} < $file
-        echo "mysql -u${user} -p${password} ${db} < $file"
+        mysql -u${user} -p${password} ${db} < ${file}
+        echo "mysql -u${user} -p${password} ${db} < ${file}"
         echo '-->updating db'
         table='core_config_data' 
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
@@ -92,6 +100,10 @@ function sql2mysql() {
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
         echo "your database ${db} is imported"
+        if [ -n "${filecopy}" ] && [ -e "${filecopy}" ]; then
+          echo 'removing sanitised file'
+          rm ${filecopy}
+        fi
       else
         echo "error: database name ${db} used"
       fi
