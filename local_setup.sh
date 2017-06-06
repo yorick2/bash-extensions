@@ -29,7 +29,7 @@ function tar2mysql() {
     file=${file##*/} &&
     sql2mysql ${file}.sql ${url} ${db}  &&
     echo '-->removing sql' &&
-    rm ${file} # $file redefined in sql2mysql()
+    rm ${file}.sql
   fi
 }
 
