@@ -55,7 +55,7 @@ function gz2mysql() {
   fi
 }
 
-# inport sql file into sql database it creates
+# import sql file into sql database it creates
 function sql2mysql() {
     if [  -z $1  ] || [  -z $2 ] ; then
       echo ;
@@ -75,14 +75,14 @@ function sql2mysql() {
       else
         db=$3;
       fi
-        dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
+      dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
         if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
           echo 'creating sanitised file'
           filecopy="${file}.sanitized"
           cp ${file} ${filecopy}
-          sed -ie 's/ROW_FORMAT=FIXED//g' ${filecopy}
-          file=${filecopy}
+          sed -i -e 's/ROW_FORMAT=FIXED//g' ${filecopy} ; # use -i -e not -ie, as -i uses next character if set.
+          local file=${filecopy}
         fi
         echo '-->creating db'
         mysql -u${user} -p${password} -e"create database ${db}"
@@ -100,7 +100,7 @@ function sql2mysql() {
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
         echo "your database ${db} is imported"
-        if [ -n "${filecopy}" ]; then
+        if [ -n "${filecopy}" ] && [ -e "${filecopy}" ]; then
           echo 'removing sanitised file'
           rm ${filecopy}
         fi
