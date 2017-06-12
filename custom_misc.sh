@@ -54,35 +54,35 @@ function listCustomCommands(){
         { \
             grep function ${DIR}/gitextension.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
             grep alias ${DIR}/gitextension.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-        } | grep "${1}" | tr '\n' ' ';
+        } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
         echo "-- Local Setup --"
         { \
           grep function ${DIR}/local_setup.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
           grep alias ${DIR}/local_setup.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-        } | grep "${1}" | tr '\n' ' ';
+        } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
         echo "-- Magento 1 --"
         { \
           grep function ${DIR}/magento1.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
           grep alias ${DIR}/magento1.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-        } | grep "${1}" | tr '\n' ' ';
+        } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
         echo "-- Magento 2 --"
         { \
           grep function ${DIR}/magento2.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
           grep alias ${DIR}/magento2.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-        } | grep "${1}" | tr '\n' ' ';
+        } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
         echo "-- Misc --"
         { \
           grep function ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
           grep alias ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-        } | grep "${1}" | tr '\n' ' ';
+        } | grep -i "${1}" | tr '\n' ' ';
         if [ -e ${DIR}/personal.sh ] ; then \
           echo
           echo
@@ -90,7 +90,7 @@ function listCustomCommands(){
           { \
               grep function ${DIR}/personal.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
               grep alias ${DIR}/personal.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
-          } | grep "${1}" | tr '\n' ' ';
+          } | grep -i "${1}" | tr '\n' ' ';
         fi ; \
       echo
       echo
