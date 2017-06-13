@@ -46,6 +46,8 @@ function setupLocalMagento2() {
           if [  -z $4  ]; then
             dbname=${dbfile%.*};
             dbname=${dbname%.tar};
+            dbname=${dbname%.sql};
+            dbname=${dbname##*:};
             dbname=${dbname##*/};
             dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
           else
@@ -79,6 +81,8 @@ function setupLocalMagento2() {
       echo 'mamp users: please restart mamp'
     fi
 }
+
+alias setupMage2='setupLocalMagento2';
 
 function echoConfigMage2() {
   scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";

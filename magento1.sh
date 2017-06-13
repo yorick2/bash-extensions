@@ -92,6 +92,8 @@ function setupLocalMagento1() {
           if [  -z $5  ]; then
             dbname=${dbfile%.*};
             dbname=${dbname%.tar};
+            dbname=${dbname%.sql};
+            dbname=${dbname##*:};
             dbname=${dbname##*/};
             dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
           else
@@ -129,3 +131,4 @@ function setupLocalMagento1() {
       echo 'mamp users: please restart mamp'
     fi
 }
+alias setupMage1='setupLocalMagento1';

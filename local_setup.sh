@@ -125,7 +125,7 @@ function import2mysql(){
     url=$2;
     db=$3;
     if [[ ${file}} == *':'* ]] ; then
-        rsync ${file} .
+        rsync -ahz ${file} .
         file=${file##*:}
         file=${file##*/}
     fi
@@ -140,14 +140,16 @@ function import2mysql(){
       prevfileextension=${prevfileextension##*.};
       # if tar.gz file
       if [[ ${prevfileextension} == "tar" ]]; then
+        echo "--> tar.gz file detected"
         if [[ -z db ]]; then
-            echo "--> tar.gz file detected"
             db=${file%.tar.gz};
         fi;
         tar2mysql ${file} ${url} ${db};
       else
         echo "--> gz file detected"
-        db=${file%.gz};
+        if [[ -z db ]]; then
+          db=${file%.gz};
+        fi;
         gz2mysql ${file} ${url} ${db};
       fi
     else
