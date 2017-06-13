@@ -70,24 +70,11 @@ function setupLocalMagento1() {
     else
       subfolder=$1;
       if [[ "${2}" == *'.'* ]] ; then
-        echo dbfile
         dbfile=$2;
       else
-        echo dbname
         dbname=$2;
       fi
       url=$3;
-
-      if [ -z $4 ] ; then
-        sites;
-        if [ -d "${subfolder}/htdocs" ] ; then
-            htdocsLocation="htdocs"
-        fi
-      elif [[ "$4" = '.' ]] ; then
-          htdocsLocation='';
-      else
-          htdocsLocation=$4
-      fi
       if [ -z ${dbname} ] ; then
           if [  -z $5  ]; then
             dbname=${dbfile%.*};
@@ -101,6 +88,16 @@ function setupLocalMagento1() {
           fi
           echo "------- importing database -------";
           import2mysql ${dbfile} ${url} ${dbname};
+      fi
+      if [ -z $4 ] ; then
+        sites;
+        if [ -d "${subfolder}/htdocs" ] ; then
+            htdocsLocation="htdocs"
+        fi
+      elif [[ "$4" = '.' ]] ; then
+          htdocsLocation='';
+      else
+          htdocsLocation=$4
       fi
       echo "------- making vhost -------";
       repo # move to repos folder

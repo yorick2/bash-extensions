@@ -118,16 +118,17 @@ function import2mysql(){
     echo 'import2mysql <<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
     echo 'for files on remote server ';
     echo 'import2mysql <<login details>>:<<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
-    echo 'eg. import2mysql user@example.com:example.sql l.example';
+    echo 'eg. import2mysql user@example.com:~/example.sql l.example';
     echo 'please try again';
   else 
     file=$1;
     url=$2;
     db=$3;
     if [[ ${file}} == *':'* ]] ; then
-        rsync -ahz ${file} .
-        file=${file##*:}
+        rsync -ahz ${file} $(dbsLocation) &&
+        file=${file##*:} &&
         file=${file##*/}
+        file="$(dbsLocation)/${file}"
     fi
     fileextension="${file##*.}"; # last file extension if example.sql.tar.gz it returns gz if example.sql returns sql
     # if sql file
