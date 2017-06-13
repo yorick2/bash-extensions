@@ -70,14 +70,25 @@ function setupLocalMagento1() {
     else
       subfolder=$1;
       if [[ "${2}" == *'.'* ]] ; then
-        echo dbfile
         dbfile=$2;
       else
-        echo dbname
         dbname=$2;
       fi
       url=$3;
-
+      if [ -z ${dbname} ] ; then
+          if [  -z $5  ]; then
+            dbname=${dbfile%.*};
+            dbname=${dbname%.tar};
+            dbname=${dbname%.sql};
+            dbname=${dbname##*:};
+            dbname=${dbname##*/};
+            dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
+          else
+            dbname=$5
+          fi
+          echo "------- importing database -------";
+          import2mysql ${dbfile} ${url} ${dbname};
+      fi
       if [ -z $4 ] ; then
         sites;
         if [ -d "${subfolder}/htdocs" ] ; then
@@ -87,18 +98,6 @@ function setupLocalMagento1() {
           htdocsLocation='';
       else
           htdocsLocation=$4
-      fi
-      if [ -z ${dbname} ] ; then
-          if [  -z $5  ]; then
-            dbname=${dbfile%.*};
-            dbname=${dbname%.tar};
-            dbname=${dbname##*/};
-            dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
-          else
-            dbname=$5
-          fi
-          echo "------- importing database -------";
-          import2mysql ${dbfile} ${url} ${dbname};
       fi
       echo "------- making vhost -------";
       repo # move to repos folder
@@ -129,3 +128,4 @@ function setupLocalMagento1() {
       echo 'mamp users: please restart mamp'
     fi
 }
+alias setupMage1='setupLocalMagento1';

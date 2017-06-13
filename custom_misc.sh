@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+## required for local setups
+alias dbsLocation='echo ~/Documents/Databases'
+alias repoLocation='echo ~/Documents/Repositories'
+alias sitesLocation='echo ~/Documents/Repositories/sites'
+
+function dbs(){
+  cd $(dbsLocation)
+}
+function repo(){
+   cd $(repoLocation)/${1}
+}
+
+function sites(){
+   cd $(sitesLocation)/${1}
+}
+
+
 # turn on auto change directory. so dont have to type cd when changing directory
 shopt -s autocd
 

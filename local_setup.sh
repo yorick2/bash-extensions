@@ -118,16 +118,17 @@ function import2mysql(){
     echo 'import2mysql <<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
     echo 'for files on remote server ';
     echo 'import2mysql <<login details>>:<<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
-    echo 'eg. import2mysql user@example.com:example.sql l.example';
+    echo 'eg. import2mysql user@example.com:~/example.sql l.example';
     echo 'please try again';
   else 
     file=$1;
     url=$2;
     db=$3;
     if [[ ${file}} == *':'* ]] ; then
-        rsync ${file} .
-        file=${file##*:}
+        rsync -ahz ${file} $(dbsLocation) &&
+        file=${file##*:} &&
         file=${file##*/}
+        file="$(dbsLocation)/${file}"
     fi
     fileextension="${file##*.}"; # last file extension if example.sql.tar.gz it returns gz if example.sql returns sql
     # if sql file
@@ -140,14 +141,16 @@ function import2mysql(){
       prevfileextension=${prevfileextension##*.};
       # if tar.gz file
       if [[ ${prevfileextension} == "tar" ]]; then
+        echo "--> tar.gz file detected"
         if [[ -z db ]]; then
-            echo "--> tar.gz file detected"
             db=${file%.tar.gz};
         fi;
         tar2mysql ${file} ${url} ${db};
       else
         echo "--> gz file detected"
-        db=${file%.gz};
+        if [[ -z db ]]; then
+          db=${file%.gz};
+        fi;
         gz2mysql ${file} ${url} ${db};
       fi
     else
