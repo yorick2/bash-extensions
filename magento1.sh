@@ -51,7 +51,37 @@ function update_localxml() {
   fi
 }
 
+setupNewLocalMagento1(){
+  if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
+      echo ;
+      echo 'git clone, import database, make into vhost, add .htaccess, copy local.xml'
+      echo "dosn't download git repo or create folder"
+      echo ''
+      echo 'arguments missing'
+      echo 'setupNewLocalMagento1 <<git url>> <<db file>> <<url>>'
+      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>>'
+      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>> <<db>>'
+      echo 'please try again'
+    else
+      giturl=$1;
+      dbfile=$2;
+      url=$3;
+      htdocsLocation=$4;
+      dbname=$5;
 
+      subfolder=${giturl%.git};
+      subfolder=${subfolder##*/};
+
+      if [ -d "$subfolder" ] ; then
+        echo "error: subfolder  ${subfolder} already used, please clone the git repository and use setupLocalMagento1";
+      fi
+
+      git clone ${giturl} ${subfolder};
+      cd ${subfolder}
+      composer install --no-dev
+      echo "setupLocalMagento1 ${subfolder} ${dbfile} ${url} ${htdocsLocation} ${dbname}";
+    fi
+}
 
 
 # make vhost and setup magento
