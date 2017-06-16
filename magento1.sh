@@ -148,7 +148,8 @@ function setupLocalMagento1() {
       cp ${scriptDir}/local_setup_files/local.xml app/etc   ###### <<<<<<<<<<< location not always right, composer puts everything in htdocs folder
       echo "------- updating local.xml -------";
       update_localxml "${dbname}" "${url}";
-      echo "------- flushing cache -------";
+      echo "------- disabling and flushing cache -------";
+      n98-magerun.phar cache:disable
       n98-magerun.phar cache:flush;
       echo ran 'n98-magerun.phar cache:flush' here:
       echo "------- create test admin user -------";

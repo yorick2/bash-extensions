@@ -71,7 +71,8 @@ function setupLocalMagento2() {
       php bin/magento deploy:mode:set developer
       echo "------- magento packages upgrade -------";
       php bin/magento setup:upgrade
-      echo "------- flushing cache -------";
+      echo "------- disabling and flushing cache -------";
+      php bin/magento cache:disable
       php bin/magento cache:flush;
       echo "------- create test admin user -------";
       echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
