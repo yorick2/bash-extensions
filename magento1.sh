@@ -79,7 +79,7 @@ setupNewLocalMagento1(){
       git clone ${giturl} ${subfolder};
       cd ${subfolder}
       composer install --no-dev
-      echo "setupLocalMagento1 ${subfolder} ${dbfile} ${url} ${htdocsLocation} ${dbname}";
+      setupLocalMagento1 ${subfolder} ${dbfile} ${url} ${htdocsLocation} ${dbname};
     fi
 }
 
