@@ -53,8 +53,8 @@ function setupLocalMagento2() {
           else
             dbname=$4
           fi
-          import2mysql ${dbfile} ${url} ${dbname};
       fi
+      import2mysql ${dbfile} ${url} ${dbname};
       echo "------- making vhost -------";
       sites # move to sites folder
       mkvhost ${subfolder}/pub ${url};

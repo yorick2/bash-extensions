@@ -116,9 +116,10 @@ function setupLocalMagento1() {
           else
             dbname=$5
           fi
-          echo "------- importing database -------";
-          import2mysql ${dbfile} ${url} ${dbname};
-      fi
+       fi
+      echo "------- importing database -------";
+      import2mysql ${dbfile} ${url} ${dbname};
+
       if [ -z $4 ] ; then
         sites;
         if [ -d "${subfolder}/htdocs" ] ; then
