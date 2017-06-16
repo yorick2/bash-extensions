@@ -73,6 +73,12 @@ function setupLocalMagento2() {
       php bin/magento setup:upgrade
       echo "------- flushing cache -------";
       php bin/magento cache:flush;
+      echo "------- create test admin user -------";
+      echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
+      n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"
+      echo 'new user created:'
+      echo 'user:test '
+      echo 'password:test '
       echo "------- removing generated folders -------";
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";

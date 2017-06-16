@@ -151,6 +151,12 @@ function setupLocalMagento1() {
       echo "------- flushing cache -------";
       n98-magerun.phar cache:flush;
       echo ran 'n98-magerun.phar cache:flush' here:
+      echo "------- create test admin user -------";
+      echo ran 'n98-magerun.phar admin:user:create  test t@test.com test test test' here:
+      n98-magerun.phar admin:user:create  test t@test.com test test test
+      echo 'new user created:'
+      echo 'user:test '
+      echo 'password:test '
       pwd
       echo 'n98 sometimes throws an error on this line, just ignore it'
       #echo "------- reindexing -------";
