@@ -76,6 +76,7 @@ setupNewLocalMagento1(){
         echo "error: subfolder  ${subfolder} already used, please clone the git repository and use setupLocalMagento1";
       fi
 
+      sites
       git clone ${giturl} ${subfolder};
       cd ${subfolder}
       composer install --no-dev
