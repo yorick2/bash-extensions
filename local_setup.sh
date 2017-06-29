@@ -20,7 +20,6 @@ function tar2mysql() {
     file=$1
     url=$2
     db=$3
-    echo ${db}
     echo '-->uncompressing file'
     tar -xzvf ${file} &&
     file=${file%.gz} &&
