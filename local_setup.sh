@@ -46,7 +46,8 @@ function gz2mysql() {
     echo ${db}
     echo '-->uncompressing file'
     gunzip ${file} &&
-    file=${file%.*} &&
+    file=${file%.gz} &&
+    file=${file%.sql} &&
     file=${file##*/} &&
     sql2mysql ${file}.sql ${url} ${db} &&
     echo '-->removing sql' &&
