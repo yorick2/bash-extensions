@@ -36,10 +36,16 @@ function setupLocalMagento2() {
         echo dbfile
         dbfile=$2;
       else
-        echo dbname
         dbname=$2;
       fi
       url=$3;
+
+      runStaticDeploy=''
+      while [[ "${runStaticDeploy}" != "y" && "${runStaticDeploy}" != "n" ]] ; do
+          echo 'run setup:static-content:deploy?';
+          read runStaticDeploy;
+      done;
+
 
       if [ -z ${dbname} ] ; then
           echo "------- importing database -------";
@@ -68,23 +74,25 @@ function setupLocalMagento2() {
       cp ${scriptDir}/local_setup_files/magento2/env.php app/etc/env.php
       sed -i "s/<<<databasename>>>/${dbname}/g" app/etc/env.php
       echo "------- setting developer mode -------";
-      php bin/magento deploy:mode:set developer
+      php bin/magento deploy:mode:set developer;
       echo "------- magento packages upgrade -------";
-      php bin/magento setup:upgrade
+      php bin/magento setup:upgrade;
       echo "------- disabling and flushing cache -------";
-      php bin/magento cache:disable
+      php bin/magento cache:disable;
       php bin/magento cache:flush;
       echo "------- create test admin user -------";
       echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
-      n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"
+      n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
       echo 'new user created:'
       echo 'user:test '
-      echo 'password:test '
+      echo 'password:password1 '
       echo "------- removing generated folders -------";
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";
-      php bin/magento setup:static-content:deploy
-      php bin/magento setup:static-content:deploy en_GB
+      if [ "${runStaticDeploy}" = "y" ] ; then
+        php bin/magento setup:static-content:deploy
+        php bin/magento setup:static-content:deploy en_GB
+      fi
       echo 'mamp users: please restart mamp'
     fi
 }
