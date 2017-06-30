@@ -48,10 +48,9 @@ function gz2mysql() {
     gunzip ${file} &&
     file=${file%.gz} &&
     file=${file%.sql} &&
-    file=${file##*/} &&
     sql2mysql ${file}.sql ${url} ${db} &&
     echo '-->removing sql' &&
-    rm ${file}.sql
+    gz ${file}.sql
   fi
 }
 
