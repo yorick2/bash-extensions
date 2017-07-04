@@ -13,6 +13,7 @@ alias gl='git pull'
 alias gm='git merge --no-ff '
 alias grup='git remote update'
 alias gmt='git mergetool'
+alias git_current_commit_ref="echo 'git rev-parse --verify HEAD'; git rev-parse --verify HEAD"
 
 export PATH="/usr/local/mysql/bin:$PATH"
 
