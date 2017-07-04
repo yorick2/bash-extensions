@@ -86,10 +86,10 @@ function sql2mysql() {
         echo '-->creating db'
         mysql -u${user} -p${password} -e"create database ${db}"
         echo '-->importing db'
-        mysql -u${user} -p${password} ${db} < ${file}
         echo "mysql -u${user} -p${password} ${db} < ${file}"
+        mysql -u${user} -p${password} ${db} < ${file}
         echo '-->updating db'
-        table='core_config_data' 
+        table='core_config_data'
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
