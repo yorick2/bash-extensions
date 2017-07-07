@@ -17,7 +17,7 @@ function sites(){
 }
 
 # run php through a shell for xdebug
-alias phpShellDebug="php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=On"
+alias phpDebug="php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=On"
 
 
 # turn on auto change directory. so dont have to type cd when changing directory

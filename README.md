@@ -118,6 +118,7 @@ Magento 2
 Misc
 |command|details|example|requirements|
 |..............|..................|..............|..................|
+| phpDebug | run file with php with xdebug | phpDebug index.php | php must be able to be run from the terminal with the command 'php' |
 |listcustomcommands| list the custom commands |  |  |
 |listCustomCommands| list the custom commands |  |  |
 |dbs| cd into dbs folder |  |  |
