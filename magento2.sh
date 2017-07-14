@@ -149,5 +149,5 @@ function n982nu () {
     echo '  n98-magerun2.phar admin:user:create --admin-user="my_user_name" --admin-email="example@example.com" --admin-password="mypassword" --admin-firstname="paul" --admin-lastname="test"'
   fi
   echo running n98-magerun2.phar admin:user:create "$@";
-  n98-magerun.phar admin:user:create "$@"
+  n98-magerun2.phar admin:user:create "$@"
 }
