@@ -155,8 +155,8 @@ function setupLocalMagento1() {
       n98-magerun.phar cache:flush;
       echo ran 'n98-magerun.phar cache:flush' here:
       echo "------- create test admin user -------";
-      echo ran 'n98-magerun.phar admin:user:create  test t@test.com paasword1 a testman' here:
-      n98-magerun.phar admin:user:create  test t@test.com paasword1 a testman
+      echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman' here:
+      n98-magerun.phar admin:user:create  test t@test.com password1 a testman
       echo 'new user created:'
       echo 'user:test '
       echo 'password:password1 '
