@@ -42,7 +42,7 @@ function setupLocalMagento2() {
 
       runStaticDeploy=''
       while [[ "${runStaticDeploy}" != "y" && "${runStaticDeploy}" != "n" ]] ; do
-          echo 'run setup:static-content:deploy?';
+          echo 'run setup:static-content:deploy? [y/n]';
           read runStaticDeploy;
       done;
 
