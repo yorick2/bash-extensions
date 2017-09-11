@@ -29,19 +29,13 @@ function git_current_branch(){
 
 # remove remote from name and echo out result
 # expected formats :
-# remotes/origin/....
-# /remotes/origin/....
-# origin/....
-# /origin/....
+# remotes/....
+# /remotes....
 function git_branch_name_without_remote(){
   if  [[ "${1}" == \/remotes* ]] ; then
     echo "${1#\/remotes\/[a-zA-Z]*?\/}"
   elif  [[ "${1}" == remotes* ]] ; then
     echo "${1#remotes\/[a-zA-Z]*?\/}"
-  elif [[ "${1}" == \/origin* ]] ; then
-    echo "${1#\/origin\/}"
-  elif [[ "${1}" == origin* ]] ; then
-    echo "${1#origin\/}"
   else
     echo "${1}"
   fi

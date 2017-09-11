@@ -98,6 +98,10 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_frontend';" # for magento 2
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_admin';" # for magento 2
+        mysql -u${user} -p${password} -e"${cmd}"
         echo "your database ${db} is imported"
         if [ -n "${filecopy}" ] && [ -e "${filecopy}" ]; then
           echo 'removing sanitised file'
