@@ -164,6 +164,7 @@ function import2mysql(){
   fi
 }
 
+root@ubuntu-14:/usr/local/src/ioncube# cp ioncube_loader_lin_5.5.so ioncube_loader_lin_5.5_ts.so /usr/local/ioncube/
 
 function get_vhost_location_file(){
   vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
