@@ -128,6 +128,7 @@ function import2mysql(){
     url=$2;
     db=$3;
     if [[ ${file}} == *':'* ]] ; then
+        echo '-->  downloading db file'
         rsync -ahz ${file} $(dbsLocation) &&
         file=${file##*:} &&
         file=${file##*/}
