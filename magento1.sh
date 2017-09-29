@@ -51,7 +51,7 @@ function update_localxml() {
   fi
 }
 
-setupNewLocalMagento1(){
+function setupNewLocalMagento1(){
   if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
       echo ;
       echo 'git clone, import database, make into vhost, add .htaccess, copy local.xml'
