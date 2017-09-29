@@ -27,8 +27,8 @@ function setupNewLocalMagento2(){
       echo ''
       echo 'arguments missing'
       echo 'setupNewLocalMagento1 <<git url>> <<db file>> <<url>>'
-      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>>'
-      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>> <<db>>'
+      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>>'
+      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<db>>'
       echo 'please try again'
     else
       giturl=$1;
@@ -46,7 +46,7 @@ function setupNewLocalMagento2(){
       fi
       git clone ${giturl} ${subfolder};
       cd ${subfolder}
-      setupLocalMagento2 ${subfolder} ${dbfile} ${url} ${htdocsLocation} ${dbname};
+      setupLocalMagento2 ${subfolder} ${dbfile} ${url} ${dbname};
     fi
 }
 
