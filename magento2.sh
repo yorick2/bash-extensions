@@ -123,12 +123,6 @@ function setupLocalMagento2() {
       echo "------- disabling and flushing cache -------";
       php bin/magento cache:disable;
       php bin/magento cache:flush;
-      echo "------- create test admin user -------";
-      echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
-      n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
-      echo 'new user created:'
-      echo 'user:test '
-      echo 'password:password1 '
       echo "------- removing generated folders -------";
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";
@@ -136,6 +130,12 @@ function setupLocalMagento2() {
         php bin/magento setup:static-content:deploy
         php bin/magento setup:static-content:deploy en_GB
       fi
+      echo "------- create test admin user -------";
+      echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
+      n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
+      echo 'new user created:'
+      echo 'user:test '
+      echo 'password:password1 '
       echo 'mamp users: please restart mamp'
     fi
 }
