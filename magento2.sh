@@ -18,6 +18,38 @@
 #     sed -i "s/['|""]dbname['|"]\s*=>\s*['|"].*['|"]/'dbname' => '${database}'/g" ${location}/app/etc/env.php <<<<<<< not finished yet
 #  fi
 #}
+
+setupNewLocalMagento2(){
+  if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
+      echo ;
+      echo 'git clone, import database, make into vhost, add .htaccess, copy local.xml'
+      echo "dosn't download git repo or create folder"
+      echo ''
+      echo 'arguments missing'
+      echo 'setupNewLocalMagento1 <<git url>> <<db file>> <<url>>'
+      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>>'
+      echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>> <<db>>'
+      echo 'please try again'
+    else
+      giturl=$1;
+      dbfile=$2;
+      url=$3;
+      htdocsLocation=$4;
+      dbname=$5;
+
+      subfolder=${giturl%.git};
+      subfolder=${subfolder##*/};
+
+      sites # move to sites folder
+      if [ -d "$subfolder" ] ; then
+        echo "error: subfolder  ${subfolder} already used, please clone the git repository and use setupLocalMagento1";
+      fi
+      git clone ${giturl} ${subfolder};
+      cd ${subfolder}
+      setupLocalMagento2 ${subfolder} ${dbfile} ${url} ${htdocsLocation} ${dbname};
+    fi
+}
+
 function setupLocalMagento2() {
   if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
       echo ;
@@ -25,10 +57,23 @@ function setupLocalMagento2() {
       echo "dosn't download git repo or create folder"
       echo ''
       echo 'arguments missing'
+      echo 'setupLocalMagento1 <<git url>> <<db file>> <<url>>'
       echo 'setupLocalMagento1 <<sub folder>> <<db file>> <<url>>'
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<db>>'
       echo 'please try again'
     else
+      runStaticDeploy=''
+      while [[ "${runStaticDeploy}" != "y" && "${runStaticDeploy}" != "n" ]] ; do
+          echo 'run setup:static-content:deploy? [y/n]';
+          read runStaticDeploy;
+      done;
+
+      # if a git repo used
+      if [[ "${1}" == *'.git' ]] ; then
+        setupNewLocalMagento2 $1 $2 $3 $4 $5
+        return 1;
+      fi
+
       unset dbname;
       subfolder=$1;
       # if $2 is a filename, set db filename or set db name
@@ -40,12 +85,10 @@ function setupLocalMagento2() {
       fi
       url=$3;
 
-      runStaticDeploy=''
-      while [[ "${runStaticDeploy}" != "y" && "${runStaticDeploy}" != "n" ]] ; do
-          echo 'run setup:static-content:deploy? [y/n]';
-          read runStaticDeploy;
-      done;
-
+      if [ -f "composer.json" ]; then
+        echo "------- composer update -------";
+        composer install --no-dev
+      fi
 
       if [ -z ${dbname} ] ; then
           echo "------- importing database -------";

@@ -72,14 +72,12 @@ setupNewLocalMagento1(){
       subfolder=${giturl%.git};
       subfolder=${subfolder##*/};
 
+      sites # move to sites folder
       if [ -d "$subfolder" ] ; then
         echo "error: subfolder  ${subfolder} already used, please clone the git repository and use setupLocalMagento1";
       fi
-
-      sites
       git clone ${giturl} ${subfolder};
       cd ${subfolder}
-      composer install --no-dev
       setupLocalMagento1 ${subfolder} ${dbfile} ${url} ${htdocsLocation} ${dbname};
     fi
 }
@@ -94,11 +92,18 @@ function setupLocalMagento1() {
       echo "dosn't download git repo or create folder"
       echo ''
       echo 'arguments missing'
+      echo 'setupLocalMagento1 <<git url>> <<db file>> <<url>>'
       echo 'setupLocalMagento1 <<sub folder>> <<db file>> <<url>>'
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>>'
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>> <<db>>'
       echo 'please try again'
     else
+      # if a git repo used
+      if [[ "${1}" == *'.git' ]] ; then
+        setupNewLocalMagento1 $1 $2 $3 $4 $5
+        return 1;
+      fi
+
       subfolder=$1;
       if [[ "${2}" == *'.'* ]] ; then
         dbfile=$2;
@@ -117,7 +122,13 @@ function setupLocalMagento1() {
           else
             dbname=$5
           fi
-       fi
+      fi
+
+      if [ -f "composer.json" ]; then
+        echo "------- composer update -------";
+        composer install --no-dev
+      fi
+
       echo "------- importing database -------";
       import2mysql ${dbfile} ${url} ${dbname};
 
@@ -131,6 +142,7 @@ function setupLocalMagento1() {
       else
           htdocsLocation=$4
       fi
+
       echo "------- making vhost -------";
       repo # move to repos folder
       if [  -z ${htdocsLocation}  ] ; then
@@ -138,6 +150,7 @@ function setupLocalMagento1() {
       else
           mkvhost "${subfolder}/$htdocsLocation" ${url};
       fi
+
       echo "------- adding .htaccess -------";
       sites; # move to repos folder
       cd ${subfolder}
@@ -145,15 +158,19 @@ function setupLocalMagento1() {
         cd ${htdocsLocation}
       fi
       scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-      cp ${scriptDir}/local_setup_files/htaccess .htaccess  ###### <<<<<<<<<<< location not always right, composer puts everything in htdocs folder
+      cp ${scriptDir}/local_setup_files/htaccess .htacces
+
       echo "------- copying local.xml -------";
-      cp ${scriptDir}/local_setup_files/local.xml app/etc   ###### <<<<<<<<<<< location not always right, composer puts everything in htdocs folder
+      cp ${scriptDir}/local_setup_files/local.xml app/etc
+
       echo "------- updating local.xml -------";
       update_localxml "${dbname}" "${url}";
+
       echo "------- disabling and flushing cache -------";
       n98-magerun.phar cache:disable
       n98-magerun.phar cache:flush;
       echo ran 'n98-magerun.phar cache:flush' here:
+
       echo "------- create test admin user -------";
       echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators' here:
       n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators
