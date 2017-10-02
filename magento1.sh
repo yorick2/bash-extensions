@@ -55,7 +55,6 @@ function setupNewLocalMagento1(){
   if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
       echo ;
       echo 'git clone, import database, make into vhost, add .htaccess, copy local.xml'
-      echo "dosn't download git repo or create folder"
       echo ''
       echo 'arguments missing'
       echo 'setupNewLocalMagento1 <<git url>> <<db file>> <<url>>'
@@ -89,7 +88,6 @@ function setupLocalMagento1() {
   if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
       echo ;
       echo 'import database, make into vhost, add .htaccess, copy local.xml'
-      echo "dosn't download git repo or create folder"
       echo ''
       echo 'arguments missing'
       echo 'setupLocalMagento1 <<git url>> <<db file>> <<url>>'
@@ -158,7 +156,7 @@ function setupLocalMagento1() {
         cd ${htdocsLocation}
       fi
       scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-      cp ${scriptDir}/local_setup_files/htaccess .htacces
+      cp ${scriptDir}/local_setup_files/htaccess .htaccess
 
       echo "------- copying local.xml -------";
       cp ${scriptDir}/local_setup_files/local.xml app/etc
