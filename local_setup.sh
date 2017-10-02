@@ -90,18 +90,41 @@ function sql2mysql() {
         mysql -u${user} -p${password} ${db} < ${file}
         echo '-->updating db'
         table='core_config_data'
-        cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+
+        # for magento 1 & 2
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
         mysql -u${user} -p${password} -e"${cmd}"
-        cmd="update ${db}.${table} set value='${url}' where path='web/cookie/cookie_domain';"
+        cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_frontend';" # for magento 2
+
+        # for magento 1
+        cmd="update ${db}.${table} set value='{{secure_base_url}}' where path='web/secure/base_link_url';"
         mysql -u${user} -p${password} -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_admin';" # for magento 2
+        cmd="update ${db}.${table} set value='{{secure_base_url}}/js/' where path='web/secure/base_js_url';"
         mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='{{secure_base_url}}/media/' where path='web/secure/base_media_url';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='{{secure_base_url}}/skin/' where path='web/secure/base_skin_url';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='{{unsecure_base_url}}' where path='web/unsecure/base_link_url';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='{{unsecure_base_url}}/js/' where path='web/unsecure/base_js_url';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='{{unsecure_base_url}}/media/' where path='web/unsecure/base_media_url';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='{{unsecure_base_url}}/skin/' where path='web/unsecure/base_skin_url';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set value='${url}' where path='web/cookie/cookie_domain';"
+        mysql -u${user} -p${password} -e"${cmd}"
+
+        # for magento 2
+        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_frontend';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_admin';"
+        mysql -u${user} -p${password} -e"${cmd}"
+
         echo "your database ${db} is imported"
         if [ -n "${filecopy}" ] && [ -e "${filecopy}" ]; then
           echo 'removing sanitised file'
