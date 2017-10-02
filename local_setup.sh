@@ -99,6 +99,7 @@ function sql2mysql() {
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
 
+
         # for magento 1
         cmd="update ${db}.${table} set value='{{secure_base_url}}' where path='web/secure/base_link_url';"
         mysql -u${user} -p${password} -e"${cmd}"
@@ -117,6 +118,11 @@ function sql2mysql() {
         cmd="update ${db}.${table} set value='{{unsecure_base_url}}/skin/' where path='web/unsecure/base_skin_url';"
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set value='${url}' where path='web/cookie/cookie_domain';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        # check/money order
+        cmd="update ${db}.${table} set VALUE='1' where PATH='payment/checkmo/active'"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/allowspecific'"
         mysql -u${user} -p${password} -e"${cmd}"
 
         # for magento 2
