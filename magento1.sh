@@ -164,6 +164,11 @@ function setupLocalMagento1() {
       echo "------- updating local.xml -------";
       update_localxml "${dbname}" "${url}";
 
+      echo '-------- create media cache folder--------'
+      if [ ! -d "media/cache" ] ; then
+         mkdir -p "media/cache"
+      fi
+
       echo "------- disabling and flushing cache -------";
       n98-magerun.phar cache:disable
       n98-magerun.phar cache:flush;
