@@ -246,7 +246,7 @@ function getVhostLocation() {
 # make vhost but dont setup magento
 function mkvhost() {
     scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    # file locations
+    #--file locations--
     httpdvhosts='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf';
     if [ ! -e "${httpdvhosts}" ]; then
       httpdvhosts='/etc/apache2/extra/httpd-vhosts.conf';
@@ -254,8 +254,21 @@ function mkvhost() {
     if [ ! -e "${httpdvhosts}" ]; then
       httpdvhosts='/etc/apache2/sites-enabled/httpd-vhosts.conf';
     fi
+    #-
+    https_vhosts='/Applications/MAMP/conf/apache/extra/httpd-ssl-vhosts.conf';
+    if [ ! -e "${https_vhosts}" ]; then
+      https_vhosts='/etc/apache2/extra/httpsd-ssl-vhosts.conf';
+    fi
+    if [ ! -e "${https_vhosts}" ]; then
+      https_vhosts='/etc/apache2/sites-enabled/httpd-ssl-vhosts.conf';
+    fi
+     if [ ! -e "${https_vhosts}" ]; then
+      https_vhosts='';
+    fi
+    #-
     hostsfile='/etc/hosts'
     setupfile='${scriptDir}/local_setup_files/vhost_template.txt'
+    #------------------
     if [  -z $1  ] || [  -z $2 ] ; then
       echo ;
       echo 'sets up a vhost (adds to hotst file and httpd-vhosts.conf file)'
@@ -287,19 +300,14 @@ function mkvhost() {
       fi
 
 
-
+      # standard http connection
       if grep -q "${url}" ${httpdvhosts} ; then
           echo "--> no need to update vhosts file"
       else
           echo "--> updating vhosts file"
           eval userDir=~$(whoami); # get user folder location
 
-          #vhostdefault=$( cat "${setupfile}" );
-          
-          #vhostdefault=$(cat ~/Documents/oh-my-zsh-extensions/local_setup_files/vhost_template.txt );
-         # vhostdetails=$( echo "${vhostdefault}" | sed -e"s/myurl/${url}/" | sed -e"s/subfolder/${subfolder}/" );
-          #echo  $vhostdetails >> ${httpdvhosts};
-          
+          # standard connection
           cp ${scriptDir}/local_setup_files/vhost_template.txt ${scriptDir}/local_setup_files/vhost_template.txt.swp
           sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
           sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
@@ -307,12 +315,31 @@ function mkvhost() {
           cat ${scriptDir}/local_setup_files/vhost_template.txt.swp >> ${httpdvhosts};
           # rm ${scriptDir}/local_setup_files/vhost_template.txt.swp
 
-           echo ------
-           echo ${httpdvhosts}
-           echo ------
-
           restart="true";
       fi
+
+      # https (ssl) connection
+      if grep -q "${url}" ${https_vhosts} ; then
+          echo "--> no need to update https vhosts file"
+      else
+          if [ -z "${https_vhosts}" ]; then
+            echo "--> no https vhosts file found"
+          else
+              echo "--> updating https vhosts file"
+              eval userDir=~$(whoami); # get user folder location
+
+              # standard connection
+              cp ${scriptDir}/local_setup_files/vhost_ssl_template.txt ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+              sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+              sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+              sed -i "s/\~/${userDir//\//\\\/}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+              cat ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp >> ${https_vhosts};
+              # rm ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+
+              restart="true";
+          fi
+      fi
+
       if [ "$restart" = "false" ] ; then
          echo "--> no need to restart server"
       else
