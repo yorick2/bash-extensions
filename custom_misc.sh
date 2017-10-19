@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# how time in terminal, like below
+# [07:00:31] user@name:~$
+export PS1="[\$(date +%H:%M:%S)] "${PS1}
+
 ## required for local setups
 alias dbsLocation='echo ~/Documents/Databases'
 alias repoLocation='echo ~/Documents/Repositories'
