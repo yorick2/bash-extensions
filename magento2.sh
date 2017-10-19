@@ -114,6 +114,8 @@ function setupLocalMagento2() {
       cp ${scriptDir}/local_setup_files/magento2/config.php app/etc/config.php
       cp ${scriptDir}/local_setup_files/magento2/env.php app/etc/env.php
       sed -i "s/<<<databasename>>>/${dbname}/g" app/etc/env.php
+      cp ${scriptDir}/local_setup_files/magento2/.htaccess .htaccess
+      cp ${scriptDir}/local_setup_files/magento2/pub/.htaccess pub/.htaccess
       echo "------- setting developer mode -------";
       php bin/magento deploy:mode:set developer;
       echo "------- magento packages upgrade -------";
