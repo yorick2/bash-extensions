@@ -3,7 +3,7 @@
 ######## needs work ########
 # update local.xml with new db details (for magento 1.**)
 #function update_envphp() {
-#    vhost_file_location=$(get_vhost_location_file)
+#    vhost_file_location=$(get_vhost_location_file "${url}")
 #
 #   if [  -z $1  ] || [  -z $2 ] ; then
 #     echo ;
@@ -30,11 +30,12 @@ function setupNewLocalMagento2(){
       echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<db>>'
       echo 'please try again'
     else
-      giturl=$1;
-      dbfile=$2;
-      url=$3;
-      htdocsLocation=$4;
-      dbname=$5;
+      local  subfolder
+      local giturl=$1;
+      local dbfile=$2;
+      local url=$3;
+      local htdocsLocation=$4;
+      local dbname=$5;
 
       subfolder=${giturl%.git};
       subfolder=${subfolder##*/};
@@ -60,6 +61,8 @@ function setupLocalMagento2() {
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<db>>'
       echo 'please try again'
     else
+      local runStaticDeploy subfolder dbfile dbname url scriptDir
+
       runStaticDeploy=''
       while [[ "${runStaticDeploy}" != "y" && "${runStaticDeploy}" != "n" ]] ; do
           echo 'run setup:static-content:deploy? [y/n]';
@@ -143,22 +146,22 @@ function setupLocalMagento2() {
 alias setupMage2='setupLocalMagento2';
 
 function echoConfigMage2() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/config.php
 }
 
 function copyConfigMage2() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/config.php | xclip -selection clipboard
 }
 
 function echoEnvMage2() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/env.php
 }
 
 function copyEnvMage2() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/env.php | xclip -selection clipboard
 }
 

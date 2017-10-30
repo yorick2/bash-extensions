@@ -14,39 +14,38 @@ alias n98dis='echo running n98-magerun.phar cache:disable; n98-magerun.phar cach
 alias rmcache='echo "rm -rf var/cache/* var/session/*"; rm -rf var/cache/* var/session/*'
 
 function echoHtaccessMage1() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/htaccess
 }
 
 function copyHtaccessMage1() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/htaccess | xclip -selection clipboard
 }
 
 function echoLocalXmlTemplate() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/local.xml
 }
 
 function copyLocalXmlTemplate() {
-  scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
+  local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/local.xml | xclip -selection clipboard
 }
 
 # update local.xml with new db details (for magento 1.**)
 function update_localxml() {
-    vhost_file_location=$(get_vhost_location_file)
-
    if [  -z $1  ] || [  -z $2 ] ; then
      echo ;
      echo 'arguments missing'
      echo 'update_localxml <<db>> <<url>>'
      echo 'please try again'
    else
-     database=$1
-     url=$2
-     grepped=$(grep -B 7 -A 8  "${url}" ${vhost_file_location})
-     location=$(getVhostLocation "${url}")
+     local database=$1
+     local url=$2
+     local vhost_file_location=$(get_vhost_location_file "${url}")
+     local grepped=$(grep -B 7 -A 8  "${url}" ${vhost_file_location})
+     local location=$(getVhostLocation "${url}")
      sed -i "s/<dbname>.*<\/dbname>/<dbname><\!\[CDATA\[${database}\]\]><\/dbname>/g" ${location}/app/etc/local.xml
   fi
 }
@@ -62,11 +61,12 @@ function setupNewLocalMagento1(){
       echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>> <<db>>'
       echo 'please try again'
     else
-      giturl=$1;
-      dbfile=$2;
-      url=$3;
-      htdocsLocation=$4;
-      dbname=$5;
+      local subfolder
+      local giturl=$1;
+      local dbfile=$2;
+      local url=$3;
+      local htdocsLocation=$4;
+      local dbname=$5;
 
       subfolder=${giturl%.git};
       subfolder=${subfolder##*/};
@@ -96,6 +96,7 @@ function setupLocalMagento1() {
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>> <<db>>'
       echo 'please try again'
     else
+      local subfolder dbfile dbname url htdocsLocation scriptDir
       # if a git repo used
       if [[ "${1}" == *'.git' ]] ; then
         setupNewLocalMagento1 $1 $2 $3 $4 $5
@@ -121,7 +122,6 @@ function setupLocalMagento1() {
             dbname=$5
           fi
       fi
-
       if [ -f "composer.json" ]; then
         echo "------- composer update -------";
         composer install --no-dev
@@ -162,6 +162,7 @@ function setupLocalMagento1() {
       cp ${scriptDir}/local_setup_files/local.xml app/etc
 
       echo "------- updating local.xml -------";
+
       update_localxml "${dbname}" "${url}";
 
       echo '-------- create media cache folder--------'

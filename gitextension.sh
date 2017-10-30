@@ -20,7 +20,7 @@ export PATH="/usr/local/mysql/bin:$PATH"
 alias gcd='git checkout develop'
 
 # show list of files that have conflicts
-gdf="git diff --name-only --diff-filter=U"
+alias gdf="git diff --name-only --diff-filter=U"
 
 # display current branch name e.g. master
 function git_current_branch(){
@@ -42,6 +42,7 @@ function git_branch_name_without_remote(){
 }
 
 function gco () {
+  local arguments lastArgument branch
   arguments="";
   lastArgument="";
   for arg in "$@"
@@ -88,6 +89,7 @@ function gm2b(){
     echo "e.g. gmm branch1 branch2"
     return
   fi
+  local target destination sure
   if [ "$1" = "." ]
     then
       target=$(git_current_branch)
@@ -119,6 +121,7 @@ function gmm (){
     echo "e.g. gmm branch1 branch2"
     return
   fi
+  local BRANCH target sure destination
   git rev-parse --show-toplevel #first line has to be a git command for auto complete o work
   BRANCH=$1;
   if [  -z $1  ] || [ "$1" = "." ] 
@@ -156,6 +159,7 @@ function gmd (){
     echo "e.g. gmd branch1 branch2"
     return
   fi
+  local target sure destination
   #git rev-parse --show-toplevel #first line has to be a git command for auto complete o work
   if [  -z $1  ] || [ "$1" = "." ] 
   then
@@ -226,6 +230,7 @@ function gb2b() {
     echo "gb2b <<<branch>>>"
     echo "e.g. gb2b master"
   else
+    local target sure
     target=$(git_branch_name_without_remote ${1})
     echo "transfer ${target}? (y/n)" ;
     read sure;

@@ -17,6 +17,7 @@ function tar2mysql() {
     echo 'tar2mysql <<file>> <<url>> or tar2mysql <<file>> <<url>> <<db>>'
     echo 'please try again'
   else
+    local file url db
     file=$1
     url=$2
     db=$3
@@ -40,6 +41,7 @@ function gz2mysql() {
     echo 'gz2mysql <<file>> <<url>> or tar2mysql <<file>> <<url>> <<db>>'
     echo 'please try again'
   else
+    local file url db
     file=$1
     url=$2
     db=$3
@@ -62,9 +64,10 @@ function sql2mysql() {
       echo 'sql2mysql <<file>> <<url>>  or sql2mysql <<file>> <<url>> <<db>>'
       echo 'please try again'
     else
+      local user password file url filecopy db dbexists table cmd
       user=root
       password=root
-      local file=$1;
+      file=$1;
       url=$2;
       filecopy=""
       if [  -z $3  ]; then
@@ -81,7 +84,7 @@ function sql2mysql() {
           filecopy="${file}.sanitized"
           cp ${file} ${filecopy}
           sed -i -e 's/ROW_FORMAT=FIXED//g' ${filecopy} ; # use -i -e not -ie, as -i uses next character if set.
-          local file=${filecopy}
+          file=${filecopy}
         fi
         echo '-->creating db'
         mysql -u${user} -p${password} -e"create database ${db}"
@@ -124,6 +127,8 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/allowspecific'"
         mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='system/guidance_cachebuster/is_enabled'"
+        mysql -u${user} -p${password} -e"${cmd}"
 
         # for magento 2
         cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_frontend';"
@@ -144,7 +149,7 @@ function sql2mysql() {
 
 # import sql file into sql database it creates
 function import2mysql(){
-  if [  -z $1  ] ; then
+  if [  -z $2  ] ; then
     echo ;
     echo 'arguments missing';
     echo 'import2mysql <<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
@@ -152,7 +157,8 @@ function import2mysql(){
     echo 'import2mysql <<login details>>:<<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
     echo 'eg. import2mysql user@example.com:~/example.sql l.example';
     echo 'please try again';
-  else 
+  else
+    local file url db fileextension prevfileextension
     file=$1;
     url=$2;
     db=$3;
@@ -196,13 +202,21 @@ function import2mysql(){
 root@ubuntu-14:/usr/local/src/ioncube# cp ioncube_loader_lin_5.5.so ioncube_loader_lin_5.5_ts.so /usr/local/ioncube/
 
 function get_vhost_location_file(){
-  vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
+  if [  -z $1  ] ; then
+    echo ;
+    echo 'arguments missing';
+    echo 'get_vhost_location_file <<url>>';
+    echo 'please try again';
+    return;
+  fi;
+  local url=$1;
+  local vhost_file_location='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf'
   if [ ! -a "${vhost_file_location}" ]; then
     vhost_folder_location='/etc/apache2/extra';
     if [ ! -d "${vhost_folder_location}" ]; then
-      vhost_folder_location='/etc/apache2/sites-available';
+      vhost_folder_location='/etc/apache2/sites-enabled';
     fi
-    vhost_file_location=$( grep --files-with-matches "${url}" $vhost_folder_location/* )
+    vhost_file_location=$( grep --files-with-matches "${url}" $vhost_folder_location/* | head -1 )
   fi
   echo ${vhost_file_location}
 }
@@ -217,9 +231,10 @@ function getVhostLocation() {
      echo 'please try again';
      return 1;
   fi
+  local url vhost_file_location string delimter documentRoot
   url=$1
   
-  vhost_file_location=$(get_vhost_location_file)
+  vhost_file_location=$(get_vhost_location_file "${url}")
   string=$(cat ${vhost_file_location})
   #
   # add ; to EOL and put into single line
@@ -245,30 +260,6 @@ function getVhostLocation() {
 
 # make vhost but dont setup magento
 function mkvhost() {
-    scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    #--file locations--
-    httpdvhosts='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf';
-    if [ ! -e "${httpdvhosts}" ]; then
-      httpdvhosts='/etc/apache2/extra/httpd-vhosts.conf';
-    fi
-    if [ ! -e "${httpdvhosts}" ]; then
-      httpdvhosts='/etc/apache2/sites-enabled/httpd-vhosts.conf';
-    fi
-    #-
-    https_vhosts='/Applications/MAMP/conf/apache/extra/httpd-ssl-vhosts.conf';
-    if [ ! -e "${https_vhosts}" ]; then
-      https_vhosts='/etc/apache2/extra/httpsd-ssl-vhosts.conf';
-    fi
-    if [ ! -e "${https_vhosts}" ]; then
-      https_vhosts='/etc/apache2/sites-enabled/httpd-ssl-vhosts.conf';
-    fi
-     if [ ! -e "${https_vhosts}" ]; then
-      https_vhosts='';
-    fi
-    #-
-    hostsfile='/etc/hosts'
-    setupfile='${scriptDir}/local_setup_files/vhost_template.txt'
-    #------------------
     if [  -z $1  ] || [  -z $2 ] ; then
       echo ;
       echo 'sets up a vhost (adds to hotst file and httpd-vhosts.conf file)'
@@ -277,6 +268,34 @@ function mkvhost() {
       echo 'mkvhost <<sub folder>> <<url>>'
       echo 'please try again'
     else
+      local scriptDir httpdvhosts https_vhosts hostsfile setupfile magentoSubfolder url restart regexSubfolder userDir
+
+      scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+      #--file locations--
+      httpdvhosts='/Applications/MAMP/conf/apache/extra/httpd-vhosts.conf';
+      if [ ! -e "${httpdvhosts}" ]; then
+        httpdvhosts='/etc/apache2/extra/httpd-vhosts.conf';
+      fi
+      if [ ! -e "${httpdvhosts}" ]; then
+        httpdvhosts='/etc/apache2/sites-enabled/httpd-vhosts.conf';
+      fi
+      #-
+      https_vhosts='/Applications/MAMP/conf/apache/extra/httpd-ssl-vhosts.conf';
+      if [ ! -e "${https_vhosts}" ]; then
+        https_vhosts='/etc/apache2/extra/httpsd-ssl-vhosts.conf';
+      fi
+      if [ ! -e "${https_vhosts}" ]; then
+        https_vhosts='/etc/apache2/sites-enabled/httpd-ssl-vhosts.conf';
+      fi
+       if [ ! -e "${https_vhosts}" ]; then
+        https_vhosts='';
+      fi
+      #-
+      hostsfile='/etc/hosts'
+      setupfile='${scriptDir}/local_setup_files/vhost_template.txt'
+      #------------------
+
+
       magentoSubfolder=$1;
       url=$2;
       restart="false";
@@ -354,6 +373,7 @@ function mkvhost() {
 
 # list all my vhosts in hosts file that are local
 function listhosts(){
+  local hosts_file_location string
   hosts_file_location='/etc/hosts';
   if [ -z $1 ] ; then
     string=$( grep '127.0.0.1' ${hosts_file_location} | sed -e"s/127\.0\.0\.1//g" | sort);
