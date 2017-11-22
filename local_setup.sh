@@ -7,6 +7,23 @@ function listdbs() {
   fi
 }
 
+testSshConnection () {
+    if [  -z $1  ] ; then
+        echo ;
+        echo 'arguments missing'
+        echo 'testSshConnection <<ssh details>>'
+        echo 'e.g.'
+        echo 'testSshConnection root@test.com'
+        echo 'please try again'
+        return;
+    fi
+    local testSshConnection=$( ( ssh $1 "echo true;" ) & sleep 5 ; kill $! 2>/dev/null; )
+    if [ "${testSshConnection}" != "true" ]; then
+        echo 'ssh connection failed'
+        return;
+    fi
+    echo 'true';
+}
 
 # import sql file inside a tar.gz file into sql database it creates
 # only works fro ***.tar.gz files not ***.sql.tar.gz
@@ -16,6 +33,7 @@ function tar2mysql() {
     echo 'arguments missing'
     echo 'tar2mysql <<file>> <<url>> or tar2mysql <<file>> <<url>> <<db>>'
     echo 'please try again'
+    echo '';
   else
     local file url db
     file=$1
@@ -158,11 +176,17 @@ function import2mysql(){
     echo 'eg. import2mysql user@example.com:~/example.sql l.example';
     echo 'please try again';
   else
-    local file url db fileextension prevfileextension
+    local file url db fileextension prevfileextension testSshConnection
     file=$1;
     url=$2;
     db=$3;
-    if [[ ${file}} == *':'* ]] ; then
+    if [[ ${file} == *':'* ]] ; then
+        echo '-->  testing ssh connection'
+        testSshConnection=$(testSshConnection ${file%:*});
+        if [[ "$testSshConnection" != 'true' ]]; then
+            echo 'unable to download database: connection failed'
+            return;
+        fi
         echo '-->  downloading db file'
         rsync -ahz ${file} $(dbsLocation) &&
         file=${file##*:} &&

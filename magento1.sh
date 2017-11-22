@@ -61,7 +61,7 @@ function setupNewLocalMagento1(){
       echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<htdocs location>> <<db>>'
       echo 'please try again'
     else
-      local subfolder
+      local subfolder testSshConnection
       local giturl=$1;
       local dbfile=$2;
       local url=$3;
@@ -69,7 +69,16 @@ function setupNewLocalMagento1(){
       local dbname=$5;
 
       subfolder=${giturl%.git};
-      subfolder=${subfolder##*/};
+      subfolder=${subfolder##*/}
+
+
+      if [[ ${dbfile} == *':'* ]] ; then
+          testSshConnection=$(testSshConnection ${dbfile%:*});
+          if [[ "$testSshConnection" != 'true' ]]; then
+            echo 'unable to download database: connection failed'
+            return;
+          fi
+      fi
 
       sites # move to sites folder
       if [ -d "$subfolder" ] ; then
@@ -96,19 +105,28 @@ function setupLocalMagento1() {
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>> <<db>>'
       echo 'please try again'
     else
-      local subfolder dbfile dbname url htdocsLocation scriptDir
-      # if a git repo used
-      if [[ "${1}" == *'.git' ]] ; then
-        setupNewLocalMagento1 $1 $2 $3 $4 $5
-        return 1;
-      fi
-
+      local subfolder dbfile dbname url htdocsLocation scriptDir testSshConnection
       subfolder=$1;
       if [[ "${2}" == *'.'* ]] ; then
         dbfile=$2;
       else
         dbname=$2;
       fi
+
+      if [[ ${dbfile} == *':'* ]] ; then
+          testSshConnection=$(testSshConnection ${dbfile%:*});
+          if [[ "$testSshConnection" != 'true' ]]; then
+            echo 'unable to download database: connection failed'
+            return;
+          fi
+      fi
+
+      # if a git repo used
+      if [[ "${1}" == *'.git' ]] ; then
+        setupNewLocalMagento1 $1 $2 $3 $4 $5
+        return 1;
+      fi
+
       url=$3;
       if [ -z ${dbname} ] ; then
           if [  -z $5  ]; then
@@ -122,6 +140,7 @@ function setupLocalMagento1() {
             dbname=$5
           fi
       fi
+
       if [ -f "composer.json" ]; then
         echo "------- composer update -------";
         composer install --no-dev

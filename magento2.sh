@@ -30,7 +30,7 @@ function setupNewLocalMagento2(){
       echo 'or setupNewLocalMagento1 <<git url>> <<db file>> <<url>> <<db>>'
       echo 'please try again'
     else
-      local  subfolder
+      local  subfolder testSshConnection
       local giturl=$1;
       local dbfile=$2;
       local url=$3;
@@ -39,6 +39,14 @@ function setupNewLocalMagento2(){
 
       subfolder=${giturl%.git};
       subfolder=${subfolder##*/};
+
+      if [[ ${dbfile} == *':'* ]] ; then
+          testSshConnection=$(testSshConnection ${dbfile%:*});
+          if [[ "$testSshConnection" != 'true' ]]; then
+            echo 'unable to download database: connection failed'
+            return;
+          fi
+      fi
 
       sites # move to sites folder
       if [ -d "$subfolder" ] ; then
@@ -61,7 +69,24 @@ function setupLocalMagento2() {
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<db>>'
       echo 'please try again'
     else
-      local runStaticDeploy subfolder dbfile dbname url scriptDir
+      local runStaticDeploy subfolder dbfile dbname url scriptDir testSshConnection
+      subfolder=$1;
+      # if $2 is a filename, set db filename or set db name
+      if [[ "${2}" == *'.'* ]] ; then
+        echo dbfile
+        dbfile=$2;
+      else
+        dbname=$2;
+      fi
+      url=$3;
+
+      if [[ ${dbfile} == *':'* ]] ; then
+          testSshConnection=$(testSshConnection ${dbfile%:*});
+          if [[ "$testSshConnection" != 'true' ]]; then
+            echo 'unable to download database: connection failed'
+            return;
+          fi
+      fi
 
       runStaticDeploy=''
       while [[ "${runStaticDeploy}" != "y" && "${runStaticDeploy}" != "n" ]] ; do
@@ -75,16 +100,7 @@ function setupLocalMagento2() {
         return 1;
       fi
 
-      unset dbname;
-      subfolder=$1;
-      # if $2 is a filename, set db filename or set db name
-      if [[ "${2}" == *'.'* ]] ; then
-        echo dbfile
-        dbfile=$2;
-      else
-        dbname=$2;
-      fi
-      url=$3;
+
 
       if [ -f "composer.json" ]; then
         echo "------- composer update -------";
