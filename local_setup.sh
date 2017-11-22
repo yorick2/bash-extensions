@@ -120,7 +120,7 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set value='{{unsecure_base_url}}skin/' where path='web/unsecure/base_skin_url';"
         mysql -u${user} -p${password} -e"${cmd}"
-        cmd="update ${db}.${table} set value='${url}' where path='web/cookie/cookie_domain';"
+        cmd="delete from ${db}.${table} where path='web/cookie/cookie_domain';"
         mysql -u${user} -p${password} -e"${cmd}"
         # check/money order
         cmd="update ${db}.${table} set VALUE='1' where PATH='payment/checkmo/active'"
