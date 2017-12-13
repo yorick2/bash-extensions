@@ -153,6 +153,10 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_admin';"
         mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='dev/css/merge_css_files';"
+        mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='dev/js/merge_files';"
+        mysql -u${user} -p${password} -e"${cmd}"
 
         echo "your database ${db} is imported"
         if [ -n "${filecopy}" ] && [ -e "${filecopy}" ]; then
