@@ -139,8 +139,9 @@ function setupLocalMagento2() {
       php bin/magento deploy:mode:set developer;
       echo "------- magento packages upgrade -------";
       php bin/magento setup:upgrade;
-      echo "------- disabling and flushing cache -------";
-      php bin/magento cache:disable;
+      echo "------- disabling full_page cache and flushing cache -------";
+      php bin/magento cache:enable;
+      php bin/magento cache:disable full_page;
       php bin/magento cache:flush;
       echo "------- removing generated folders -------";
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
@@ -182,24 +183,31 @@ function copyEnvMage2() {
 }
 
 alias n982='echo running n98-magerun2.phar; n98-magerun2.phar'
-alias n982fl='echo running n98-magerun2.phar cache:flush; n98-magerun2.phar cache:flush'
 alias n982pass='echo running n98-magerun2.phar admin:user:change-password; n98-magerun2.phar admin:user:change-password'
 alias n982re='echo running n98-magerun2.phar indexer:reindex; n98-magerun2.phar indexer:reindex'
+alias n982st='echo running n98-magerun2.phar cache:status; n98-magerun2.phar cache:status'
+alias n982fl='echo running n98-magerun2.phar cache:flush; n98-magerun2.phar cache:flush'
+alias n982en='echo running n98-magerun2.phar cache:enable; n98-magerun2.phar cache:enable'
 alias n982dis='echo running n98-magerun2.phar cache:disable; n98-magerun2.phar cache:disable'
 
-alias mage2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
-alias mage2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
-
-alias mage2modules='php bin/magento module:status'
-
-
-alias mage2UpgradeNStatic="echo 'php bin/magento setup:upgrade \
+alias m2='echo running php bin/magento; php bin/magento'
+alias m2re='echo running php bin/magento indexer:reindex; php bin/magento indexer:reindex'
+alias m2st='echo running php bin/magento cache:status; php bin/magento cache:status'
+alias m2fl='echo running php bin/magento cache:flush; php bin/magento cache:flush'
+alias m2en='echo running php bin/magento cache:enable; php bin/magento cache:enable'
+alias m2dis='echo running php bin/magento cache:disable; php bin/magento cache:disable'
+alias m2dis_without_full_page='echo running php bin/magento cache:enable && php bin/magento cache:disable full_page; \
+ php bin/magento cache:enable && php bin/magento cache:disable full_page'
+alias m2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
+alias m2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
+alias m2modules='php bin/magento module:status'
+alias m2UpgradeNStatic="echo 'php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean' \
  ; php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean"
-alias mage2staticFlush="echo 'php bin/magento setup:static-content:deploy \
+alias m2staticFlush="echo 'php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean' \
  ; php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean"
@@ -213,3 +221,6 @@ function n982nu () {
   echo running n98-magerun2.phar admin:user:create "$@";
   n98-magerun2.phar admin:user:create "$@"
 }
+
+
+
