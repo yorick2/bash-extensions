@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
 
-######## needs work ########
-# update local.xml with new db details (for magento 1.**)
-#function update_envphp() {
-#    vhost_file_location=$(get_vhost_location_file "${url}")
-#
-#   if [  -z $1  ] || [  -z $2 ] ; then
-#     echo ;
-#     echo 'arguments missing'
-#     echo 'update_localxml <<db>> <<url>>'
-#     echo 'please try again'
-#   else
-#     database=$1
-#     url=$2
-#     grepped=$(grep -B 7 -A 8  "${url}" ${vhost_file_location})
-#     location=$(getVhostLocation "${url}")
-#     sed -i "s/['|""]dbname['|"]\s*=>\s*['|"].*['|"]/'dbname' => '${database}'/g" ${location}/app/etc/env.php <<<<<<< not finished yet
-#  fi
-#}
+# update local.xml with new db details (for magento 2.**)
+function update_envphp() {
+   if [  -z $1  ] || [  -z $2 ] ; then
+     echo ;
+     echo 'arguments missing'
+     echo 'update_envphp <<db>> <<url>>'
+     echo 'please try again'
+   else
+     database=$1
+     url=$2
+     vhostLocation=$(getVhostLocation "${url}")
+     quotes="['\"]"
+     notQuotes="[^'\"]"
+     if [ -f  ${vhostLocation}/../app/etc/env.php ] ; then
+        location="${vhostLocation}/../app/etc/env.php";
+     elif [ -f  ${vhostLocation}/app/etc/env.php ] ; then
+        location="${vhostLocation}/app/etc/env.php";
+     else
+        echo 'env file not found';
+        return;
+     fi
+     sed -i "s/${quotes}dbname${quotes}\s=>\s${quotes}${notQuotes}*${quotes},/'dbname' => '${database}'/g" ${location}
+  fi
+}
 
 function setupNewLocalMagento2(){
   if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
