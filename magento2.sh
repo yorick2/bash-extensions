@@ -147,7 +147,7 @@ function setupLocalMagento2() {
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";
       if [ "${runStaticDeploy}" = "y" ] ; then
-        php bin/magento setup:static-content:deploy
+        php bin/magento setup:static-content:deploy --theme="Magento/backend" en_US
         php bin/magento setup:static-content:deploy en_GB
       fi
       echo "------- create test admin user -------";
