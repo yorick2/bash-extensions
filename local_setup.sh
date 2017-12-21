@@ -119,6 +119,8 @@ function sql2mysql() {
         mysql -u${user} -p${password} -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
         mysql -u${user} -p${password} -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='31536000' where path='admin/security/session_lifetime';"
+        mysql -u${user} -p${password} -e"${cmd}"
 
 
         # for magento 1
