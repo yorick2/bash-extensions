@@ -108,7 +108,7 @@ function sql2mysql() {
       url=$2;
       filecopy=""
       if [  -z $3  ]; then
-        db=$(_createDatabaseName "${dbfile}")
+        db=$(_createDatabaseName "${file}")
       else
         db=$3;
       fi
