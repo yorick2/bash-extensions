@@ -50,6 +50,7 @@ function update_localxml() {
   fi
 }
 
+
 function setupNewLocalMagento1(){
   if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
       echo ;
@@ -130,12 +131,7 @@ function setupLocalMagento1() {
       url=$3;
       if [ -z ${dbname} ] ; then
           if [  -z $5  ]; then
-            dbname=${dbfile%.*};
-            dbname=${dbname%.tar};
-            dbname=${dbname%.sql};
-            dbname=${dbname##*:};
-            dbname=${dbname##*/};
-            dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
+            dbname=$(_createDatabaseName "${dbfile}")
           else
             dbname=$5
           fi
@@ -208,3 +204,22 @@ function setupLocalMagento1() {
     fi
 }
 alias setupMage1='setupLocalMagento1';
+
+function updateMage1Db(){
+     if [  -z $2 ]; then
+          echo ;
+          echo 'import database and set to current database in magento setting file'
+          echo ''
+          echo 'arguments missing'
+          echo 'updateMage1Db <<db file>> <<url>'
+          echo 'please try again'
+    else
+        file=$1
+        url=$2
+        dbname=$(_createDatabaseName "${file}");
+        echo "-------importing database--------"
+        import2mysql "${file}" "${url}" "${dbname}"
+        echo "-------updating local.xml--------"
+        update_localxml "${dbname}" "${url}"
+    fi
+}

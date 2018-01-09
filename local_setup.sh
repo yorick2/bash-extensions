@@ -1,4 +1,23 @@
 #!/usr/bin/env bash
+function _createDatabaseName(){
+    if [  -z $1  ] ; then
+        echo 'create safe db name from filename';
+        echo '';
+        echo 'arguments missing';
+        echo 'createDatabaseName <<database filename>>';
+        echo 'please try again';
+        return;
+    fi
+    dbfile=$1
+    dbname=${dbfile%.*};
+    dbname=${dbname%.tar};
+    dbname=${dbname%.sql};
+    dbname=${dbname##*:};
+    dbname=${dbname##*/};
+    dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
+    echo "${dbname}"
+}
+
 function listdbs() {
   if [  -z $1  ] ; then
     mysql -uroot -proot -e'show databases'
@@ -89,9 +108,7 @@ function sql2mysql() {
       url=$2;
       filecopy=""
       if [  -z $3  ]; then
-        db=${file%.sql};
-        db=${db##*/};
-        db=${db//[-.]/_}; #make db name valid when created from filenames not valid db names
+        db=$(_createDatabaseName "${dbfile}")
       else
         db=$3;
       fi
@@ -396,8 +413,6 @@ function mkvhost() {
       fi
     fi  
 }
-
-
 
 # list all my vhosts in hosts file that are local
 function listhosts(){

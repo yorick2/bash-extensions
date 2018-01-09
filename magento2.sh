@@ -116,12 +116,7 @@ function setupLocalMagento2() {
       if [ -z ${dbname} ] ; then
           echo "------- importing database -------";
           if [  -z $4  ]; then
-            dbname=${dbfile%.*};
-            dbname=${dbname%.tar};
-            dbname=${dbname%.sql};
-            dbname=${dbname##*:};
-            dbname=${dbname##*/};
-            dbname=${dbname//[-.]/_}; #make db name valid when created from filenames not valid db names
+            dbname=$(_createDatabaseName "${dbfile}")
           else
             dbname=$4
           fi
@@ -228,5 +223,23 @@ function n982nu () {
   n98-magerun2.phar admin:user:create "$@"
 }
 
+function updateMage2Db(){
+     if [  -z $2 ]; then
+          echo ;
+          echo 'import database and set to current database in magento setting file'
+          echo ''
+          echo 'arguments missing'
+          echo 'updateMage2Db <<db file>> <<url>'
+          echo 'please try again'
+    else
+        file=$1
+        url=$2
+        dbname=$(_createDatabaseName "${file}");
+        echo "-------importing database--------"
+        import2mysql "${file}" "${url}" "${dbname}"
+        echo "-------updating env.php--------"
+        update_envphp "${dbname}" "${url}"
+    fi
+}
 
 
