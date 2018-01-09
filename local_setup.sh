@@ -8,6 +8,7 @@ function _createDatabaseName(){
         echo 'please try again';
         return;
     fi
+    local dbfile dbname
     dbfile=$1
     dbname=${dbfile%.*};
     dbname=${dbname%.tar};

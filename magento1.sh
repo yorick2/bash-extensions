@@ -43,8 +43,6 @@ function update_localxml() {
    else
      local database=$1
      local url=$2
-     local vhost_file_location=$(get_vhost_location_file "${url}")
-     local grepped=$(grep -B 7 -A 8  "${url}" ${vhost_file_location})
      local location=$(getVhostLocation "${url}")
      sed -i "s/<dbname>.*<\/dbname>/<dbname><\!\[CDATA\[${database}\]\]><\/dbname>/g" ${location}/app/etc/local.xml
   fi
@@ -214,6 +212,7 @@ function updateMage1Db(){
           echo 'updateMage1Db <<db file>> <<url>'
           echo 'please try again'
     else
+        local file url dbname location
         file=$1
         url=$2
         dbname=$(_createDatabaseName "${file}");
@@ -221,5 +220,16 @@ function updateMage1Db(){
         import2mysql "${file}" "${url}" "${dbname}"
         echo "-------updating local.xml--------"
         update_localxml "${dbname}" "${url}"
+        echo "------- flushing cache -------";
+        location=$(getVhostLocation "${url}")
+        cd ${location}
+        n98-magerun.phar cache:flush;
+        echo ran 'n98-magerun.phar cache:flush' here:
+        echo "------- create test admin user -------";
+        echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators' here:
+        n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators
+        echo 'new user created:'
+        echo 'user:test '
+        echo 'password:password1 '
     fi
 }

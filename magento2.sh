@@ -232,6 +232,7 @@ function updateMage2Db(){
           echo 'updateMage2Db <<db file>> <<url>'
           echo 'please try again'
     else
+        local file url dbname
         file=$1
         url=$2
         dbname=$(_createDatabaseName "${file}");
@@ -239,6 +240,32 @@ function updateMage2Db(){
         import2mysql "${file}" "${url}" "${dbname}"
         echo "-------updating env.php--------"
         update_envphp "${dbname}" "${url}"
+        echo "------- setting developer mode -------";
+        vhostLocation=$(getVhostLocation "${url}")
+        if [ -f  ${vhostLocation}/../app/etc/env.php ] ; then
+           location="${vhostLocation}/../app/etc/env.php";
+        elif [ -f  ${vhostLocation}/app/etc/env.php ] ; then
+           location="${vhostLocation}/app/etc/env.php";
+        else
+           echo 'env file not found';
+           return;
+        fi
+        cd "${location}"
+        php bin/magento deploy:mode:set developer;
+        echo "------- magento packages upgrade -------";
+        php bin/magento setup:upgrade;
+        echo "------- disabling full_page cache and flushing cache -------";
+        php bin/magento cache:enable;
+        php bin/magento cache:disable full_page;
+        php bin/magento cache:flush;
+        echo "------- removing generated folders -------";
+        rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
+        echo "------- create test admin user -------";
+        echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
+        n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
+        echo 'new user created:'
+        echo 'user:test '
+        echo 'password:password1 '
     fi
 }
 
