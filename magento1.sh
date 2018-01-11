@@ -102,10 +102,14 @@ function setupLocalMagento1() {
       echo 'setupLocalMagento1 <<sub folder>> <<db file>> <<url>>'
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>>'
       echo 'or setupLocalMagento1 <<sub folder>> <<db file>> <<url>> <<htdocs location>> <<db>>'
+      echo 'To use the current folder as the subfolder use .'
       echo 'please try again'
     else
       local subfolder dbfile dbname url htdocsLocation scriptDir testSshConnection
       subfolder=$1;
+      if [ "$subfolder" = "." ] ; then
+        subfolder=$(_getCurrentFolderName);
+      fi;
       if [[ "${2}" == *'.'* ]] ; then
         dbfile=$2;
       else

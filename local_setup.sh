@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+#  get the name of the current folder without full folder path
+function _getCurrentFolderName(){
+    echo "${PWD##*/}";
+}
+
 function _createDatabaseName(){
     if [  -z $1  ] ; then
         echo 'create safe db name from filename';
@@ -312,6 +318,7 @@ function mkvhost() {
       echo ''
       echo 'arguments missing'
       echo 'mkvhost <<sub folder>> <<url>>'
+      echo 'To use the current folder as the subfolder use .'
       echo 'please try again'
     else
       local scriptDir httpdvhosts https_vhosts hostsfile setupfile magentoSubfolder url restart regexSubfolder userDir
@@ -342,10 +349,13 @@ function mkvhost() {
       #------------------
 
 
-      magentoSubfolder=$1;
+      subfolder=$1;
+      if [ "$subfolder" = "." ] ; then
+        subfolder=$(_getCurrentFolderName);
+      fi;
       url=$2;
       restart="false";
-      regexSubfolder=${magentoSubfolder/\//\\\/}
+      regexSubfolder=${subfolder/\//\\\/}
 
       if [ ! -w "${httpdvhosts}" ] ; then
             echo "${httpdvhosts} is not writable"
