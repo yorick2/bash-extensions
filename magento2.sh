@@ -21,7 +21,7 @@ function update_envphp() {
         echo 'env file not found';
         return;
      fi
-     sed -i "s/${quotes}dbname${quotes}\s=>\s${quotes}${notQuotes}*${quotes},/'dbname' => '${database}'/g" ${location}
+     sed -i "s/${quotes}dbname${quotes}\s=>\s${quotes}${notQuotes}*${quotes}/'dbname' => '${database}'/g" ${location}
   fi
 }
 
@@ -255,6 +255,7 @@ function updateMage2Db(){
            return;
         fi
         cd "${location}"
+        cd ..
         php bin/magento deploy:mode:set developer;
         echo "------- magento packages upgrade -------";
         php bin/magento setup:upgrade;
@@ -265,7 +266,7 @@ function updateMage2Db(){
         echo "------- removing generated folders -------";
         rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
         echo "------- create test admin user -------";
-        echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
+        echo 'ran n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"'
         n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
         echo 'new user created:'
         echo 'user:test '
