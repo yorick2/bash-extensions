@@ -35,7 +35,7 @@ function copyLocalXmlTemplate() {
 
 # update local.xml with new db details (for magento 1.**)
 function update_localxml() {
-   if [  -z $1  ] || [  -z $2 ] ; then
+   if [  -z $2 ] || [ "$1" = "--help" ] ; then
      echo ;
      echo 'arguments missing'
      echo 'update_localxml <<db>> <<url>>'
@@ -50,7 +50,7 @@ function update_localxml() {
 
 
 function setupNewLocalMagento1(){
-  if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
+  if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
       echo 'git clone, import database, make into vhost, add .htaccess, copy local.xml'
       echo ''
@@ -93,7 +93,7 @@ function setupNewLocalMagento1(){
 # make vhost and setup magento
 ######## needs work ########
 function setupLocalMagento1() {
-  if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
+  if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
       echo 'import database, make into vhost, add .htaccess, copy local.xml'
       echo ''
@@ -208,7 +208,7 @@ function setupLocalMagento1() {
 alias setupMage1='setupLocalMagento1';
 
 function updateMage1Db(){
-     if [  -z $2 ]; then
+     if [  -z $2 ] || [ "$1" = "--help" ]; then
           echo ;
           echo 'import database and set to current database in magento setting file'
           echo ''

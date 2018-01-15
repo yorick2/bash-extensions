@@ -2,7 +2,7 @@
 
 # update local.xml with new db details (for magento 2.**)
 function update_envphp() {
-   if [  -z $1  ] || [  -z $2 ] ; then
+   if [  -z $2 ] || [ "$1" = "--help" ] ; then
      echo ;
      echo 'arguments missing'
      echo 'update_envphp <<db>> <<url>>'
@@ -26,7 +26,7 @@ function update_envphp() {
 }
 
 function setupNewLocalMagento2(){
-  if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
+  if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
       echo 'git clone, import database, make into vhost, copy env.php & config.php'
       echo ''
@@ -65,7 +65,7 @@ function setupNewLocalMagento2(){
 }
 
 function setupLocalMagento2() {
-  if [  -z $1  ] || [  -z $2 ] || [  -z $3 ] ; then
+  if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
       echo 'git clone, import database, make into vhost, copy env.php & config.php'
       echo ''
@@ -109,8 +109,6 @@ function setupLocalMagento2() {
         setupNewLocalMagento2 $1 $2 $3 $4 $5
         return 1;
       fi
-
-
 
       if [ -f "composer.json" ]; then
         echo "------- composer update -------";
@@ -218,7 +216,7 @@ alias m2staticFlush="echo 'php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean"
 
 function n982nu () {
-  if [  -z $1  ] ; then
+  if [  -z $1  ] || [ "$1" = "--help" ] ; then
     echo 'arguments missing'
     echo 'e.g.'
     echo '  n98-magerun2.phar admin:user:create --admin-user="my_user_name" --admin-email="example@example.com" --admin-password="mypassword" --admin-firstname="paul" --admin-lastname="test"'
@@ -228,7 +226,7 @@ function n982nu () {
 }
 
 function updateMage2Db(){
-     if [  -z $2 ]; then
+     if [  -z $2 ] || [ "$1" = "--help" ]; then
           echo ;
           echo 'import database and set to current database in magento setting file'
           echo ''

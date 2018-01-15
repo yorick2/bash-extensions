@@ -6,7 +6,7 @@ function _getCurrentFolderName(){
 }
 
 function _createDatabaseName(){
-    if [  -z $1  ] ; then
+    if [  -z $1  ] || [ "$1" = "--help" ] ; then
         echo 'create safe db name from filename';
         echo '';
         echo 'arguments missing';
@@ -26,7 +26,7 @@ function _createDatabaseName(){
 }
 
 function listdbs() {
-  if [  -z $1  ] ; then
+  if [  -z $1  ] || [ "$1" = "--help" ] ; then
     mysql -uroot -proot -e'show databases'
   else
     mysql -uroot -proot -e'show databases' | grep "${1}"
@@ -34,7 +34,7 @@ function listdbs() {
 }
 
 testSshConnection () {
-    if [  -z $1  ] ; then
+    if [  -z $1  ] || [ "$1" = "--help" ] ; then
         echo ;
         echo 'arguments missing'
         echo 'testSshConnection <<ssh details>>'
@@ -54,7 +54,7 @@ testSshConnection () {
 # import sql file inside a tar.gz file into sql database it creates
 # only works fro ***.tar.gz files not ***.sql.tar.gz
 function tar2mysql() {
-  if [  -z $1  ] || [  -z $2 ] ; then
+  if [  -z $2 ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing'
     echo 'tar2mysql <<file>> <<url>> or tar2mysql <<file>> <<url>> <<db>>'
@@ -79,7 +79,7 @@ function tar2mysql() {
 
 # import sql file inside a gz file into sql database it creates
 function gz2mysql() {
-  if [  -z $1  ] || [  -z $2 ] ; then
+  if [  -z $2 ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing'
     echo 'gz2mysql <<file>> <<url>> or tar2mysql <<file>> <<url>> <<db>>'
@@ -102,7 +102,7 @@ function gz2mysql() {
 
 # import sql file into sql database it creates
 function sql2mysql() {
-    if [  -z $1  ] || [  -z $2 ] ; then
+    if [  -z $2 ] || [ "$1" = "--help" ] ; then
       echo ;
       echo 'arguments missing'
       echo 'sql2mysql <<file>> <<url>>  or sql2mysql <<file>> <<url>> <<db>>'
@@ -197,7 +197,7 @@ function sql2mysql() {
 
 # import sql file into sql database it creates
 function import2mysql(){
-  if [  -z $2  ] ; then
+  if [  -z $2  ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing';
     echo 'import2mysql <<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
@@ -254,7 +254,7 @@ function import2mysql(){
 }
 
 function get_vhost_location_file(){
-  if [  -z $1  ] ; then
+  if [  -z $1  ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing';
     echo 'get_vhost_location_file <<url>>';
@@ -276,7 +276,7 @@ function get_vhost_location_file(){
 # get vhost location
 ######## needs work ########
 function getVhostLocation() {
-   if [  -z $1  ]; then
+   if [  -z $1  ] || [ "$1" = "--help" ]; then
      echo ;
      echo 'arguments missing';
      echo 'getVhostLocation <<url>>';
@@ -312,7 +312,7 @@ function getVhostLocation() {
 
 # make vhost but dont setup magento
 function mkvhost() {
-    if [  -z $1  ] || [  -z $2 ] ; then
+    if [  -z $2 ] || [ "$1" = "--help" ] ; then
       echo ;
       echo 'sets up a vhost (adds to hotst file and httpd-vhosts.conf file)'
       echo ''

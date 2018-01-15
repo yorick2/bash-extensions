@@ -59,7 +59,7 @@ function gco () {
 # pull and merge a branch into another branch
 function git_merge_branchs() {
   git rev-parse --show-toplevel #first line has to be a git command for auto complete o work
-  if [ -z $2 ]
+  if [ -z $2 ] || [ "$1" = "--help" ]
     then
     echo "merge one branch into another"
     echo "git_merge_branchs <<source branch>> <<destination branch>>"
@@ -81,7 +81,7 @@ function git_merge_branchs() {
   fi
 }
 function gm2b(){
-  if [ -z $2 ] || [ "$1" = "-help" ]
+  if [ -z $2 ] || [ "$1" = "--help" ]
   then
     echo "merge one branch into another"
     echo "gm2b <<source branch>> <<destination branch>>"
@@ -224,7 +224,7 @@ function gx() {
 
 
 function gb2b() {
-  if [ -z $1 ]
+  if [ -z $1 ] || [ "$1" = "--help" ]
   then
     echo "transfer branch from a remote called beanstalk to one called bitbucket"
     echo "gb2b <<<branch>>>"
@@ -248,7 +248,7 @@ function gb2b() {
 }
 
 function gitMoveToNewRepo(){
-  if [ -z $2 ]
+  if [ -z $2 ] || [ "$1" = "--help" ]
   then
     echo "transfer whole repo to new repo"
     echo "Warning: it clones a repo in a subfolder of the current location"
