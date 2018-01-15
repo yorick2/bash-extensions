@@ -247,9 +247,9 @@ function updateMage2Db(){
         echo "------- setting developer mode -------";
         vhostLocation=$(getVhostLocation "${url}")
         if [ -f  ${vhostLocation}/../app/etc/env.php ] ; then
-           location="${vhostLocation}/../app/etc/env.php";
+           location="${vhostLocation}";
         elif [ -f  ${vhostLocation}/app/etc/env.php ] ; then
-           location="${vhostLocation}/app/etc/env.php";
+           location="${vhostLocation}/pub";
         else
            echo 'env file not found';
            return;
