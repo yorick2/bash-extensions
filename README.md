@@ -15,6 +15,12 @@ if [ -d <<<you repo location>>> ]; then
          . ${file}
     done
 fi
+# for the bash arguments auto completion
+if [ -d <<<you repo location>>>/bash-completion ]; then
+    for file in <<<you repo location>>>/bash-completion/*.sh ; do
+         . ${file}
+    done
+fi
 ```
 
 ####Vhosts
