@@ -1,23 +1,24 @@
 #!/usr/bin/env bash
 
-_listCustomCommands(){
-    local cur tags
+#_listCustomCommands(){
+#    local cur tags
+#
+#    # possible arguments to use
+#    tags="git local custom magento1 magento2 personal"
+#
+#    COMPREPLY=()
+#    #Variable to hold the current word
+#    cur="${COMP_WORDS[COMP_CWORD]}"
+#
+#
+#    #Generate possible matches and store them in the
+#    #array variable COMPREPLY
+#    COMPREPLY=($(compgen -W "${tags}" $cur))
+#}
 
-    # possible arguments to use
-    tags="git local custom magento1 magento2 personal"
-
-    COMPREPLY=()
-    #Variable to hold the current word
-    cur="${COMP_WORDS[COMP_CWORD]}"
-
-
-    #Generate possible matches and store them in the
-    #array variable COMPREPLY
-    COMPREPLY=($(compgen -W "${tags}" $cur))
-}
 #Assign the auto-completion function _get for our command get.
-complete -F _listCustomCommands listCustomCommands
-complete -F _listCustomCommands listcustomcommands
+complete -W "git local custom magento1 magento2 personal" listCustomCommands
+complete -W "git local custom magento1 magento2 personal" listcustomcommands
 
 
 _repo()
