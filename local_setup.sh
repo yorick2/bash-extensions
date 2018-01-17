@@ -26,11 +26,17 @@ function createDatabaseName(){
 }
 
 function listdbs() {
-  if [  -z $1  ] || [ "$1" = "--help" ] ; then
-    mysql -uroot -proot -e'show databases'
-  else
-    mysql -uroot -proot -e'show databases' | grep "${1}"
+  if [ "$1" = "--help" ] ; then
+    echo "lists databases in mysql"
+    echo
+    echo "mysql"
+    echo "mysql <<search needle>>"
   fi
+  if [ "$1" = "--help" ] ; then
+    mysql -uroot -proot -e'show databases' ;
+    return;
+  fi
+  mysql -uroot -proot -e'show databases' | grep "${1}"
 }
 
 testSshConnection () {
