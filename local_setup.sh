@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 #  get the name of the current folder without full folder path
-function _getCurrentFolderName(){
+function getCurrentFolderName(){
     echo "${PWD##*/}";
 }
 
-function _createDatabaseName(){
+function createDatabaseName(){
     if [  -z $1  ] || [ "$1" = "--help" ] ; then
         echo 'create safe db name from filename';
         echo '';
@@ -115,7 +115,7 @@ function sql2mysql() {
       url=$2;
       filecopy=""
       if [  -z $3  ]; then
-        db=$(_createDatabaseName "${file}")
+        db=$(createDatabaseName "${file}")
       else
         db=$3;
       fi
@@ -351,7 +351,7 @@ function mkvhost() {
 
       subfolder=$1;
       if [ "$subfolder" = "." ] ; then
-        subfolder=$(_getCurrentFolderName);
+        subfolder=$(getCurrentFolderName);
       fi;
       url=$2;
       restart="false";

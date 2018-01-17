@@ -108,7 +108,7 @@ function setupLocalMagento1() {
       local subfolder dbfile dbname url htdocsLocation scriptDir testSshConnection
       subfolder=$1;
       if [ "$subfolder" = "." ] ; then
-        subfolder=$(_getCurrentFolderName);
+        subfolder=$(getCurrentFolderName);
       fi;
       if [[ "${2}" == *'.'* ]] ; then
         dbfile=$2;
@@ -133,7 +133,7 @@ function setupLocalMagento1() {
       url=$3;
       if [ -z ${dbname} ] ; then
           if [  -z $5  ]; then
-            dbname=$(_createDatabaseName "${dbfile}")
+            dbname=$(createDatabaseName "${dbfile}")
           else
             dbname=$5
           fi
@@ -189,15 +189,15 @@ function setupLocalMagento1() {
 
       echo "------- disabling and flushing cache -------";
       n98-magerun.phar cache:disable
+      echo ran 'n98-magerun.phar cache:disable'
       n98-magerun.phar cache:flush;
-      echo ran 'n98-magerun.phar cache:flush' here:
-
+      echo ran 'n98-magerun.phar cache:flush'
       echo "------- create test admin user -------";
-      echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators' here:
-      n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators
+      echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman'
+      n98-magerun.phar admin:user:create  test t@test.com password1 a testman
       echo 'new user created:'
-      echo 'user:test '
-      echo 'password:password1 '
+      echo 'user:test'
+      echo 'password:password1'
       pwd
       echo 'n98 sometimes throws an error on this line, just ignore it'
       #echo "------- reindexing -------";
@@ -219,7 +219,7 @@ function updateMage1Db(){
         local file url dbname location
         file=$1
         url=$2
-        dbname=$(_createDatabaseName "${file}");
+        dbname=$(createDatabaseName "${file}");
         echo "-------importing database--------"
         import2mysql "${file}" "${url}" "${dbname}"
         echo "-------updating local.xml--------"
@@ -228,10 +228,10 @@ function updateMage1Db(){
         location=$(getVhostLocation "${url}")
         cd ${location}
         n98-magerun.phar cache:flush;
-        echo ran 'n98-magerun.phar cache:flush' here:
+        echo ran 'n98-magerun.phar cache:flush'
         echo "------- create test admin user -------";
-        echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators' here:
-        n98-magerun.phar admin:user:create  test t@test.com password1 a testman Administrators
+        echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman'
+        n98-magerun.phar admin:user:create  test t@test.com password1 a testman
         echo 'new user created:'
         echo 'user:test '
         echo 'password:password1 '

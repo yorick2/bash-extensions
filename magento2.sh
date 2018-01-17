@@ -79,7 +79,7 @@ function setupLocalMagento2() {
       local runStaticDeploy subfolder dbfile dbname url scriptDir testSshConnection
       subfolder=$1;
       if [ "$subfolder" = "." ] ; then
-        subfolder=$(_getCurrentFolderName);
+        subfolder=$(getCurrentFolderName);
       fi;
       # if $2 is a filename, set db filename or set db name
       if [[ "${2}" == *'.'* ]] ; then
@@ -118,7 +118,7 @@ function setupLocalMagento2() {
       if [ -z ${dbname} ] ; then
           echo "------- importing database -------";
           if [  -z $4  ]; then
-            dbname=$(_createDatabaseName "${dbfile}")
+            dbname=$(createDatabaseName "${dbfile}")
           else
             dbname=$4
           fi
@@ -154,7 +154,7 @@ function setupLocalMagento2() {
         php bin/magento setup:static-content:deploy en_GB
       fi
       echo "------- create test admin user -------";
-      echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"' here:
+      echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"'
       n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
       echo 'new user created:'
       echo 'user:test '
@@ -237,7 +237,7 @@ function updateMage2Db(){
         local file url dbname
         file=$1
         url=$2
-        dbname=$(_createDatabaseName "${file}");
+        dbname=$(createDatabaseName "${file}");
         echo "-------importing database--------"
         import2mysql "${file}" "${url}" "${dbname}"
         echo "-------updating env.php--------"
