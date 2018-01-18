@@ -9,6 +9,11 @@ alias dbsLocation='echo ~/Documents/Databases'
 alias repoLocation='echo ~/Documents/Repositories'
 alias sitesLocation='echo ~/Documents/Repositories/sites'
 
+function customBashExtensionsFolder(){
+    echo $(dirname "${BASH_SOURCE[0]}")
+}
+
+
 function dbs(){
   cd $(dbsLocation)
 }
@@ -19,6 +24,10 @@ function repo(){
 function sites(){
    cd $(sitesLocation)/${1}
 }
+
+# stops the warning shown when using "mysql -uroot -proot"
+# "Warning: Using a password on the command line interface can be insecure."
+alias localMysqlConnection='mysql --defaults-extra-file=$(customBashExtensionsFolder)/mysql-connection-details.txt'
 
 # run php through a shell for xdebug
 alias phpDebug="php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=On"

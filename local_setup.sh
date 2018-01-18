@@ -33,10 +33,10 @@ function listdbs() {
     echo "mysql <<search needle>>"
   fi
   if [ "$1" = "--help" ] ; then
-    mysql -uroot -proot -e'show databases' ;
+    localMysqlConnection -e'show databases' ;
     return;
   fi
-  mysql -uroot -proot -e'show databases' | grep "${1}"
+  localMysqlConnection -e'show databases' | grep "${1}"
 }
 
 testSshConnection () {
@@ -115,8 +115,6 @@ function sql2mysql() {
       echo 'please try again'
     else
       local user password file url filecopy db dbexists table cmd
-      user=root
-      password=root
       file=$1;
       url=$2;
       filecopy=""
@@ -125,7 +123,7 @@ function sql2mysql() {
       else
         db=$3;
       fi
-      dbexists=$(mysql -u${user} -p${password} --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
+      dbexists=$(localMysqlConnection --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
         if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
           echo 'creating sanitised file'
@@ -135,60 +133,60 @@ function sql2mysql() {
           file=${filecopy}
         fi
         echo '-->creating db'
-        mysql -u${user} -p${password} -e"create database ${db}"
+        localMysqlConnection -e"create database ${db}"
         echo '-->importing db'
-        echo "mysql -u${user} -p${password} ${db} < ${file}"
-        mysql -u${user} -p${password} ${db} < ${file}
+        echo "localMysqlConnection ${db} < ${file}"
+        localMysqlConnection ${db} < ${file}
         echo '-->updating db'
         table='core_config_data'
 
         # for magento 1 & 2
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='31536000' where path='admin/security/session_lifetime';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
 
 
         # for magento 1
         cmd="update ${db}.${table} set value='{{secure_base_url}}' where path='web/secure/base_link_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='{{secure_base_url}}js/' where path='web/secure/base_js_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='{{secure_base_url}}media/' where path='web/secure/base_media_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='{{secure_base_url}}skin/' where path='web/secure/base_skin_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='{{unsecure_base_url}}' where path='web/unsecure/base_link_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='{{unsecure_base_url}}js/' where path='web/unsecure/base_js_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='{{unsecure_base_url}}media/' where path='web/unsecure/base_media_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set value='{{unsecure_base_url}}skin/' where path='web/unsecure/base_skin_url';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="delete from ${db}.${table} where path='web/cookie/cookie_domain';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         # check/money order
         cmd="update ${db}.${table} set VALUE='1' where PATH='payment/checkmo/active'"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/allowspecific'"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='system/guidance_cachebuster/is_enabled'"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
 
         # for magento 2
         cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_frontend';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_admin';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='dev/css/merge_css_files';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='dev/js/merge_files';"
-        mysql -u${user} -p${password} -e"${cmd}"
+        localMysqlConnection -e"${cmd}"
 
         echo "your database ${db} is imported"
         if [ -n "${filecopy}" ] && [ -e "${filecopy}" ]; then

@@ -38,7 +38,7 @@ function update_localxml() {
    if [  -z $2 ] || [ "$1" = "--help" ] ; then
      echo ;
      echo 'arguments missing'
-     echo 'update_localxml <<db file>> <<url>>'
+     echo 'update_localxml <<db>> <<url>>'
      echo 'please try again'
    else
      local database=$1
