@@ -13,7 +13,7 @@ alias gl='git pull'
 alias gm='git merge --no-ff '
 alias grup='git remote update'
 alias gmt='git mergetool'
-alias git_current_commit_ref="echo 'git rev-parse --verify HEAD'; git rev-parse --verify HEAD"
+alias gref="echo 'git rev-parse --verify HEAD'; git rev-parse --verify HEAD"
 
 export PATH="/usr/local/mysql/bin:$PATH"
 
@@ -263,30 +263,6 @@ function gitMoveToNewRepo(){
     git push --mirror origin-new
   fi
 }
-
-# if git auto complete not set and is installed 
-if [ -z "$(type -t __git_complete)" ] && [ -f ~/.git-completion.bash ]; then
-  #set git auto complete
-  . ~/.git-completion.bash;
-fi;
-# git autocompletes
-__git_complete g __git_main
-__git_complete ga _git_add
-__git_complete gc _git_commit
-__git_complete gco _git_checkout
-__git_complete gcp _git_cherry_pick
-__git_complete gb _git_branch
-__git_complete gst _git_status
-__git_complete gl _git_pull
-__git_complete gm _git_merge
-__git_complete gm2b _git_merge
-__git_complete gmm _git_merge
-__git_complete gmd _git_merge
-__git_complete gmb2b _git_merge
-__git_complete grup _git_remotes
-
-
-
 
 
 

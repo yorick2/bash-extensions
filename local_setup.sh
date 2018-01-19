@@ -28,11 +28,12 @@ function createDatabaseName(){
 function listdbs() {
   if [ "$1" = "--help" ] ; then
     echo "lists databases in mysql"
-    echo
-    echo "mysql"
-    echo "mysql <<search needle>>"
+    echo "e.g."
+    echo "listdbs"
+    echo "listdbs <<search needle>>"
+    echo "please try again"
   fi
-  if [ "$1" = "--help" ] ; then
+  if [ -z $1  ] ; then
     localMysqlConnection -e'show databases' ;
     return;
   fi
