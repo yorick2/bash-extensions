@@ -227,6 +227,7 @@ function updateMage1Db(){
         echo "------- flushing cache -------";
         location=$(getVhostLocation "${url}")
         cd ${location}
+        n98-magerun.phar cache:disable;
         n98-magerun.phar cache:flush;
         echo ran 'n98-magerun.phar cache:flush'
         echo "------- create test admin user -------";
