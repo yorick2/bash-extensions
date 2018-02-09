@@ -174,6 +174,10 @@ function sql2mysql() {
         # check/money order
         cmd="update ${db}.${table} set VALUE='1' where PATH='payment/checkmo/active'"
         localMysqlConnection -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/min_order_total'"
+        localMysqlConnection -e"${cmd}"
+        cmd="update ${db}.${table} set VALUE='999999999' where PATH='payment/checkmo/max_order_total'"
+        localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/allowspecific'"
         localMysqlConnection -e"${cmd}"
         cmd="update ${db}.${table} set VALUE='0' where PATH='system/guidance_cachebuster/is_enabled'"
