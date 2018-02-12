@@ -50,7 +50,7 @@ testSshConnection () {
         echo 'please try again'
         return;
     fi
-    local testSshConnection=$( ( ssh $1 "echo true;" ) & sleep 5 ; kill $! 2>/dev/null; )
+    local testSshConnection=$( ( ssh -oStrictHostKeyChecking=no $1 "echo true;" ) & sleep 5 ; kill $! 2>/dev/null; )
     if [ "${testSshConnection}" != "true" ]; then
         echo 'ssh connection failed'
         return;
@@ -227,7 +227,7 @@ function import2mysql(){
             return;
         fi
         echo '-->  downloading db file'
-        rsync -ahz ${file} $(dbsLocation) &&
+        rsync -ahz -e "ssh -o StrictHostKeyChecking=no" ${file} $(dbsLocation) &&
         file=${file##*:} &&
         file=${file##*/}
         file="$(dbsLocation)/${file}"
