@@ -154,8 +154,7 @@ function setupLocalMagento2() {
         php bin/magento setup:static-content:deploy en_GB
       fi
       echo "------- create test admin user -------";
-      echo ran 'n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"'
-      n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
+      n982nu --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
       echo 'new user created:'
       echo 'user:test '
       echo 'password:password1 '
@@ -221,6 +220,13 @@ function n982nu () {
     echo 'e.g.'
     echo '  n98-magerun2.phar admin:user:create --admin-user="my_user_name" --admin-email="example@example.com" --admin-password="mypassword" --admin-firstname="paul" --admin-lastname="test"'
   fi
+  # a bug caused by n98 dump with --strip=@development
+  echo 'adding administrator user if missing'
+  n98-magerun2.phar db:query "INSERT IGNORE INTO authorization_role (role_id, parent_id, tree_level, sort_order,
+  role_type, user_id, user_type, role_name) VALUES (1, 0, 1, 1, 'G', 0, '2', 'Administrators')"
+  n98-magerun2.phar db:query "INSERT IGNORE INTO authorization_rule (rule_id, role_id, resource_id, privileges, permission)
+  VALUES (1, 1, 'Magento_Backend::all', null, 'allow')"
+  ###
   echo running n98-magerun2.phar admin:user:create "$@";
   n98-magerun2.phar admin:user:create "$@"
 }
@@ -264,8 +270,7 @@ function updateMage2Db(){
         echo "------- removing generated folders -------";
         rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
         echo "------- create test admin user -------";
-        echo 'ran n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="test" --admin-firstname="test" --admin-lastname="test"'
-        n98-magerun2.phar admin:user:create --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
+        n982nu --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
         echo 'new user created:'
         echo 'user:test '
         echo 'password:password1 '
