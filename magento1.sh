@@ -219,6 +219,11 @@ function updateMage1Db(){
         local file url dbname location
         file=$1
         url=$2
+        vhost_file_location=$(get_vhost_location_file "${url}")
+        if [ ! -f "${vhost_file_location}" ]; then
+            echo "unable to find ${url} in your host files";
+            return 1;
+        fi
         dbname=$(createDatabaseName "${file}");
         echo "-------importing database--------"
         import2mysql "${file}" "${url}" "${dbname}"

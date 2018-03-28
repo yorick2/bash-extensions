@@ -244,6 +244,11 @@ function updateMage2Db(){
         file=$1
         url=$2
         dbname=$(createDatabaseName "${file}");
+        vhost_file_location=$(get_vhost_location_file "${url}")
+        if [ ! -f "${vhost_file_location}" ]; then
+            echo "unable to find ${url} in your host files";
+            return 1;
+        fi
         echo "-------importing database--------"
         import2mysql "${file}" "${url}" "${dbname}"
         echo "-------updating env.php--------"

@@ -294,8 +294,11 @@ function getVhostLocation() {
   fi
   local url vhost_file_location string delimter documentRoot
   url=$1
-  
+
   vhost_file_location=$(get_vhost_location_file "${url}")
+  if [ ! -f "${vhost_file_location}" ]; then
+     return 1;
+  fi
   string=$(cat ${vhost_file_location})
   #
   # add ; to EOL and put into single line
