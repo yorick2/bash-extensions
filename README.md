@@ -22,6 +22,11 @@ if [ -d <<<you repo location>>>/bash-completion ]; then
     done
 fi
 ```
+####Colour Terminal
+add to ~/.bashrc before the above code
+```bash
+force_color_prompt=yes
+```
 
 ####Vhosts
 make a vhosts file called httpd-vhosts.conf in your apache installation
