@@ -3,10 +3,16 @@
 function branch_data() {
     curr_branch=$(git rev-parse --abbrev-ref HEAD);
     curr_remote=$(git config branch.$curr_branch.remote);
+    tags=$(git tag --points-at HEAD | tr '\r\n' ' ');
     branch_data=$(git branch -vv | grep '*');
-    aheadbehind=${branch_data%]*};
-    aheadbehind=${aheadbehind##*: };
-    echo " (${curr_branch}) [${curr_remote}:${aheadbehind}]"
+    if [[ ${branch_data} = *":"* ]]; then
+        aheadbehind=${branch_data%]*};
+        aheadbehind=${aheadbehind##*: };
+        echo " (${curr_branch}) [${curr_remote}:${aheadbehind}] ${tags}"
+    else
+        echo " (${curr_branch}) [${curr_remote}] ${tags}"
+    fi
+
 }
 
 if [ -n "$force_color_prompt" ]; then
@@ -21,7 +27,6 @@ if [ -n "$force_color_prompt" ]; then
         PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(parse_git_branch)$(branch_data)\$ '
     fi
 fi
-
 
 unset color_prompt
 
