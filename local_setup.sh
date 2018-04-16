@@ -232,6 +232,10 @@ function import2mysql(){
         file=${file##*/}
         file="$(dbsLocation)/${file}"
     fi
+    if [ ! -f "${file}" ]; then
+        echo 'database file dosent exist';
+        return 1;
+    fi
     fileextension="${file##*.}"; # last file extension if example.sql.tar.gz it returns gz if example.sql returns sql
     # if sql file
     if [[ ${fileextension} == "sql" ]]; then

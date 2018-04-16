@@ -22,10 +22,23 @@ if [ -d <<<you repo location>>>/bash-completion ]; then
     done
 fi
 ```
-####Colour Terminal
+####Terminal Git Prompt
+![](bash_prompt.png)
+
+Shows the below information:
+- time
+- git branch
+- git remote
+- number of commits ahead or behind
+- git tags
+
 add to ~/.bashrc before the above code
 ```bash
-force_color_prompt=yes
+force_git_prompt=yes
+```
+and also the below line to allow the colour version
+```bash
+force_git_color_prompt=yes
 ```
 
 ####Vhosts
