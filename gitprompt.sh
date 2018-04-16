@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 function branch_data() {
+    if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ]; then # 2>/dev/null to stop errors showing if not in git folder
+        return 1;
+    fi
     curr_branch=$(git rev-parse --abbrev-ref HEAD);
     curr_remote=$(git config branch.$curr_branch.remote);
     tags=$(git tag --points-at HEAD | tr '\r\n' ' ');
@@ -22,10 +25,10 @@ if [ -n "$force_color_prompt" ]; then
         # a case would tend to support setf rather than setaf.)
         color_prompt=yes
         PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(branch_data)\[\033[00m\]\$ '
-    else
-        color_prompt=
-        PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(parse_git_branch)$(branch_data)\$ '
+        return 1;
     fi
+    color_prompt=
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(parse_git_branch)$(branch_data)\$ '
 fi
 
 unset color_prompt
