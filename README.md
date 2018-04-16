@@ -5,8 +5,8 @@
 My bash extensions.
 
 
-#Installation
-####Main
+# Installation
+#### Main
 Add these lines into ~/.bashrc, replacing ```<<<you repo location>>>``` with the location of your repo
 
 ```bash
@@ -22,7 +22,7 @@ if [ -d <<<you repo location>>>/bash-completion ]; then
     done
 fi
 ```
-####Terminal Git Prompt
+#### Terminal Git Prompt
 ![](bash_prompt.png)
 
 Shows the below information:
@@ -41,11 +41,11 @@ and also the below line to allow the colour version
 force_git_color_prompt=yes
 ```
 
-####Vhosts
+#### Vhosts
 make a vhosts file called httpd-vhosts.conf in your apache installation
 make the vhosts file and  /etc/hosts is editable by your user without sudo
 
-####Git auto complete
+#### Git auto complete
 This is not written by me but is really useful
 
 To allow git autocomplete to work run
@@ -62,6 +62,7 @@ fi
 
 #### Command list
 Git
+
 |command|details|example|requirements|
 |..............|..................|..............|..................|
 | git_current_branch | return current branch name |  |  |
@@ -89,6 +90,7 @@ Git
 |gmt| git mergetool |  |  |
 
 Local Setup
+
 |command|details|example|requirements|
 |..............|..................|..............|..................|
 |listdbs| list dbs |  |  |
@@ -97,6 +99,7 @@ Local Setup
 |listhosts| list vhosts on your local (that have 127.0.0.1 as the ip in /etc/hosts)  |  |  |
 
 Magento 1
+
 |command|details|example|requirements|
 |..............|..................|..............|..................|
 |echoHtaccessMage1| echo .htaccess template content |  |  |
@@ -118,6 +121,7 @@ Magento 1
 
 
 Magento 2
+
 |command|details|example|requirements|
 |..............|..................|..............|..................|
 |update_envphp|  |  |  |
@@ -140,6 +144,7 @@ Magento 2
 |mage2staticFlush| deploy statics "php bin/magento setup:static-content:deploy" |  |  |
 
 Misc
+
 |command|details|example|requirements|
 |..............|..................|..............|..................|
 | phpDebug | run file with php with xdebug | phpDebug index.php | php must be able to be run from the terminal with the command 'php' |
