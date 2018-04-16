@@ -64,7 +64,7 @@ fi
 Git
 
 |command|details|example|requirements|
-|..............|..................|..............|..................|
+|-------------|-------------|-------------|-------------|
 | git_current_branch | return current branch name |  |  |
 |gco| git checkout | gco master |  |
 |git_merge_branchs|  |  |  |
@@ -91,17 +91,17 @@ Git
 
 Local Setup
 
-|command|details|example|requirements|
-|..............|..................|..............|..................|
-|listdbs| list dbs |  |  |
-|import2mysql| uncompress database, create database, import database and update base urls and email |  |  |
-|mkvhost| make new vhost |  |  |
-|listhosts| list vhosts on your local (that have 127.0.0.1 as the ip in /etc/hosts)  |  |  |
+| command | details | example | requirements |
+|-------------|-------------|-------------|-------------|
+| listdbs | list dbs |  |  |
+| import2mysql | uncompress database, create database, import database and update base urls and email |  |  |
+| mkvhost | make new vhost |  |  |
+| listhosts | list vhosts on your local (that have 127.0.0.1 as the ip in /etc/hosts)  |  |  |
 
 Magento 1
 
 |command|details|example|requirements|
-|..............|..................|..............|..................|
+|-------------|-------------|-------------|-------------|
 |echoHtaccessMage1| echo .htaccess template content |  |  |
 |copyHtaccessMage1| copy .htaccess template code to clipboard |  |  |
 |echoLocalXmlTemplate| echo local.xml template content |  |  |
@@ -123,7 +123,7 @@ Magento 1
 Magento 2
 
 |command|details|example|requirements|
-|..............|..................|..............|..................|
+|-------------|-------------|-------------|-------------|
 |update_envphp|  |  |  |
 |setupLocalMagento2| setup local version of magento 2 site |  |  |
 |echoConfigMage2| echo contents of config file template |  |  |
@@ -146,7 +146,7 @@ Magento 2
 Misc
 
 |command|details|example|requirements|
-|..............|..................|..............|..................|
+|-------------|-------------|-------------|-------------|
 | phpDebug | run file with php with xdebug | phpDebug index.php | php must be able to be run from the terminal with the command 'php' |
 |listcustomcommands| list the custom commands |  |  |
 |listCustomCommands| list the custom commands |  |  |
