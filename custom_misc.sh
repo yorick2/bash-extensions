@@ -10,6 +10,10 @@ function customBashExtensionsFolder(){
 }
 
 
+function compup(){
+    composer update --no-dev
+}
+
 function dbs(){
   cd $(dbsLocation)
 }
