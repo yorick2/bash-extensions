@@ -5,8 +5,10 @@ alias dbsLocation='echo ~/Documents/Databases'
 alias repoLocation='echo ~/Documents/Repositories'
 alias sitesLocation='echo ~/Documents/Repositories/sites'
 
-function customBashExtensionsFolder(){
-    echo $(dirname "${BASH_SOURCE[0]}")
+alias sitesLocation='echo ~/Documents/Repositories/sites'
+
+function compup(){
+    composer update --no-dev
 }
 
 
