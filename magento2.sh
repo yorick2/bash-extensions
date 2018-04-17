@@ -204,17 +204,21 @@ alias m2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/mage
 alias m2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
 alias m2modules='php bin/magento module:status'
 alias m2Upgrade="echo 'php bin/magento setup:upgrade \
- && php bin/magento cache:clean' \
+ && php bin/magento cache:clean \
+ && php bin/magento setup:di:compile' \
  ; php bin/magento setup:upgrade \
- && php bin/magento cache:clean"
+ && php bin/magento cache:clean
+ && php bin/magento setup:di:compile"
 alias m2UpgradeNStatic="echo 'php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
  && php bin/magento setup:static-content:deploy en_GB \
- && php bin/magento cache:clean' \
+ && php bin/magento cache:clean \
+ && php bin/magento setup:di:compile' \
  ; php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
  && php bin/magento setup:static-content:deploy en_GB \
- && php bin/magento cache:clean"
+ && php bin/magento cache:clean \
+ && php bin/magento setup:di:compile"
 alias m2staticFlush="echo 'php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean' \
  ; php bin/magento setup:static-content:deploy \
