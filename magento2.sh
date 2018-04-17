@@ -203,11 +203,17 @@ alias m2dis_without_full_page='echo running php bin/magento cache:enable && php 
 alias m2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
 alias m2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
 alias m2modules='php bin/magento module:status'
+alias m2Upgrade="echo 'php bin/magento setup:upgrade \
+ && php bin/magento cache:clean' \
+ ; php bin/magento setup:upgrade \
+ && php bin/magento cache:clean"
 alias m2UpgradeNStatic="echo 'php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
+ && php bin/magento setup:static-content:deploy en_GB \
  && php bin/magento cache:clean' \
  ; php bin/magento setup:upgrade \
  && php bin/magento setup:static-content:deploy \
+ && php bin/magento setup:static-content:deploy en_GB \
  && php bin/magento cache:clean"
 alias m2staticFlush="echo 'php bin/magento setup:static-content:deploy \
  && php bin/magento cache:clean' \
