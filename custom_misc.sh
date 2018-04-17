@@ -40,6 +40,15 @@ function open(){
 	nautilus ${1} 
 }
 
+function safestring(){
+    str="$*"
+    if [ "${str}" == "--help" ]; then
+        echo 'returns a lower case string of the arguments passed, with spaces replaced with _s'
+    fi
+    str=${str,,} #lower case
+    echo "${str// /_}"
+}
+
 alias listcustomcommands="listCustomCommands"
 
 function listCustomCommands(){
