@@ -7,14 +7,19 @@ function branch_data() {
     curr_branch=$(git rev-parse --abbrev-ref HEAD);
     curr_remote=$(git config branch.$curr_branch.remote);
     tags=$(git tag --points-at HEAD | tr '\r\n' ' ');
+    if [[ -z $(git status -s) ]]; then
+        uncommitedFlag=""
+    else
+        uncommitedFlag="! "
+    fi
     branch_data=$(git branch -vv | grep '*');
     branch_data=${branch_data%]*};
     branch_data=${branch_data##*[};
     if [[ ${branch_data} = *":"* ]]; then
         aheadbehind=${branch_data##*: };
-        echo " (${curr_branch}) [${curr_remote}:${aheadbehind}] ${tags}"
+        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}:${aheadbehind}] ${tags}"
     else
-        echo " (${curr_branch}) [${curr_remote}] ${tags}"
+        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}"
     fi
 
 }
