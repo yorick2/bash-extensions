@@ -46,7 +46,7 @@ function safestring(){
         echo 'returns a lower case string of the arguments passed, with spaces replaced with _s'
     fi
     str=${str,,} #lower case
-    echo "${str// /_}"
+    echo "${str//[\:\;\-\. ]/_}" # replace white space and special characters
 }
 
 alias listcustomcommands="listCustomCommands"
