@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# this folder location
+function customBashExtensionsFolder(){
+    echo $(dirname "${BASH_SOURCE[0]}")
+}
+
 ## required for local setups
 alias dbsLocation='echo ~/Documents/Databases'
 alias repoLocation='echo ~/Documents/Repositories'
@@ -26,6 +31,7 @@ function repo(){
 function sites(){
    cd $(sitesLocation)/${1}
 }
+
 
 # stops the warning shown when using "mysql -uroot -proot"
 # "Warning: Using a password on the command line interface can be insecure."
