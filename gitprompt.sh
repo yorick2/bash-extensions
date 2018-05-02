@@ -15,7 +15,7 @@ function branch_data() {
     branch_data=$(git branch -vv | grep '*');
     branch_data=${branch_data%]*};
     branch_data=${branch_data##*[};
-    if [[ ${branch_data} = *":"* ]]; then
+    if [[ ${branch_data} = *":"* ]]  && [[ ${branch_data} = *"["* ]]; then
         aheadbehind=${branch_data##*: };
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}:${aheadbehind}] ${tags}"
     else
