@@ -13,15 +13,18 @@ function branch_data() {
         uncommitedFlag="! "
     fi
     branch_data=$(git branch -vv | grep '*');
+    if [[ ${branch_data} != *"["* ]]; then
+        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}";
+        return 1;
+    fi
     branch_data=${branch_data%]*};
     branch_data=${branch_data##*[};
-    if [[ ${branch_data} = *":"* ]]  && [[ ${branch_data} = *"["* ]]; then
+    if [[ ${branch_data} = *":"* ]]; then
         aheadbehind=${branch_data##*: };
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}:${aheadbehind}] ${tags}"
     else
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}"
     fi
-
 }
 
 if [ -n "$force_git_prompt" ]; then
