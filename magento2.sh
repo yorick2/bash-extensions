@@ -211,6 +211,10 @@ alias m2composer="echo 'composer update --no-dev;\
  php bin/magento setup:upgrade; \
  php bin/magento setup:di:compile; \
  php bin/magento cache:clean;"
+alias m2Compile="echo 'php bin/magento setup:di:compile; \
+ php bin/magento cache:clean'\
+ ; php bin/magento setup:di:compile; \
+ php bin/magento cache:clean;"
 alias m2Upgrade="echo 'php bin/magento setup:upgrade \
  && php bin/magento cache:clean \
  && php bin/magento setup:di:compile'; \
