@@ -123,7 +123,17 @@ function setupLocalMagento2() {
             dbname=$4
           fi
       fi
+      dbexists=$(dbExists ${dbname})
+        if [ -n "${dbexists}" ]; then
+          echo 'already exists';
+          return 1
+        fi
       import2mysql ${dbfile} ${url} ${dbname};
+      dbexists=$(dbExists ${dbname})
+        if [ -z "${dbexists}" ]; then
+          echo 'db not created';
+          return 1
+        fi
       echo "------- making vhost -------";
       sites # move to sites folder
       mkvhost ${subfolder}/pub ${url};
@@ -271,8 +281,18 @@ function updateMage2Db(){
             echo "unable to find ${url} in your host files";
             return 1;
         fi
+        dbexists=$(dbExists ${dbname})
+        if [ -n "${dbexists}" ]; then
+          echo 'db already created';
+          return 1
+        fi
         echo "-------importing database--------"
         import2mysql "${file}" "${url}" "${dbname}"
+        dbexists=$(dbExists ${dbname})
+        if [ -z "${dbexists}" ]; then
+          echo 'db not created';
+          return 1
+        fi
         echo "-------updating env.php--------"
         update_envphp "${dbname}" "${url}"
         echo "------- setting developer mode -------";

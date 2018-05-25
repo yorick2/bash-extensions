@@ -224,7 +224,7 @@ function import2mysql(){
         testSshConnection=$(testSshConnection ${file%:*});
         if [[ "$testSshConnection" != 'true' ]]; then
             echo 'unable to download database: connection failed'
-            die;
+            return 1;
         fi
         echo '-->  downloading db file'
         rsync -ahz -e "ssh -o StrictHostKeyChecking=no" ${file} $(dbsLocation) &&

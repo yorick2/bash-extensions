@@ -16,11 +16,6 @@ function compup(){
     composer update --no-dev
 }
 
-
-function compup(){
-    composer update --no-dev
-}
-
 function dbs(){
   cd $(dbsLocation)
 }
@@ -36,6 +31,15 @@ function sites(){
 # stops the warning shown when using "mysql -uroot -proot"
 # "Warning: Using a password on the command line interface can be insecure."
 alias localMysqlConnection='mysql --defaults-extra-file=$(customBashExtensionsFolder)/mysql-connection-details.txt'
+
+function dbExists(){
+    dbexists=$(localMysqlConnection -e "show databases like '${1}';")
+    if [ -z "${dbexists}" ]; then
+      return 1
+    fi
+    echo 'true';
+}
+
 
 # run php through a shell for xdebug
 alias phpDebug="php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=On"

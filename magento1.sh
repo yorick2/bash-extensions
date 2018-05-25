@@ -145,7 +145,17 @@ function setupLocalMagento1() {
       fi
 
       echo "------- importing database -------";
+      dbexists=$(dbExists ${dbname})
+        if [ -n "${dbexists}" ]; then
+          echo 'already exists';
+          return 1
+        fi
       import2mysql ${dbfile} ${url} ${dbname};
+      dbexists=$(dbExists ${dbname})
+      if [ -z "${dbexists}" ]; then
+        echo 'db not created';
+        return 1
+      fi
 
       if [ -z $4 ] ; then
         sites;
@@ -225,8 +235,18 @@ function updateMage1Db(){
             return 1;
         fi
         dbname=$(createDatabaseName "${file}");
+        dbexists=$(dbExists ${dbname})
+        if [ -n "${dbexists}" ]; then
+          echo 'db already created';
+          return 1
+        fi
         echo "-------importing database--------"
         import2mysql "${file}" "${url}" "${dbname}"
+        dbexists=$(dbExists ${dbname})
+        if [ -z "${dbexists}" ]; then
+          echo 'db not created';
+          return 1
+        fi
         echo "-------updating local.xml--------"
         update_localxml "${dbname}" "${url}"
         echo "------- flushing cache -------";
