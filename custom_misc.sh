@@ -40,6 +40,28 @@ function dbExists(){
     echo 'true';
 }
 
+function dropDb(){
+    dbexists=$(localMysqlConnection -e "show databases like '${1}';")
+    if [ -z "${dbexists}" ]; then
+        echo "database ${1} not found"
+        return 1
+    fi
+    echo "are you sure you want to drop database ${1} ? [n]"
+    read continue
+    if [ -z "${continue}" ]; then
+        echo 'dropping database cancelled'
+        return 1
+    fi
+    if [ "${continue}" = "n" ]; then
+        echo 'dropping database cancelled'
+        return 1
+    fi
+    if [ "${continue}" = "N" ]; then
+        echo 'dropping database cancelled'
+        return 1
+    fi
+    localMysqlConnection -e"drop database ${1};";
+}
 
 # run php through a shell for xdebug
 alias phpDebug="php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=On"
