@@ -337,7 +337,7 @@ function mkvhost() {
       echo 'To use the current folder as the subfolder use .'
       echo 'please try again'
     else
-      local scriptDir httpdvhosts https_vhosts hostsfile setupfile magentoSubfolder url restart regexSubfolder userDir
+      local subfolder scriptDir httpdvhosts https_vhosts hostsfile setupfile magentoSubfolder url restart regexSubfolder userDir
 
       scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
       #--file locations--
