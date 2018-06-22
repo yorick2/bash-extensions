@@ -241,7 +241,7 @@ function m2staticFlush(){
     # --quite stops it returning anything unless theres an error
     echo 'php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US'
     test=$(php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US && echo 'success')
-    # if we dont have to force the static deploy
+    # if we have to force the static deploy
     if [ -z "${test}" ]
     then
         echo 'static deploy failed, sttempting to force the statiuc deploy'
