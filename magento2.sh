@@ -151,7 +151,7 @@ function setupLocalMagento2() {
       echo "------- setting developer mode -------";
       php bin/magento deploy:mode:set developer;
       echo "------- magento packages upgrade -------";
-      php bin/magento setup:upgrade;
+      php bin/magento setup:upgrade
       echo "------- disabling full_page cache and flushing cache -------";
       php bin/magento cache:enable;
       php bin/magento cache:disable full_page;
@@ -160,10 +160,7 @@ function setupLocalMagento2() {
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";
       if [ "${runStaticDeploy}" = "y" ] ; then
-        php bin/magento setup:static-content:deploy -f --theme="Magento/backend" en_US
-        # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
-        php bin/magento setup:static-content:deploy -f en_GB
-        # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
+        m2staticFlush
       fi
       echo "------- create test admin user -------";
       n982nu --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
@@ -235,22 +232,32 @@ alias m2upgrade="echo 'php bin/magento setup:upgrade \
  && php bin/magento setup:di:compile"
 # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
 alias m2upgradeNstatic="echo 'php bin/magento setup:upgrade \
- && php bin/magento setup:static-content:deploy -f --theme="Magento/backend" en_US \
- && php bin/magento setup:static-content:deploy -f en_GB \
- && php bin/magento cache:clean \
+ && m2staticFlush \
  && php bin/magento setup:di:compile' \
  ; php bin/magento setup:upgrade \
- && php bin/magento setup:static-content:deploy -f --theme="Magento/backend" en_US\
- && php bin/magento setup:static-content:deploy -f en_GB \
- && php bin/magento cache:clean \
- && php bin/magento setup:di:compile"
+ && m2staticFlush"
  # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
-alias m2staticFlush="echo 'php bin/magento setup:static-content:deploy -f --theme="Magento/backend" en_US \
- && php bin/magento setup:static-content:deploy -f en_GB \
- && php bin/magento cache:clean' \
- ; php bin/magento setup:static-content:deploy -f --theme="Magento/backend" en_US  \
- && php bin/magento setup:static-content:deploy -f en_GB \
- && php bin/magento cache:clean"
+function m2staticFlush(){
+    # --quite stops it returning anything unless theres an error
+    echo 'php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US'
+    test=$(php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US && echo 'success')
+    # if we dont have to force the static deploy
+    if [ -z "${test}" ]
+    then
+        echo 'static deploy failed, sttempting to force the statiuc deploy'
+        echo 'php bin/magento setup:static-content:deploy -f --quiet --theme="Magento/backend" en_US'
+        php bin/magento setup:static-content:deploy -f --quiet --theme="Magento/backend" en_US
+        echo 'php bin/magento setup:static-content:deploy -f --quiet en_GB'
+        php bin/magento setup:static-content:deploy -f --quiet en_GB
+        echo 'php bin/magento cache:clean'
+        php bin/magento cache:clean
+    else
+        echo 'php bin/magento setup:static-content:deploy --quiet en_GB'
+        php bin/magento setup:static-content:deploy --quiet en_GB
+        echo 'php bin/magento cache:clean'
+        php bin/magento cache:clean
+    fi
+}
 
 function n982nu () {
   if [  -z $1  ] || [ "$1" = "--help" ] ; then
