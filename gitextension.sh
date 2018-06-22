@@ -274,6 +274,7 @@ function gnb(){
     string="$@" # all argruments
     string="${string## }" # trim start
     string="${string%% }" # trim end
+    string=${string,,} # convert to lower case
     git checkout -b ${string//[^a-zA-Z0-9_-]/-}
   fi
 }
