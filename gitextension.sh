@@ -264,7 +264,19 @@ function gitMoveToNewRepo(){
   fi
 }
 
-
+function gnb(){
+ if [[ -z $1 ]] || [[ "$1" = "--help" ]]
+  then
+    echo "checkout a new git branch with a name, which is sanitized here"
+    echo "gnb <<<branch name>>>"
+    echo "e.g. gnb"
+  else
+    string="$@" # all argruments
+    string="${string## }" # trim start
+    string="${string%% }" # trim end
+    git checkout -b ${string//[^a-zA-Z0-9_-]/-}
+  fi
+}
 
 
 
