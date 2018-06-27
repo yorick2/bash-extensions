@@ -21,9 +21,9 @@ function branch_data() {
     branch_data=${branch_data##*[};
     if [[ ${branch_data} = *":"* ]]; then
         aheadbehind=${branch_data##*: };
-        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}:${aheadbehind}] ${tags}"
+        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}:${aheadbehind}] ${tags}";
     else
-        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}"
+        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}";
     fi
 }
 
@@ -34,12 +34,12 @@ if [ -n "$force_git_prompt" ]; then
             # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
             # a case would tend to support setf rather than setaf.)
             color_prompt=yes
-            PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(branch_data)\[\033[00m\]\$ '
-            export PS1="[\$(date +%H:%M:%S)] "${PS1} # add time to line
+            customBashPrompt='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[01;31m\]$(branch_data)\[\033[00m\]\$ '
+            export PS1="[$(date +%H:%M:%S)] ${customBashPrompt}"; # add time to line
             return 1
         fi
     fi
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(branch_data)\$ '
-    export PS1="[\$(date +%H:%M:%S)] "${PS1} # add time to line
+    export PS1="[$(date +%H:%M:%S)] ${PS1}" # add time to line
     unset color_prompt
 fi
