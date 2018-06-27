@@ -223,30 +223,6 @@ function gx() {
 }
 
 
-function gb2b() {
-  if [ -z $1 ] || [ "$1" = "--help" ]
-  then
-    echo "transfer branch from a remote called beanstalk to one called bitbucket"
-    echo "gb2b <<<branch>>>"
-    echo "e.g. gb2b master"
-  else
-    local target sure
-    target=$(git_branch_name_without_remote ${1})
-    echo "transfer ${target}? (y/n)" ;
-    read sure;
-    if [[ ${sure} == "y" ]] ; then
-      echo "-------remote update-------" \
-      && git remote update  \
-      && echo "-------checkout beanstalk/${target}-------"  \
-      && git checkout beanstalk/${target} \
-      && echo "-------pull changes from bitbucket -------"  \
-      && git pull bitbucket ${target} \
-      && echo "-------push changes to bitbucket-------"  \
-      && git push beanstalk ${target}
-    fi
-  fi
-}
-
 function gitMoveToNewRepo(){
   if [ -z $2 ] || [ "$1" = "--help" ]
   then
@@ -264,12 +240,12 @@ function gitMoveToNewRepo(){
   fi
 }
 
-function gnb(){
+function gcob(){
  if [[ -z $1 ]] || [[ "$1" = "--help" ]]
   then
     echo "checkout a new git branch with a name, which is sanitized here"
     echo "gnb <<<branch name>>>"
-    echo "e.g. gnb"
+    echo "e.g. gcob"
   else
     string="$@" # all argruments
     string="${string## }" # trim start
