@@ -264,6 +264,7 @@ function n982nu () {
     echo 'arguments missing'
     echo 'e.g.'
     echo '  n98-magerun2.phar admin:user:create --admin-user="my_user_name" --admin-email="example@example.com" --admin-password="mypassword" --admin-firstname="paul" --admin-lastname="test"'
+    return;
   fi
   # a bug caused by n98 dump with --strip=@development
   echo 'adding administrator user if missing'
