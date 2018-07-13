@@ -43,6 +43,10 @@ function setupNewLocalMagento2(){
       local htdocsLocation=$4;
       local dbname=$5;
 
+      if [ "$subfolder" = "." ] ; then
+        subfolder=$(getCurrentFolderName);
+      fi;
+
       subfolder=${giturl%.git};
       subfolder=${subfolder##*/};
 
@@ -78,9 +82,16 @@ function setupLocalMagento2() {
     else
       local runStaticDeploy subfolder dbfile dbname url scriptDir testSshConnection
       subfolder=$1;
+      # if a git repo used
+      if [[ "${1}" == *'.git' ]] ; then
+        setupNewLocalMagento2 $1 $2 $3 $4 $5
+        return 1;
+      fi
+
       if [ "$subfolder" = "." ] ; then
         subfolder=$(getCurrentFolderName);
       fi;
+
       # if $2 is a filename, set db filename or set db name
       if [[ "${2}" == *'.'* ]] ; then
         echo dbfile
@@ -103,12 +114,6 @@ function setupLocalMagento2() {
           echo 'run setup:static-content:deploy? [y/n]';
           read runStaticDeploy;
       done;
-
-      # if a git repo used
-      if [[ "${1}" == *'.git' ]] ; then
-        setupNewLocalMagento2 $1 $2 $3 $4 $5
-        return 1;
-      fi
 
       if [ -f "composer.json" ]; then
         echo "------- composer update -------";
@@ -236,8 +241,9 @@ alias m2upgradeNstatic="echo 'php bin/magento setup:upgrade \
  && php bin/magento setup:di:compile' \
  ; php bin/magento setup:upgrade \
  && m2staticFlush"
+
  # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
-function m2staticFlush(){
+function m2static(){
     # --quite stops it returning anything unless theres an error
     echo 'php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US'
     test=$(php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US && echo 'success')

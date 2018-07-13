@@ -73,14 +73,14 @@ function tar2mysql() {
     url=$2
     db=$3
     echo '-->uncompressing file'
-    tar -xzvf ${file} &&
+    tar -xzvf ${file} --directory="$(dbsLocation)" &&
     file=${file%.gz} &&
     file=${file%.tar} &&
     file=${file%.sql} &&
     file=${file##*/} &&
-    sql2mysql ${file}.sql ${url} ${db}  &&
+    sql2mysql $(dbsLocation)/${file}.sql ${url} ${db}  &&
     echo '-->removing sql' &&
-    rm ${file}.sql
+    rm $(dbsLocation)/${file}.sql
   fi
 }
 
@@ -89,7 +89,7 @@ function gz2mysql() {
   if [  -z $2 ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing'
-    echo 'gz2mysql <<file>> <<url>> or tar2mysql <<file>> <<url>> <<db>>'
+    echo 'gz2mysql <<file>> <<url>> or gz2mysql <<file>> <<url>> <<db>>'
     echo 'please try again'
   else
     local file url db
@@ -104,6 +104,30 @@ function gz2mysql() {
     sql2mysql ${file}.sql ${url} ${db} &&
     echo '-->removing sql' &&
     gzip ${file}.sql
+  fi
+}
+
+# import sql file inside a gz file into sql database it creates
+function zip2mysql() {
+  if [  -z $2 ] || [ "$1" = "--help" ] ; then
+    echo ;
+    echo 'arguments missing'
+    echo 'zip2mysql <<file>> <<url>> or zip2mysql <<file>> <<url>> <<db>>'
+    echo 'please try again'
+  else
+    local file url db
+    file=$1
+    url=$2
+    db=$3
+    echo ${db}
+    echo '-->uncompressing file'
+    unzip ${file} -d $(dbsLocation) &&
+    file=${file%.zip} &&
+    file=${file%.sql} &&
+    file=${file##*/} &&
+    sql2mysql $(dbsLocation)/${file}.sql ${url} ${db} &&
+    echo '-->removing sql' # &&
+    rm $(dbsLocation)/${file}.sql
   fi
 }
 
@@ -242,6 +266,12 @@ function import2mysql(){
       echo "--> sql file detected"
       sql2mysql ${file} ${url} ${db};
     # if ****.gz file
+    elif [[ ${fileextension} == "zip" ]]; then
+        echo "--> zip file detected"
+        if [[ -z db ]]; then
+          db=${file%.zip};
+        fi;
+        zip2mysql ${file} ${url} ${db};
     elif [[ ${fileextension} == "gz" ]]; then
       prevfileextension=${file%.gz};
       prevfileextension=${prevfileextension##*.};
