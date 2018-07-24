@@ -237,7 +237,7 @@ function updateMage1Db(){
         dbname=$(createDatabaseName "${file}");
         dbexists=$(dbExists ${dbname})
         if [ -n "${dbexists}" ]; then
-          echo 'db already created';
+          echo "db ${dbname} already exists";
           return 1
         fi
         echo "-------importing database--------"

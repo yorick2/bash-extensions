@@ -303,7 +303,7 @@ function updateMage2Db(){
         fi
         dbexists=$(dbExists ${dbname})
         if [ -n "${dbexists}" ]; then
-          echo 'db already created';
+          echo "db ${dbname} already exists";
           return 1
         fi
         echo "-------importing database--------"

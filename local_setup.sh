@@ -98,12 +98,12 @@ function gz2mysql() {
     db=$3
     echo ${db}
     echo '-->uncompressing file'
-    gunzip ${file} &&
+    gunzip -k ${file} &&
     file=${file%.gz} &&
     file=${file%.sql} &&
     sql2mysql ${file}.sql ${url} ${db} &&
-    echo '-->removing sql' &&
-    gzip ${file}.sql
+    echo '-->removing sql'
+#    rm ${file}.sql
   fi
 }
 
@@ -131,6 +131,34 @@ function zip2mysql() {
   fi
 }
 
+function sanitizeSqlFile() {
+    if [  -z $1 ] || [ "$1" = "--help" ] ; then
+        echo ;
+        echo 'arguments missing'
+        echo 'sanitiseSqlFile <<file>>'
+        echo 'please try again'
+        return 1;
+    fi;
+    local file filecopy
+    file="${1}"
+    if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
+            sed -i -e 's/ROW_FORMAT=FIXED//g' ${file};
+            filecopy="${file}.sanitized"
+            sed -e 's/ROW_FORMAT=FIXED//g' ${file} > ${filecopy};
+            file="${filecopy}"
+    fi
+    if [ -n "$(cat ${file} | grep "DATA DIRECTORY='./'" )" ] ; then
+        if [[ "${file}" = *".sanitized" ]] ; then
+            sed -i -e 's/DATA DIRECTORY=.\.\/.//g' ${file};
+        else
+            filecopy="${file%.sanitized}.sanitized"
+            sed -e 's/DATA DIRECTORY=.\.\/.//g' ${file} > ${filecopy};
+            file="${filecopy}"
+        fi
+    fi
+    echo "${file}"
+}
+
 # import sql file into sql database it creates
 function sql2mysql() {
     if [  -z $2 ] || [ "$1" = "--help" ] ; then
@@ -150,13 +178,7 @@ function sql2mysql() {
       fi
       dbexists=$(localMysqlConnection --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
-        if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
-          echo 'creating sanitised file'
-          filecopy="${file}.sanitized"
-          cp ${file} ${filecopy}
-          sed -i -e 's/ROW_FORMAT=FIXED//g' ${filecopy} ; # use -i -e not -ie, as -i uses next character if set.
-          file=${filecopy}
-        fi
+        file="$(sanitizeSqlFile ${file})"
         echo '-->creating db'
         localMysqlConnection -e"create database ${db}"
         echo '-->importing db'
@@ -218,9 +240,9 @@ function sql2mysql() {
         localMysqlConnection -e"${cmd}"
 
         echo "your database ${db} is imported"
-        if [ -n "${filecopy}" ] && [ -e "${filecopy}" ]; then
+        if [[ "${file}" = *".sanitized" ]] && [ -e "${file}" ]; then
           echo 'removing sanitised file'
-          rm ${filecopy}
+          rm ${file}
         fi
       else
         echo "error: database name ${db} used"
