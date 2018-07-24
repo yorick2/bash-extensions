@@ -9,8 +9,13 @@ function customBashExtensionsFolder(){
 alias dbsLocation='echo ~/Documents/Databases'
 alias repoLocation='echo ~/Documents/Repositories'
 alias sitesLocation='echo ~/Documents/Repositories/sites'
-
-alias sitesLocation='echo ~/Documents/Repositories/sites'
+array=( $(dbsLocation) $(repoLocation) $(sitesLocation) )
+for i in "${array[@]}"; do
+  #check folders exist
+  if [ ! -d ${i} ]; then
+      mkdir -p ${i} ;
+  fi
+done
 
 function compup(){
     composer update --no-dev
