@@ -4,6 +4,12 @@ function branch_data() {
     if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ]; then # 2>/dev/null to stop errors showing if not in git folder
         return 1;
     fi
+    # if has no commmits yet
+    if [ -z $(git rev-list -n 1 --all) ]; then
+        status_output=$(git status -sb | grep '##'); # "## No commits yet on <<branch name>>"
+        echo " (${status_output#### })";
+        return 1;
+    fi
     curr_branch=$(git rev-parse --abbrev-ref HEAD);
     curr_remote=$(git config branch.$curr_branch.remote);
     tags=$(git tag --points-at HEAD | tr '\r\n' ' ');
@@ -18,7 +24,7 @@ function branch_data() {
         return 1;
     fi
     branch_data=${branch_data%]*};
-    branch_data=${branch_data##*[};
+    branch_data=${branch_data##*\[};
     if [[ ${branch_data} = *":"* ]]; then
         aheadbehind=${branch_data##*: };
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}:${aheadbehind}] ${tags}";
