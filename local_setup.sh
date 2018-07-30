@@ -142,7 +142,6 @@ function sanitizeSqlFile() {
     local file filecopy
     file="${1}"
     if [ -n "$(cat ${file} | grep ROW_FORMAT=FIXED)" ] ; then
-            sed -i -e 's/ROW_FORMAT=FIXED//g' ${file};
             filecopy="${file}.sanitized"
             sed -e 's/ROW_FORMAT=FIXED//g' ${file} > ${filecopy};
             file="${filecopy}"
