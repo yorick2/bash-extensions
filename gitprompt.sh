@@ -18,17 +18,16 @@ function branch_data() {
     else
         uncommitedFlag="! "
     fi
-    branch_data=$(git status --porcelain -b);
+    branch_data=$(git branch -vv | grep '*');
     if [[ ${branch_data} != *"["* ]]; then
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}";
         return 1;
     fi
-    if [[ ${branch_data} = *"["*"]"* ]]; then
-        branch_data=${branch_data%]*};
-        branch_data=${branch_data##*\[};
-        branch_data=${branch_data//ahead /+};
-        branch_data=${branch_data//behind /-};
-        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote} ${branch_data}] ${tags}";
+    branch_data=${branch_data%]*};
+    branch_data=${branch_data##*\[};
+    if [[ ${branch_data} = *":"* ]]; then
+        aheadbehind=${branch_data##*: };
+        echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}:${aheadbehind}] ${tags}";
     else
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}";
     fi
