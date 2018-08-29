@@ -23,7 +23,7 @@ function branch_data() {
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}";
         return 1;
     fi
-    branch_data=${branch_data%]*};
+    branch_data="$( cut -d ']' -f 1 <<< "$branch_data" )"
     branch_data=${branch_data##*\[};
     if [[ ${branch_data} = *":"* ]]; then
         aheadbehind=${branch_data##*: };
