@@ -220,25 +220,30 @@ alias m2modules='php bin/magento module:status'
 alias m2composer="echo 'composer update --no-dev;\
  php bin/magento setup:upgrade; \
  php bin/magento setup:di:compile; \
+ touch pub/static/deployed_version.txt; \
  php bin/magento cache:clean'\
  ; composer update --no-dev;\
  php bin/magento setup:upgrade; \
  php bin/magento setup:di:compile; \
+ touch pub/static/deployed_version.txt; \
  php bin/magento cache:clean;"
 alias m2compile="echo 'php bin/magento setup:di:compile; \
+touch pub/static/deployed_version.txt; \
  php bin/magento cache:clean'\
  ; php bin/magento setup:di:compile; \
+touch pub/static/deployed_version.txt; \
  php bin/magento cache:clean;"
 alias m2upgrade="echo 'php bin/magento setup:upgrade \
  && php bin/magento cache:clean \
- && php bin/magento setup:di:compile'; \
+ && php bin/magento setup:di:compile \
+ && touch pub/static/deployed_version.txt'; \
  php bin/magento setup:upgrade \
  && php bin/magento cache:clean \
- && php bin/magento setup:di:compile"
+ && php bin/magento setup:di:compile \
+ && touch pub/static/deployed_version.txt;"
 # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
 alias m2upgradeNstatic="echo 'php bin/magento setup:upgrade \
- && m2staticFlush \
- && php bin/magento setup:di:compile' \
+ && m2staticFlush ' \
  ; php bin/magento setup:upgrade \
  && m2staticFlush"
 
