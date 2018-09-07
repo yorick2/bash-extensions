@@ -10,10 +10,10 @@ alias gcp='git cherry-pick'
 alias gb='git branch'
 alias gst='git status'
 alias gl='git pull'
-alias gm='git merge --no-ff '
+alias gm='echoAndRun git merge --no-ff '
 alias grup='git remote update'
 alias gmt='git mergetool'
-alias gref="echo 'git rev-parse --verify HEAD'; git rev-parse --verify HEAD"
+alias gref="echoAndRun git rev-parse --verify HEAD"
 
 export PATH="/usr/local/mysql/bin:$PATH"
 

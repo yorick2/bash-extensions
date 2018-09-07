@@ -198,56 +198,40 @@ function copyEnvMage2() {
   cat ${scriptDir}/local_setup_files/magento2/env.php | xclip -selection clipboard
 }
 
-alias n982='echo running n98-magerun2.phar; n98-magerun2.phar'
-alias n982pass='echo running n98-magerun2.phar admin:user:change-password; n98-magerun2.phar admin:user:change-password'
-alias n982re='echo running n98-magerun2.phar indexer:reindex; n98-magerun2.phar indexer:reindex'
-alias n982st='echo running n98-magerun2.phar cache:status; n98-magerun2.phar cache:status'
-alias n982fl='echo running n98-magerun2.phar cache:flush; n98-magerun2.phar cache:flush'
-alias n982en='echo running n98-magerun2.phar cache:enable; n98-magerun2.phar cache:enable'
-alias n982dis='echo running n98-magerun2.phar cache:disable; n98-magerun2.phar cache:disable'
+alias n982="echoAndRun n98-magerun2.phar"
+alias n982pass="echoAndRun n98-magerun2.phar admin:user:change-password"
+alias n982re="echoAndRun  n98-magerun2.phar indexer:reindex"
+alias n982st="echoAndRun n98-magerun2.phar cache:status"
+alias n982fl="echoAndRun n98-magerun2.phar cache:flush"
+alias n982en="echoAndRun n98-magerun2.phar cache:enable"
+alias n982dis="echoAndRun n98-magerun2.phar cache:disable"
 
-alias m2='echo running php bin/magento; php bin/magento'
-alias m2re='echo running php bin/magento indexer:reindex; php bin/magento indexer:reindex'
-alias m2st='echo running php bin/magento cache:status; php bin/magento cache:status'
-alias m2fl='echo running php bin/magento cache:flush; php bin/magento cache:flush'
-alias m2en='echo running php bin/magento cache:enable; php bin/magento cache:enable'
-alias m2dis='echo running php bin/magento cache:disable; php bin/magento cache:disable'
-alias m2dis_without_full_page='echo running php bin/magento cache:enable && php bin/magento cache:disable full_page; \
- php bin/magento cache:enable && php bin/magento cache:disable full_page'
-alias m2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
-alias m2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
-alias m2modules='php bin/magento module:status'
-alias m2composer="echo 'composer update --no-dev &&\
+alias m2="echoAndRun  php bin/magento"
+alias m2re="echoAndRun  php bin/magento indexer:reindex"
+alias m2st="echoAndRun  php bin/magento cache:status"
+alias m2fl="echoAndRun  php bin/magento cache:flush"
+alias m2en="echoAndRun  php bin/magento cache:enable"
+alias m2dis="echoAndRun  php bin/magento cache:disable"
+alias m2dis_without_full_page="echoAndRun 'php bin/magento cache:enable && php bin/magento cache:disable full_page'"
+alias m2DevMode="echoAndRun 'php bin/magento deploy:mode:set developer'"
+alias m2ProdMode="echoAndRun 'php bin/magento deploy:mode:set production'"
+alias m2modules="echoAndRun 'php bin/magento module:status'"
+alias m2composer="echoAndRun 'composer update --no-dev &&\
  php bin/magento setup:upgrade && \
  php bin/magento setup:di:compile && \
  touch pub/static/deployed_version.txt && \
  m2static && \
- php bin/magento cache:clean'\
- ; composer update --no-dev &&\
- php bin/magento setup:upgrade && \
- php bin/magento setup:di:compile && \
- touch pub/static/deployed_version.txt && \
- m2static && \
- php bin/magento cache:clean;"
-alias m2compile="echo 'php bin/magento setup:di:compile; \
+ php bin/magento cache:clean'"
+alias m2compile="echoAndRun 'php bin/magento setup:di:compile; \
 touch pub/static/deployed_version.txt; \
- php bin/magento cache:clean'\
- ; php bin/magento setup:di:compile; \
-touch pub/static/deployed_version.txt; \
- php bin/magento cache:clean;"
-alias m2upgrade="echo 'php bin/magento setup:upgrade \
+ php bin/magento cache:clean'"
+alias m2upgrade="echoAndRun 'php bin/magento setup:upgrade \
  && php bin/magento cache:clean \
  && php bin/magento setup:di:compile \
- && touch pub/static/deployed_version.txt'; \
- php bin/magento setup:upgrade \
- && php bin/magento cache:clean \
- && php bin/magento setup:di:compile \
- && touch pub/static/deployed_version.txt;"
+ && touch pub/static/deployed_version.txt'"
 # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
-alias m2upgradeNstatic="echo 'php bin/magento setup:upgrade \
- && m2static ' \
- ; php bin/magento setup:upgrade \
- && m2static"
+alias m2upgradeNstatic="echoAndRun 'php bin/magento setup:upgrade \
+ && m2static '"
 
  # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
 function m2static(){

@@ -5,6 +5,12 @@ function customBashExtensionsFolder(){
     echo $(dirname "${BASH_SOURCE[0]}")
 }
 
+# echo the command and run it
+echoAndRun() {
+    echo "\$\$  $@" ;
+    eval "$@" ;
+}
+
 ## required for local setups
 alias dbsLocation='echo ~/Documents/Databases'
 alias repoLocation='echo ~/Documents/Repositories'
