@@ -165,7 +165,7 @@ function setupLocalMagento2() {
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";
       if [ "${runStaticDeploy}" = "y" ] ; then
-        m2staticFlush
+        m2static
       fi
       echo "------- create test admin user -------";
       n982nu --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
@@ -217,15 +217,17 @@ alias m2dis_without_full_page='echo running php bin/magento cache:enable && php 
 alias m2DevMode="echo 'php bin/magento deploy:mode:set developer' ; php bin/magento deploy:mode:set developer"
 alias m2ProdMode="echo 'php bin/magento deploy:mode:set production' ; php bin/magento deploy:mode:set production"
 alias m2modules='php bin/magento module:status'
-alias m2composer="echo 'composer update --no-dev;\
- php bin/magento setup:upgrade; \
- php bin/magento setup:di:compile; \
- touch pub/static/deployed_version.txt; \
+alias m2composer="echo 'composer update --no-dev &&\
+ php bin/magento setup:upgrade && \
+ php bin/magento setup:di:compile && \
+ touch pub/static/deployed_version.txt && \
+ m2static && \
  php bin/magento cache:clean'\
- ; composer update --no-dev;\
- php bin/magento setup:upgrade; \
- php bin/magento setup:di:compile; \
- touch pub/static/deployed_version.txt; \
+ ; composer update --no-dev &&\
+ php bin/magento setup:upgrade && \
+ php bin/magento setup:di:compile && \
+ touch pub/static/deployed_version.txt && \
+ m2static && \
  php bin/magento cache:clean;"
 alias m2compile="echo 'php bin/magento setup:di:compile; \
 touch pub/static/deployed_version.txt; \
@@ -243,9 +245,9 @@ alias m2upgrade="echo 'php bin/magento setup:upgrade \
  && touch pub/static/deployed_version.txt;"
 # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
 alias m2upgradeNstatic="echo 'php bin/magento setup:upgrade \
- && m2staticFlush ' \
+ && m2static ' \
  ; php bin/magento setup:upgrade \
- && m2staticFlush"
+ && m2static"
 
  # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
 function m2static(){
