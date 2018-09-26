@@ -441,45 +441,54 @@ function mkvhost() {
          restart="true";
       fi
 
+      if [ -w "${httpdvhosts}" ] 
+      then
+        # standard http connection
+        if grep -q "${url}" ${httpdvhosts} ; then
+            echo "--> no need to update vhosts file"
+        else
+            echo "--> updating vhosts file"
+            eval userDir=~$(whoami); # get user folder location
 
-      # standard http connection
-      if grep -q "${url}" ${httpdvhosts} ; then
-          echo "--> no need to update vhosts file"
-      else
-          echo "--> updating vhosts file"
-          eval userDir=~$(whoami); # get user folder location
+            # standard connection
+            cp ${scriptDir}/local_setup_files/vhost_template.txt ${scriptDir}/local_setup_files/vhost_template.txt.swp
+            sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
+            sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
+            sed -i "s/\~/${userDir//\//\\\/}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
+            cat ${scriptDir}/local_setup_files/vhost_template.txt.swp >> ${httpdvhosts};
+            # rm ${scriptDir}/local_setup_files/vhost_template.txt.swp
 
-          # standard connection
-          cp ${scriptDir}/local_setup_files/vhost_template.txt ${scriptDir}/local_setup_files/vhost_template.txt.swp
-          sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
-          sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
-          sed -i "s/\~/${userDir//\//\\\/}/" ${scriptDir}/local_setup_files/vhost_template.txt.swp
-          cat ${scriptDir}/local_setup_files/vhost_template.txt.swp >> ${httpdvhosts};
-          # rm ${scriptDir}/local_setup_files/vhost_template.txt.swp
-
-          restart="true";
+            restart="true";
+        fi
+      else 
+        '- vhosts file not writable'
       fi
 
-      # https (ssl) connection
-      if grep -q "${url}" ${https_vhosts} ; then
-          echo "--> no need to update https vhosts file"
-      else
-          if [ -z "${https_vhosts}" ]; then
-            echo "--> no https vhosts file found"
-          else
-              echo "--> updating https vhosts file"
-              eval userDir=~$(whoami); # get user folder location
+      if [ -w "${https_vhosts}" ] 
+      then
+        # https (ssl) connection
+        if grep -q "${url}" ${https_vhosts} ; then
+            echo "--> no need to update https vhosts file"
+        else
+            if [ -z "${https_vhosts}" ]; then
+              echo "--> no https vhosts file found"
+            else
+                echo "--> updating https vhosts file"
+                eval userDir=~$(whoami); # get user folder location
 
-              # standard connection
-              cp ${scriptDir}/local_setup_files/vhost_ssl_template.txt ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
-              sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
-              sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
-              sed -i "s/\~/${userDir//\//\\\/}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
-              cat ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp >> ${https_vhosts};
-              # rm ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+                # standard connection
+                cp ${scriptDir}/local_setup_files/vhost_ssl_template.txt ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+                sed -i "s/myurl/${url}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+                sed -i "s/subfolder/${regexSubfolder}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+                sed -i "s/\~/${userDir//\//\\\/}/" ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
+                cat ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp >> ${https_vhosts};
+                # rm ${scriptDir}/local_setup_files/vhost_ssl_template.txt.swp
 
-              restart="true";
-          fi
+                restart="true";
+            fi
+        fi
+      else 
+        '- https vhosts file not writable'
       fi
 
       if [ "$restart" = "false" ] ; then
