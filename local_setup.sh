@@ -444,7 +444,7 @@ function mkvhost() {
       if [ -w "${httpdvhosts}" ] 
       then
         # standard http connection
-        if grep -q "${url}" ${httpdvhosts} ; then
+        if grep -q "${url}" "${httpdvhosts}" ; then
             echo "--> no need to update vhosts file"
         else
             echo "--> updating vhosts file"
@@ -461,10 +461,10 @@ function mkvhost() {
             restart="true";
         fi
       else 
-        '- vhosts file not writable'
+        echo "--> vhosts file \"${httpdvhosts}\" not writable"
       fi
 
-      if [ -w "${https_vhosts}" ] 
+      if [ "${https_vhosts}" != "" ] && [ -w "${https_vhosts}" ] 
       then
         # https (ssl) connection
         if grep -q "${url}" ${https_vhosts} ; then
@@ -488,10 +488,10 @@ function mkvhost() {
             fi
         fi
       else 
-        '- https vhosts file not writable'
+        echo "--> https vhosts \"${https_vhosts}\" file not writable"
       fi
 
-      if [ "$restart" = "false" ] ; then
+      if [ "${restart}" = "false" ] ; then
          echo "--> no need to restart server"
       else
          echo "--> restarting server"
