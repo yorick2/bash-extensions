@@ -157,10 +157,6 @@ function setupLocalMagento2() {
       php bin/magento deploy:mode:set developer;
       echo "------- magento packages upgrade -------";
       php bin/magento setup:upgrade
-      echo "------- disabling full_page cache and flushing cache -------";
-      php bin/magento cache:enable;
-      php bin/magento cache:disable full_page;
-      php bin/magento cache:flush;
       echo "------- removing generated folders -------";
       rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
       echo "------- generating static files -------";
@@ -216,7 +212,13 @@ alias m2dis_without_full_page="echoAndRun 'php bin/magento cache:enable && php b
 alias m2DevMode="echoAndRun 'php bin/magento deploy:mode:set developer'"
 alias m2ProdMode="echoAndRun 'php bin/magento deploy:mode:set production'"
 alias m2modules="echoAndRun 'php bin/magento module:status'"
-alias m2composer="echoAndRun 'composer update --no-dev &&\
+alias m2composerupdate="echoAndRun 'composer update --no-dev &&\
+ php bin/magento setup:upgrade && \
+ php bin/magento setup:di:compile && \
+ touch pub/static/deployed_version.txt && \
+ m2static && \
+ php bin/magento cache:clean'"
+alias m2composerinstall="echoAndRun 'composer update --no-dev &&\
  php bin/magento setup:upgrade && \
  php bin/magento setup:di:compile && \
  touch pub/static/deployed_version.txt && \
@@ -235,13 +237,13 @@ alias m2upgradeNstatic="echoAndRun 'php bin/magento setup:upgrade \
 
  # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
 function m2static(){
-    # --quite stops it returning anything unless theres an error
+    # --quite stops it returning anything unless there is an error
     echo 'php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US'
     test=$(php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US && echo 'success')
     # if we have to force the static deploy
     if [ -z "${test}" ]
     then
-        echo 'static deploy failed, sttempting to force the statiuc deploy'
+        echo 'static deploy failed, attempting to force the static deploy'
         echo 'php bin/magento setup:static-content:deploy -f --quiet --theme="Magento/backend" en_US'
         php bin/magento setup:static-content:deploy -f --quiet --theme="Magento/backend" en_US
         echo 'php bin/magento setup:static-content:deploy -f --quiet en_GB'
