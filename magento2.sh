@@ -271,6 +271,7 @@ function n982nu () {
   fi
   # a bug caused by n98 dump with --strip=@development
   echo 'adding administrator user if missing'
+  n98-magerun2.phar db:query "delete From authorization_role where role_id=1;";
   n98-magerun2.phar db:query "INSERT IGNORE INTO authorization_role (role_id, parent_id, tree_level, sort_order,
   role_type, user_id, user_type, role_name) VALUES (1, 0, 1, 1, 'G', 0, '2', 'Administrators')"
   n98-magerun2.phar db:query "INSERT IGNORE INTO authorization_rule (rule_id, role_id, resource_id, privileges, permission)
