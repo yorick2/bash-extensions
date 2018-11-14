@@ -153,6 +153,10 @@ function setupLocalMagento2() {
       sed -i "s/<<<databasename>>>/${dbname}/g" app/etc/env.php
       cp ${scriptDir}/local_setup_files/magento2/.htaccess .htaccess
       cp ${scriptDir}/local_setup_files/magento2/pub/.htaccess pub/.htaccess
+      echo "------- disabling full_page cache and flushing cache -------";
+      php bin/magento cache:enable;
+      php bin/magento cache:disable full_page;
+      php bin/magento cache:flush;
       echo "------- setting developer mode -------";
       php bin/magento deploy:mode:set developer;
       echo "------- magento packages upgrade -------";
