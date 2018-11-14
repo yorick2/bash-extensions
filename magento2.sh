@@ -217,6 +217,18 @@ alias m2DevMode="echoAndRun 'php bin/magento deploy:mode:set developer'"
 alias m2ProdMode="echoAndRun 'php bin/magento deploy:mode:set production'"
 alias m2modules="echoAndRun 'php bin/magento module:status'"
 
+alias m2composerupdate="echoAndRun 'composer update --no-dev &&\
+ php bin/magento setup:upgrade && \
+ php bin/magento setup:di:compile && \
+ touch pub/static/deployed_version.txt && \
+ m2static && \
+ php bin/magento cache:clean'"
+alias m2composerinstall="echoAndRun 'composer update --no-dev &&\
+ php bin/magento setup:upgrade && \
+ php bin/magento setup:di:compile && \
+ touch pub/static/deployed_version.txt && \
+ m2static && \
+ php bin/magento cache:clean'"
 function m2composer(){
     echo 'Composer update or install?'
     echo 'install [i]'
@@ -236,18 +248,6 @@ function m2composer(){
     fi
     echo 'answer not recognised, please try again';
 }
-alias m2composerupdate="echoAndRun 'composer update --no-dev &&\
- php bin/magento setup:upgrade && \
- php bin/magento setup:di:compile && \
- touch pub/static/deployed_version.txt && \
- m2static && \
- php bin/magento cache:clean'"
-alias m2composerinstall="echoAndRun 'composer update --no-dev &&\
- php bin/magento setup:upgrade && \
- php bin/magento setup:di:compile && \
- touch pub/static/deployed_version.txt && \
- m2static && \
- php bin/magento cache:clean'"
 
 alias m2compile="echoAndRun 'php bin/magento setup:di:compile; \
 touch pub/static/deployed_version.txt; \
