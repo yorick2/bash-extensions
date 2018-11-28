@@ -265,19 +265,22 @@ function m2static(){
     # --quite stops it returning anything unless there is an error
     echo 'php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US'
     test=$(php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US && echo 'success')
+    languages=$(n98-magerun2.phar db:query 'select value from core_config_data where path="general/locale/code";');
+    languages=${languages/value/} # remove the column header from the list
+    languages=${languages//$'\n'/ } # replace new lines with a space
     # if we have to force the static deploy
     if [ -z "${test}" ]
     then
         echo 'static deploy failed, attempting to force the static deploy'
         echo 'php bin/magento setup:static-content:deploy -f --quiet --theme="Magento/backend" en_US'
         php bin/magento setup:static-content:deploy -f --quiet --theme="Magento/backend" en_US
-        echo 'php bin/magento setup:static-content:deploy -f --quiet en_GB'
-        php bin/magento setup:static-content:deploy -f --quiet en_GB
+        echo "php bin/magento setup:static-content:deploy -f --quiet ${languages}"
+        php bin/magento setup:static-content:deploy -f --quiet ${languages}
         echo 'php bin/magento cache:clean'
         php bin/magento cache:clean
     else
-        echo 'php bin/magento setup:static-content:deploy --quiet en_GB'
-        php bin/magento setup:static-content:deploy --quiet en_GB
+        echo "php bin/magento setup:static-content:deploy --quiet ${languages}"
+        php bin/magento setup:static-content:deploy --quiet ${languages}
         echo 'php bin/magento cache:clean'
         php bin/magento cache:clean
     fi
