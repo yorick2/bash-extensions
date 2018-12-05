@@ -266,9 +266,9 @@ function m2static(){
       echo ;
       echo 'build statics the supplied language or '
       echo 'builds for en_GB and the backend for en_US '
-      echo ''
       echo 'm2static'
       echo 'm2static <<language>>'
+      echo ''
       return 1;
     fi
     if [  -z $1  ]; then
