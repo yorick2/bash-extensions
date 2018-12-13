@@ -74,6 +74,32 @@ function dropDb(){
     localMysqlConnection -e"drop database ${1};";
 }
 
+function dbTablesSizes(){
+    if [  "$1" == "--help" ]; then
+        echo 'List the database tables ordered by size in mb'
+        echo 'dbTablesSizes'
+        echo 'dbTablesSizes << database>>'
+    fi
+    if [ -z $1 ]; then
+        localMysqlConnection -e '
+            SELECT
+            table_schema as `Database`,
+            table_name AS `Table`,
+            round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`
+            FROM information_schema.TABLES
+            ORDER BY (data_length + index_length) DESC;'
+    else
+        localMysqlConnection -e '
+            SELECT
+            table_schema as `Database`,
+            table_name AS `Table`,
+            round(((data_length + index_length) / 1024 / 1024), 2) `Size in MB`
+            FROM information_schema.TABLES
+            Where table_schema = "'${1}'"
+            ORDER BY (data_length + index_length) DESC;'
+    fi
+}
+
 # run php through a shell for xdebug
 alias phpDebug="php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=On"
 
