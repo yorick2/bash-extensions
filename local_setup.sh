@@ -103,7 +103,7 @@ function gz2mysql() {
     file=${file%.sql} &&
     sql2mysql ${file}.sql ${url} ${db} &&
     echo '-->removing sql'
-#    rm ${file}.sql
+    rm ${file}.sql
   fi
 }
 
@@ -126,7 +126,7 @@ function zip2mysql() {
     file=${file%.sql} &&
     file=${file##*/} &&
     sql2mysql $(dbsLocation)/${file}.sql ${url} ${db} &&
-    echo '-->removing sql' # &&
+    echo '-->removing sql'
     rm $(dbsLocation)/${file}.sql
   fi
 }
