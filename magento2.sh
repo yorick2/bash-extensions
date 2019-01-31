@@ -223,7 +223,7 @@ alias m2composerupdate="echoAndRun 'composer update --no-dev &&\
  touch pub/static/deployed_version.txt && \
  m2static && \
  php bin/magento cache:clean'"
-alias m2composerinstall="echoAndRun 'composer update --no-dev &&\
+alias m2composerinstall="echoAndRun 'composer install --no-dev &&\
  php bin/magento setup:upgrade && \
  php bin/magento setup:di:compile && \
  touch pub/static/deployed_version.txt && \
