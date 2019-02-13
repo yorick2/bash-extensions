@@ -2,6 +2,6 @@
     ServerAdmin webmaster@dummy-host2.example.com
     DocumentRoot "~/Documents/Repositories/sites/subfolder"
     ServerName myurl
-    ErrorLog "/var/log/apache2/myurl_error_log"
-    CustomLog "/var/log/apache2/myurl_access_log" common
+    ErrorLog "/var/log/apache2/error_log"
+    CustomLog "/var/log/apache2/access_log" common
 </VirtualHost>
