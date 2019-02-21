@@ -453,7 +453,7 @@ function importMage2mysql(){
   # if sql file
   if [[ ${fileextension} == "sql" ]]; then
     echo "--> sql file detected"
-    db=${db%.sql}
+    db=${file%.sql}
     db=${db##*/}
     sql2mysql ${file} ${url} ${db};
   # if ****.zip file

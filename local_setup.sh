@@ -230,28 +230,37 @@ function import2mysql(){
     # if sql file
     if [[ ${fileextension} == "sql" ]]; then
       echo "--> sql file detected"
+      db=${file%.sql}
+      db=${db##*/}
       sql2mysql ${file} ${url} ${db};
-    # if ****.gz file
+    # if ****.zip file
     elif [[ ${fileextension} == "zip" ]]; then
         echo "--> zip file detected"
-        if [[ -z db ]]; then
+        if [[ -z "${db}" ]]; then
           db=${file%.zip};
+          db=${db%.sql}
+          db=${db##*/}
         fi;
         zip2mysql ${file} ${url} ${db};
+    # if ****.gz file
     elif [[ ${fileextension} == "gz" ]]; then
       prevfileextension=${file%.gz};
       prevfileextension=${prevfileextension##*.};
       # if tar.gz file
       if [[ ${prevfileextension} == "tar" ]]; then
         echo "--> tar.gz file detected"
-        if [[ -z db ]]; then
-            db=${file%.tar.gz};
+        if [[ -z "${db}" ]]; then
+          db=${file%.tar.gz};
+          db=${db%.sql}
+          db=${db##*/}
         fi;
         tar2mysql ${file} ${url} ${db};
       else
         echo "--> gz file detected"
-        if [[ -z db ]]; then
+        if [[ -z "${db}" ]]; then
           db=${file%.gz};
+          db=${db%.sql}
+          db=${db##*/}
         fi;
         gz2mysql ${file} ${url} ${db};
       fi
