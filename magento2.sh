@@ -453,12 +453,16 @@ function importMage2mysql(){
   # if sql file
   if [[ ${fileextension} == "sql" ]]; then
     echo "--> sql file detected"
+    db=${db%.sql}
+    db=${db##*/}
     sql2mysql ${file} ${url} ${db};
   # if ****.zip file
   elif [[ ${fileextension} == "zip" ]]; then
       echo "--> zip file detected"
       if [[ -z "${db}" ]]; then
         db=${file%.zip};
+        db=${db%.sql}
+        db=${db##*/}
       fi;
       zip2mysql ${file} ${url} ${db};
   # if ****.gz file
@@ -469,13 +473,17 @@ function importMage2mysql(){
     if [[ ${prevfileextension} == "tar" ]]; then
       echo "--> tar.gz file detected"
       if [[ -z "${db}" ]]; then
-          db=${file%.tar.gz};
+        db=${file%.tar.gz};
+        db=${db%.sql}
+        db=${db##*/}
       fi;
       tar2mysql ${file} ${url} ${db};
     else
       echo "--> gz file detected"
       if [[ -z "${db}" ]]; then
-          db=${file%.gz};
+        db=${file%.gz};
+        db=${db%.sql}
+        db=${db##*/}
       fi;
       gz2mysql ${file} ${url} ${db};
     fi
@@ -483,13 +491,11 @@ function importMage2mysql(){
     echo "error: unrecognised file format";
     return 1;
   fi
-  db=${db%.sql}
-  db=${db##*/}
+
   echo '-->updating db'
   table='core_config_data'
   # for magento 1 & 2
   cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
-  echo $cmd
 
   localMysqlConnection -e"${cmd}"
   cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
