@@ -150,7 +150,7 @@ function setupLocalMagento1() {
           echo 'already exists';
           return 1
         fi
-      import2mysql ${dbfile} ${url} ${dbname};
+      importMage2mysql ${dbfile} ${url} ${dbname};
       dbexists=$(dbExists ${dbname})
       if [ -z "${dbexists}" ]; then
         echo 'db not created';
@@ -241,7 +241,7 @@ function updateMage1Db(){
           return 1
         fi
         echo "-------importing database--------"
-        import2mysql "${file}" "${url}" "${dbname}"
+        importMage2mysql "${file}" "${url}" "${dbname}"
         dbexists=$(dbExists ${dbname})
         if [ -z "${dbexists}" ]; then
           echo 'db not created';

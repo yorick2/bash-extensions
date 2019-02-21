@@ -133,7 +133,7 @@ function setupLocalMagento2() {
           echo 'already exists';
           return 1
         fi
-      import2mysql ${dbfile} ${url} ${dbname};
+      importMage2mysql ${dbfile} ${url} ${dbname};
       dbexists=$(dbExists ${dbname})
         if [ -z "${dbexists}" ]; then
           echo 'db not created';
@@ -378,7 +378,7 @@ function updateMage2Db(){
           return 1
         fi
         echo "-------importing database--------"
-        import2mysql "${file}" "${url}" "${dbname}"
+        importMage2mysql "${file}" "${url}" "${dbname}"
         dbexists=$(dbExists ${dbname})
         if [ -z "${dbexists}" ]; then
           echo 'db not created';
@@ -416,3 +416,133 @@ function updateMage2Db(){
 }
 
 
+# import sql file into sql database it creates
+function importMage2mysql(){
+  if [  -z $2  ] || [ "$1" = "--help" ] ; then
+    echo ;
+    echo 'arguments missing';
+    echo 'importMage2mysql <<db file>> <<url>> or importMage2mysql <db file>> <<url>> <<db>>';
+    echo 'for files on remote server ';
+    echo 'importMage2mysql <<login details>>:<<db file>> <<url>> or importMage2mysql <db file>> <<url>> <<db>>';
+    echo 'eg. importMage2mysql user@example.com:~/example.sql l.example';
+    echo 'please try again';
+    return 1;
+  fi
+  local file url db fileextension prevfileextension testSshConnection
+  file=$1;
+  url=$2;
+  db=$3;
+  if [[ ${file} == *':'* ]] ; then
+      echo '-->  testing ssh connection'
+      testSshConnection=$(testSshConnection ${file%:*});
+      if [[ "$testSshConnection" != 'true' ]]; then
+          echo 'unable to download database: connection failed'
+          return 1;
+      fi
+      echo '-->  downloading db file'
+      rsync -ahz -e "ssh -o StrictHostKeyChecking=no" ${file} $(dbsLocation) &&
+      file=${file##*:} &&
+      file=${file##*/}
+      file="$(dbsLocation)/${file}"
+  fi
+  if [ ! -f "${file}" ]; then
+      echo 'database file dosent exist';
+      return 1;
+  fi
+  fileextension="${file##*.}"; # last file extension if example.sql.tar.gz it returns gz if example.sql returns sql
+  # if sql file
+  if [[ ${fileextension} == "sql" ]]; then
+    echo "--> sql file detected"
+    sql2mysql ${file} ${url} ${db};
+  # if ****.zip file
+  elif [[ ${fileextension} == "zip" ]]; then
+      echo "--> zip file detected"
+      if [[ -z "${db}" ]]; then
+        db=${file%.zip};
+      fi;
+      zip2mysql ${file} ${url} ${db};
+  # if ****.gz file
+  elif [[ ${fileextension} == "gz" ]]; then
+    prevfileextension=${file%.gz};
+    prevfileextension=${prevfileextension##*.};
+    # if tar.gz file
+    if [[ ${prevfileextension} == "tar" ]]; then
+      echo "--> tar.gz file detected"
+      if [[ -z "${db}" ]]; then
+          db=${file%.tar.gz};
+      fi;
+      tar2mysql ${file} ${url} ${db};
+    else
+      echo "--> gz file detected"
+      if [[ -z "${db}" ]]; then
+          db=${file%.gz};
+      fi;
+      gz2mysql ${file} ${url} ${db};
+    fi
+  else
+    echo "error: unrecognised file format";
+    return 1;
+  fi
+  db=${db%.sql}
+  db=${db##*/}
+  echo '-->updating db'
+  table='core_config_data'
+  # for magento 1 & 2
+  cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
+  echo $cmd
+
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='31536000' where path='admin/security/session_lifetime';"
+  localMysqlConnection -e"${cmd}"
+
+  # for magento 1
+  cmd="update ${db}.${table} set value='{{secure_base_url}}' where path='web/secure/base_link_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{secure_base_url}}js/' where path='web/secure/base_js_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{secure_base_url}}media/' where path='web/secure/base_media_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{secure_base_url}}skin/' where path='web/secure/base_skin_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{secure_base_url}}static/' where path='web/secure/base_static_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{unsecure_base_url}}' where path='web/unsecure/base_link_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{unsecure_base_url}}js/' where path='web/unsecure/base_js_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{unsecure_base_url}}media/' where path='web/unsecure/base_media_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{unsecure_base_url}}skin/' where path='web/unsecure/base_skin_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set value='{{unsecure_base_url}}static/' where path='web/unsecure/base_static_url';"
+  localMysqlConnection -e"${cmd}"
+  cmd="delete from ${db}.${table} where path='web/cookie/cookie_domain';"
+  localMysqlConnection -e"${cmd}"
+  # check/money order
+  cmd="update ${db}.${table} set VALUE='1' where PATH='payment/checkmo/active'"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/min_order_total'"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='999999999' where PATH='payment/checkmo/max_order_total'"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/allowspecific'"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='0' where PATH='system/guidance_cachebuster/is_enabled'"
+  localMysqlConnection -e"${cmd}"
+
+  # for magento 2
+  cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_frontend';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_admin';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='0' where PATH='dev/css/merge_css_files';"
+  localMysqlConnection -e"${cmd}"
+  cmd="update ${db}.${table} set VALUE='0' where PATH='dev/js/merge_files';"
+  localMysqlConnection -e"${cmd}"
+
+  echo '-->import complete'
+}

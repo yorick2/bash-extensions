@@ -24,3 +24,15 @@ _updateMage2Db(){
 }
 complete -F _updateMage1Db updateMage1Db
 
+
+_importMage2mysql(){
+    if [ $COMP_CWORD -eq 1 ]; then
+        # standard auto complete
+        _minimal;
+    elif [ $COMP_CWORD -eq 2 ]; then
+        _fromArrayAutoCompletion "$(listhosts)";
+    elif [ $COMP_CWORD -eq 3 ]; then
+        _fromArrayAutoCompletion "$(listdbs)";
+    fi
+}
+complete -F _importMage2mysql importMage2mysql

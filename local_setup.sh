@@ -183,65 +183,6 @@ function sql2mysql() {
         echo '-->importing db'
         echo "localMysqlConnection ${db} < ${file}"
         localMysqlConnection ${db} < ${file}
-        echo '-->updating db'
-        table='core_config_data'
-
-        # for magento 1 & 2
-        cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='test@test.com' where PATH like '%email%' AND VALUE like '%@%';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='31536000' where path='admin/security/session_lifetime';"
-        localMysqlConnection -e"${cmd}"
-
-
-        # for magento 1
-        cmd="update ${db}.${table} set value='{{secure_base_url}}' where path='web/secure/base_link_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{secure_base_url}}js/' where path='web/secure/base_js_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{secure_base_url}}media/' where path='web/secure/base_media_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{secure_base_url}}skin/' where path='web/secure/base_skin_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{secure_base_url}}static/' where path='web/secure/base_static_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{unsecure_base_url}}' where path='web/unsecure/base_link_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{unsecure_base_url}}js/' where path='web/unsecure/base_js_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{unsecure_base_url}}media/' where path='web/unsecure/base_media_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{unsecure_base_url}}skin/' where path='web/unsecure/base_skin_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set value='{{unsecure_base_url}}static/' where path='web/unsecure/base_static_url';"
-        localMysqlConnection -e"${cmd}"
-        cmd="delete from ${db}.${table} where path='web/cookie/cookie_domain';"
-        localMysqlConnection -e"${cmd}"
-        # check/money order
-        cmd="update ${db}.${table} set VALUE='1' where PATH='payment/checkmo/active'"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/min_order_total'"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='999999999' where PATH='payment/checkmo/max_order_total'"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='payment/checkmo/allowspecific'"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='system/guidance_cachebuster/is_enabled'"
-        localMysqlConnection -e"${cmd}"
-
-        # for magento 2
-        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_frontend';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='web/secure/use_in_admin';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='dev/css/merge_css_files';"
-        localMysqlConnection -e"${cmd}"
-        cmd="update ${db}.${table} set VALUE='0' where PATH='dev/js/merge_files';"
-        localMysqlConnection -e"${cmd}"
-
         echo "your database ${db} is imported"
         if [[ "${file}" = *".sanitized" ]] && [ -e "${file}" ]; then
           echo 'removing sanitised file'
