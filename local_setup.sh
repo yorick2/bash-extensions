@@ -17,6 +17,8 @@ function createDatabaseName(){
     local dbfile dbname
     dbfile=$1
     dbname=${dbfile%.*};
+    dbname=${dbname%.zip};
+    dbname=${dbname%.gz};
     dbname=${dbname%.tar};
     dbname=${dbname%.sql};
     dbname=${dbname##*:};
