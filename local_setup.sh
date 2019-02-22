@@ -206,70 +206,56 @@ function import2mysql(){
     echo 'import2mysql <<login details>>:<<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
     echo 'eg. import2mysql user@example.com:~/example.sql l.example';
     echo 'please try again';
-  else
-    local file url db fileextension prevfileextension testSshConnection
-    file=$1;
-    url=$2;
-    db=$3;
-    if [[ ${file} == *':'* ]] ; then
-        echo '-->  testing ssh connection'
-        testSshConnection=$(testSshConnection ${file%:*});
-        if [[ "$testSshConnection" != 'true' ]]; then
-            echo 'unable to download database: connection failed'
-            return 1;
-        fi
-        echo '-->  downloading db file'
-        rsync -ahz -e "ssh -o StrictHostKeyChecking=no" ${file} $(dbsLocation) &&
-        file=${file##*:} &&
-        file=${file##*/}
-        file="$(dbsLocation)/${file}"
-    fi
-    if [ ! -f "${file}" ]; then
-        echo 'database file dosent exist';
-        return 1;
-    fi
-    fileextension="${file##*.}"; # last file extension if example.sql.tar.gz it returns gz if example.sql returns sql
-    # if sql file
-    if [[ ${fileextension} == "sql" ]]; then
-      echo "--> sql file detected"
-      db=${file%.sql}
-      db=${db##*/}
-      sql2mysql ${file} ${url} ${db};
-    # if ****.zip file
-    elif [[ ${fileextension} == "zip" ]]; then
-        echo "--> zip file detected"
-        if [[ -z "${db}" ]]; then
-          db=${file%.zip};
-          db=${db%.sql}
-          db=${db##*/}
-        fi;
-        zip2mysql ${file} ${url} ${db};
-    # if ****.gz file
-    elif [[ ${fileextension} == "gz" ]]; then
-      prevfileextension=${file%.gz};
-      prevfileextension=${prevfileextension##*.};
-      # if tar.gz file
-      if [[ ${prevfileextension} == "tar" ]]; then
-        echo "--> tar.gz file detected"
-        if [[ -z "${db}" ]]; then
-          db=${file%.tar.gz};
-          db=${db%.sql}
-          db=${db##*/}
-        fi;
-        tar2mysql ${file} ${url} ${db};
-      else
-        echo "--> gz file detected"
-        if [[ -z "${db}" ]]; then
-          db=${file%.gz};
-          db=${db%.sql}
-          db=${db##*/}
-        fi;
-        gz2mysql ${file} ${url} ${db};
+    return 1
+  fi
+  local file url db fileextension prevfileextension testSshConnection
+  file=$1;
+  url=$2;
+  db=$3;
+  if [[ ${file} == *':'* ]] ; then
+      echo '-->  testing ssh connection'
+      testSshConnection=$(testSshConnection ${file%:*});
+      if [[ "$testSshConnection" != 'true' ]]; then
+          echo 'unable to download database: connection failed'
+          return 1;
       fi
-    else
-      echo "error: unrecognised file format";
+      echo '-->  downloading db file'
+      rsync -ahz -e "ssh -o StrictHostKeyChecking=no" ${file} $(dbsLocation) &&
+      file=${file##*:} &&
+      file=${file##*/}
+      file="$(dbsLocation)/${file}"
+  fi
+  if [ ! -f "${file}" ]; then
+      echo 'database file dosent exist';
       return 1;
+  fi
+  fileextension="${file##*.}"; # last file extension if example.sql.tar.gz it returns gz if example.sql returns sql
+  if [[ -z "${db}" ]]; then
+      db=$(createDatabaseName ${file} )
+  fi
+  # if sql file
+  if [[ ${fileextension} == "sql" ]]; then
+    echo "--> sql file detected"
+    sql2mysql ${file} ${url} ${db};
+  # if ****.zip file
+  elif [[ ${fileextension} == "zip" ]]; then
+    echo "--> zip file detected"
+    zip2mysql ${file} ${url} ${db};
+  # if ****.gz file
+  elif [[ ${fileextension} == "gz" ]]; then
+    prevfileextension=${file%.gz};
+    prevfileextension=${prevfileextension##*.};
+    # if tar.gz file
+    if [[ ${prevfileextension} == "tar" ]]; then
+      echo "--> tar.gz file detected"
+      tar2mysql ${file} ${url} ${db};
+    else
+      echo "--> gz file detected"
+      gz2mysql ${file} ${url} ${db};
     fi
+  else
+    echo "error: unrecognised file format";
+    return 1;
   fi
 }
 
