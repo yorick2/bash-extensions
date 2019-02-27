@@ -52,26 +52,29 @@ function dbExists(){
 }
 
 function dropDb(){
-    dbexists=$(localMysqlConnection -e "show databases like '${1}';")
-    if [ -z "${dbexists}" ]; then
-        echo "database ${1} not found"
-        return 1
-    fi
-    echo "are you sure you want to drop database ${1} ? [n]"
-    read continue
-    if [ -z "${continue}" ]; then
-        echo 'dropping database cancelled'
-        return 1
-    fi
-    if [ "${continue}" = "n" ]; then
-        echo 'dropping database cancelled'
-        return 1
-    fi
-    if [ "${continue}" = "N" ]; then
-        echo 'dropping database cancelled'
-        return 1
-    fi
-    localMysqlConnection -e"drop database ${1};";
+    for database in "$@"; do
+      dbexists=$(localMysqlConnection -e "show databases like '${database}';")
+      if [ -z "${dbexists}" ]; then
+          echo "database ${1} not found"
+          return 1
+      fi
+      echo "\nare you sure you want to drop database ${database} ? [n]"
+      read continue
+      if [ -z "${continue}" ]; then
+          echo 'dropping database cancelled'
+          return 1
+      fi
+      if [ "${continue}" = "n" ]; then
+          echo 'dropping database cancelled'
+          return 1
+      fi
+      if [ "${continue}" = "N" ]; then
+          echo 'dropping database cancelled'
+          return 1
+      fi
+      echo "dropping database ${database}";
+      localMysqlConnection -e"drop database ${database};";
+    done
 }
 
 function dbTablesSizes(){
