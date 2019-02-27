@@ -225,41 +225,45 @@ function updateMage1Db(){
           echo 'arguments missing'
           echo 'updateMage1Db <<db file>> <<url>'
           echo 'please try again'
-    else
-        local file url dbname location
-        file=$1
-        url=$2
-        vhost_file_location=$(get_vhost_location_file "${url}")
-        if [ ! -f "${vhost_file_location}" ]; then
-            echo "unable to find ${url} in your host files";
-            return 1;
-        fi
-        dbname=$(createDatabaseName "${file}");
-        dbexists=$(dbExists ${dbname})
-        if [ -n "${dbexists}" ]; then
-          echo "db ${dbname} already exists";
-          return 1
-        fi
-        echo "-------importing database--------"
-        importMage2mysql "${file}" "${url}" "${dbname}"
-        dbexists=$(dbExists ${dbname})
-        if [ -z "${dbexists}" ]; then
-          echo 'db not created';
-          return 1
-        fi
-        echo "-------updating local.xml--------"
-        update_localxml "${dbname}" "${url}"
-        echo "------- flushing cache -------";
-        location=$(getVhostLocation "${url}")
-        cd ${location}
-        n98-magerun.phar cache:disable;
-        n98-magerun.phar cache:flush;
-        echo ran 'n98-magerun.phar cache:flush'
-        echo "------- create test admin user -------";
-        echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman'
-        n98-magerun.phar admin:user:create  test t@test.com password1 a testman
-        echo 'new user created:'
-        echo 'user:test '
-        echo 'password:password1 '
+          return 1;
     fi
+    local file url dbname vhostLocation vhost_file_location dbexists
+    file=$1
+    url=$2
+    vhost_file_location=$(get_vhost_location_file "${url}")
+    if [ ! -f "${vhost_file_location}" ]; then
+        echo "unable to find ${url} in your host files";
+        return 1;
+    fi
+    vhostLocation=$(getVhostLocation "${url}")
+    if [ ! -f "${vhostLocation}/app/etc/local.xml" ]; then
+        echo "Please check this is a magento 1 site and it has a local.xml file";
+        return 1;
+    fi
+    dbname=$(createDatabaseName "${file}");
+    dbexists=$(dbExists ${dbname})
+    if [ -n "${dbexists}" ]; then
+      echo "db ${dbname} already exists";
+      return 1
+    fi
+    echo "-------importing database--------"
+    importMage2mysql "${file}" "${url}" "${dbname}"
+    dbexists=$(dbExists ${dbname})
+    if [ -z "${dbexists}" ]; then
+      echo 'db not created. It already exists';
+      return 1
+    fi
+    echo "-------updating local.xml--------"
+    update_localxml "${dbname}" "${url}"
+    echo "------- flushing cache -------";
+    cd ${vhostLocation}
+    n98-magerun.phar cache:disable;
+    n98-magerun.phar cache:flush;
+    echo ran 'n98-magerun.phar cache:flush'
+    echo "------- create test admin user -------";
+    echo ran 'n98-magerun.phar admin:user:create  test t@test.com password1 a testman'
+    n98-magerun.phar admin:user:create  test t@test.com password1 a testman
+    echo 'new user created:'
+    echo 'user:test '
+    echo 'password:password1 '
 }

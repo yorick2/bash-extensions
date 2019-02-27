@@ -19,7 +19,7 @@ function update_envphp() {
         location="${vhostLocation}/app/etc/env.php";
      else
         echo 'env file not found';
-        return;
+        return 1;
      fi
      sed -i "s/${quotes}dbname${quotes}\s=>\s${quotes}${notQuotes}*${quotes}/'dbname' => '${database}'/g" ${location}
   fi
@@ -356,63 +356,63 @@ function n982nu () {
 
 function updateMage2Db(){
      if [  -z $2 ] || [ "$1" = "--help" ]; then
-          echo ;
-          echo 'import database and set to current database in magento setting file'
-          echo ''
-          echo 'arguments missing'
-          echo 'updateMage2Db <<db file>> <<url>'
-          echo 'please try again'
-    else
-        local file url dbname
-        file=$1
-        url=$2
-        dbname=$(createDatabaseName "${file}");
-        vhost_file_location=$(get_vhost_location_file "${url}")
-        if [ ! -f "${vhost_file_location}" ]; then
-            echo "unable to find ${url} in your host files";
-            return 1;
-        fi
-        dbexists=$(dbExists ${dbname})
-        if [ -n "${dbexists}" ]; then
-          echo "db ${dbname} already exists";
-          return 1
-        fi
-        echo "-------importing database--------"
-        importMage2mysql "${file}" "${url}" "${dbname}"
-        dbexists=$(dbExists ${dbname})
-        if [ -z "${dbexists}" ]; then
-          echo 'db not created';
-          return 1
-        fi
-        echo "-------updating env.php--------"
-        update_envphp "${dbname}" "${url}"
-        echo "------- setting developer mode -------";
-        vhostLocation=$(getVhostLocation "${url}")
-        if [ -f  ${vhostLocation}/../app/etc/env.php ] ; then
-           location="${vhostLocation}";
-        elif [ -f  ${vhostLocation}/app/etc/env.php ] ; then
-           location="${vhostLocation}/pub";
-        else
-           echo 'env file not found';
-           return;
-        fi
-        cd "${location}"
-        cd ..
-        php bin/magento deploy:mode:set developer;
-        echo "------- magento packages upgrade -------";
-        php bin/magento setup:upgrade;
-        echo "------- disabling full_page cache and flushing cache -------";
-        php bin/magento cache:enable;
-        php bin/magento cache:disable full_page;
-        php bin/magento cache:flush;
-        echo "------- removing generated folders -------";
-        rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
-        echo "------- create test admin user -------";
-        n982nu --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
-        echo 'new user created:'
-        echo 'user:test '
-        echo 'password:password1 '
+        echo ;
+        echo 'import database and set to current database in magento setting file'
+        echo ''
+        echo 'arguments missing'
+        echo 'updateMage2Db <<db file>> <<url>'
+        echo 'please try again'
+        return 1;
     fi
+    local file url dbname vhost_file_location dbexists vhostLocation location
+    file=$1
+    url=$2
+    dbname=$(createDatabaseName "${file}");
+    vhost_file_location=$(get_vhost_location_file "${url}")
+    if [ ! -f "${vhost_file_location}" ]; then
+        echo "unable to find ${url} in your host files";
+        return 1;
+    fi
+    dbexists=$(dbExists ${dbname})
+    if [ -n "${dbexists}" ]; then
+      echo "db ${dbname} already exists";
+      return 1
+    fi
+    vhostLocation=$(getVhostLocation "${url}")
+    if [ -f  ${vhostLocation}/../app/etc/env.php ] ; then
+       location="${vhostLocation}";
+    elif [ -f  ${vhostLocation}/app/etc/env.php ] ; then
+       location="${vhostLocation}/pub";
+    else
+       echo 'env file not found. Please check this is a magento 2 site';
+       return 1;
+    fi
+    echo "-------importing database--------"
+    importMage2mysql "${file}" "${url}" "${dbname}"
+    dbexists=$(dbExists ${dbname})
+    if [ -z "${dbexists}" ]; then
+      echo 'db not created';
+      return 1
+    fi
+    echo "-------updating env.php--------"
+    update_envphp "${dbname}" "${url}"
+    echo "------- setting developer mode -------";
+    cd "${location}"
+    cd ..
+    php bin/magento deploy:mode:set developer;
+    echo "------- magento packages upgrade -------";
+    php bin/magento setup:upgrade;
+    echo "------- disabling full_page cache and flushing cache -------";
+    php bin/magento cache:enable;
+    php bin/magento cache:disable full_page;
+    php bin/magento cache:flush;
+    echo "------- removing generated folders -------";
+    rm -rf var/cache/* var/page_cache/* var/view_preprocessed/* var/generation/* var/di/*
+    echo "------- create test admin user -------";
+    n982nu --admin-user="test" --admin-email="t@test.com" --admin-password="password1" --admin-firstname="test" --admin-lastname="test"
+    echo 'new user created:'
+    echo 'user:test '
+    echo 'password:password1 '
 }
 
 
@@ -482,7 +482,6 @@ function importMage2mysql(){
   table='core_config_data'
   # for magento 1 & 2
   cmd="update ${db}.${table} set value='http://${url}/' where path='web/secure/base_url';"
-
   localMysqlConnection -e"${cmd}"
   cmd="update ${db}.${table} set value='http://${url}/' where path='web/unsecure/base_url';"
   localMysqlConnection -e"${cmd}"
