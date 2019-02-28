@@ -8,11 +8,12 @@ function update_envphp() {
      echo 'update_envphp <<db>> <<url>>'
      echo 'please try again'
    else
-     database=$1
-     url=$2
-     vhostLocation=$(getVhostLocation "${url}")
-     quotes="['\"]"
-     notQuotes="[^'\"]"
+     local location
+     local database=$1
+     local url=$2
+     local vhostLocation=$(getVhostLocation "${url}")
+     local quotes="['\"]"
+     local notQuotes="[^'\"]"
      if [ -f  ${vhostLocation}/../app/etc/env.php ] ; then
         location="${vhostLocation}/../app/etc/env.php";
      elif [ -f  ${vhostLocation}/app/etc/env.php ] ; then
@@ -233,6 +234,7 @@ function m2composer(){
     echo 'Composer update or install?'
     echo 'install [i]'
     echo 'update  [u]'
+    local option
     read option
     if [ -z "${option}" ]; then
         echo 'answer not recognised, please try again';
@@ -271,6 +273,7 @@ function m2static(){
       echo ''
       return 1;
     fi
+    local test
     if [  -z $1  ]; then
         # --quite stops it returning anything unless there is an error
         echo 'php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US'
@@ -311,6 +314,7 @@ function m2static(){
 
  # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
 function m2staticAll(){
+    local test languages
     # --quite stops it returning anything unless there is an error
     echo 'php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US'
     test=$(php bin/magento setup:static-content:deploy --quiet --theme="Magento/backend" en_US && echo 'success')
@@ -428,7 +432,7 @@ function importMage2mysql(){
     echo 'please try again';
     return 1;
   fi
-  local file url db fileextension prevfileextension testSshConnection
+  local file url db fileextension prevfileextension testSshConnection table cmd
   file=$1;
   url=$2;
   db=$3;

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 function branch_data() {
+  local curr_remote curr_branch tags uncommitedFlag branch_data aheadbehind
     if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ]; then # 2>/dev/null to stop errors showing if not in git folder
         return 1;
     fi

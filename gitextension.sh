@@ -231,8 +231,8 @@ function gitMoveToNewRepo(){
     echo "moveToNewRepo <<<old repo>>> <<<new repo>>>"
     echo "e.g. moveToNewRepo git@bitbucket.org:yorick/myoldrepo.git git@bitbucket.org:yorick/myrepo.git"
   else
-    oldRepo=${1}
-    newRepo=${2}
+    local oldRepo=${1}
+    local newRepo=${2}
     git clone --bare ${oldRepo} temp-repo
     cd temp-repo
     git remote add origin-new ${newRepo}
@@ -247,7 +247,7 @@ function gcob(){
     echo "gnb <<<branch name>>>"
     echo "e.g. gcob"
   else
-    string="$@" # all argruments
+    local string="$@" # all argruments
     string="${string## }" # trim start
     string="${string%% }" # trim end
     string=${string,,} # convert to lower case

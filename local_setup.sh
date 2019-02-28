@@ -356,8 +356,6 @@ function mkvhost() {
       hostsfile='/etc/hosts'
       setupfile='${scriptDir}/local_setup_files/vhost_template.txt'
       #------------------
-
-
       subfolder=$1;
       if [ "$subfolder" = "." ] ; then
         subfolder=$(getCurrentFolderName);

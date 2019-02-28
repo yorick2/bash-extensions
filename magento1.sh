@@ -105,7 +105,7 @@ function setupLocalMagento1() {
       echo 'To use the current folder as the subfolder use .'
       echo 'please try again'
     else
-      local subfolder dbfile dbname url htdocsLocation scriptDir testSshConnection
+      local subfolder dbfile dbname url htdocsLocation scriptDir testSshConnection dbexists
       subfolder=$1;
       if [ "$subfolder" = "." ] ; then
         subfolder=$(getCurrentFolderName);

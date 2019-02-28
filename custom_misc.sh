@@ -44,7 +44,7 @@ function sites(){
 alias localMysqlConnection='mysql --defaults-extra-file=$(customBashExtensionsFolder)/mysql-connection-details.txt'
 
 function dbExists(){
-    dbexists=$(localMysqlConnection -e "show databases like '${1}';")
+    local dbexists=$(localMysqlConnection -e "show databases like '${1}';")
     if [ -z "${dbexists}" ]; then
       return 1
     fi
@@ -52,6 +52,7 @@ function dbExists(){
 }
 
 function dropDb(){
+    local database dbexists continue
     for database in "$@"; do
       dbexists=$(localMysqlConnection -e "show databases like '${database}';")
       if [ -z "${dbexists}" ]; then
@@ -115,6 +116,7 @@ function open(){
 }
 
 function safestring(){
+    local str
     str="$*"
     if [ "${str}" == "--help" ]; then
         echo 'returns a lower case string of the arguments passed, with spaces replaced with _s'
@@ -126,7 +128,7 @@ function safestring(){
 alias listcustomcommands="listCustomCommands"
 
 function listCustomCommands(){
-  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+  local DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   if [ "${1}" = "git"  ] ; then
         echo
         grep function ${DIR}/gitextension.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
