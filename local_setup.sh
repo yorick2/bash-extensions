@@ -63,24 +63,23 @@ testSshConnection () {
 # import sql file inside a tar.gz file into sql database it creates
 # only works fro ***.tar.gz files not ***.sql.tar.gz
 function tar2mysql() {
-  if [  -z $2 ] || [ "$1" = "--help" ] ; then
+  if [  -z $1 ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing'
-    echo 'tar2mysql <<file>> <<url>> or tar2mysql <<file>> <<url>> <<db>>'
+    echo 'tar2mysql <<file>> or tar2mysql <<file>> <<db>>'
     echo 'please try again'
     echo '';
   else
-    local file url db
+    local file db
     file=$1
-    url=$2
-    db=$3
+    db=$2
     echo '-->uncompressing file'
     tar -xzvf ${file} --directory="$(dbsLocation)" &&
     file=${file%.gz} &&
     file=${file%.tar} &&
     file=${file%.sql} &&
     file=${file##*/} &&
-    sql2mysql $(dbsLocation)/${file}.sql ${url} ${db}  &&
+    sql2mysql $(dbsLocation)/${file}.sql ${db}  &&
     echo '-->removing sql' &&
     rm $(dbsLocation)/${file}.sql
   fi
@@ -88,22 +87,21 @@ function tar2mysql() {
 
 # import sql file inside a gz file into sql database it creates
 function gz2mysql() {
-  if [  -z $2 ] || [ "$1" = "--help" ] ; then
+  if [  -z $1 ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing'
-    echo 'gz2mysql <<file>> <<url>> or gz2mysql <<file>> <<url>> <<db>>'
+    echo 'gz2mysql <<file>> or gz2mysql <<file>> <<db>>'
     echo 'please try again'
   else
-    local file url db
+    local file db
     file=$1
-    url=$2
-    db=$3
+    db=$2
     echo ${db}
     echo '-->uncompressing file'
     gunzip -k ${file} &&
     file=${file%.gz} &&
     file=${file%.sql} &&
-    sql2mysql ${file}.sql ${url} ${db} &&
+    sql2mysql ${file}.sql ${db} &&
     echo '-->removing sql'
     rm ${file}.sql
   fi
@@ -111,23 +109,22 @@ function gz2mysql() {
 
 # import sql file inside a gz file into sql database it creates
 function zip2mysql() {
-  if [  -z $2 ] || [ "$1" = "--help" ] ; then
+  if [  -z $1 ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing'
-    echo 'zip2mysql <<file>> <<url>> or zip2mysql <<file>> <<url>> <<db>>'
+    echo 'zip2mysql <<file>> or zip2mysql <<file>> <<db>>'
     echo 'please try again'
   else
-    local file url db
+    local file db
     file=$1
-    url=$2
-    db=$3
+    db=$2
     echo ${db}
     echo '-->uncompressing file'
     unzip ${file} -d $(dbsLocation) &&
     file=${file%.zip} &&
     file=${file%.sql} &&
     file=${file##*/} &&
-    sql2mysql $(dbsLocation)/${file}.sql ${url} ${db} &&
+    sql2mysql $(dbsLocation)/${file}.sql ${db} &&
     echo '-->removing sql'
     rm $(dbsLocation)/${file}.sql
   fi
@@ -162,20 +159,19 @@ function sanitizeSqlFile() {
 
 # import sql file into sql database it creates
 function sql2mysql() {
-    if [  -z $2 ] || [ "$1" = "--help" ] ; then
+    if [  -z $1 ] || [ "$1" = "--help" ] ; then
       echo ;
       echo 'arguments missing'
-      echo 'sql2mysql <<file>> <<url>>  or sql2mysql <<file>> <<url>> <<db>>'
+      echo 'sql2mysql <<file>> or sql2mysql <<file>> <<db>>'
       echo 'please try again'
     else
-      local user password file url filecopy db dbexists table cmd
+      local user password file filecopy db dbexists table cmd
       file=$1;
-      url=$2;
       filecopy=""
-      if [  -z $3  ]; then
+      if [  -z $2  ]; then
         db=$(createDatabaseName "${file}")
       else
-        db=$3;
+        db=$2;
       fi
       dbexists=$(localMysqlConnection --batch --skip-column-names -e "SHOW DATABASES LIKE '"${db}"';" | grep "${db}" > /dev/null; echo "$?")
       if [ ${dbexists} -eq 1 ]; then
@@ -201,17 +197,16 @@ function import2mysql(){
   if [  -z $2  ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing';
-    echo 'import2mysql <<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
+    echo 'import2mysql <<db file>> or import2mysql <db file>> <<db>>';
     echo 'for files on remote server ';
-    echo 'import2mysql <<login details>>:<<db file>> <<url>> or import2mysql <db file>> <<url>> <<db>>';
+    echo 'import2mysql <<login details>>:<<db file>> or import2mysql <db file>> <<db>>';
     echo 'eg. import2mysql user@example.com:~/example.sql l.example';
     echo 'please try again';
     return 1
   fi
-  local file url db fileextension prevfileextension testSshConnection
+  local file db fileextension prevfileextension testSshConnection
   file=$1;
-  url=$2;
-  db=$3;
+  db=$2;
   if [[ ${file} == *':'* ]] ; then
       echo '-->  testing ssh connection'
       testSshConnection=$(testSshConnection ${file%:*});
@@ -236,11 +231,11 @@ function import2mysql(){
   # if sql file
   if [[ ${fileextension} == "sql" ]]; then
     echo "--> sql file detected"
-    sql2mysql ${file} ${url} ${db};
+    sql2mysql ${file} ${db};
   # if ****.zip file
   elif [[ ${fileextension} == "zip" ]]; then
     echo "--> zip file detected"
-    zip2mysql ${file} ${url} ${db};
+    zip2mysql ${file} ${db};
   # if ****.gz file
   elif [[ ${fileextension} == "gz" ]]; then
     prevfileextension=${file%.gz};
@@ -248,10 +243,10 @@ function import2mysql(){
     # if tar.gz file
     if [[ ${prevfileextension} == "tar" ]]; then
       echo "--> tar.gz file detected"
-      tar2mysql ${file} ${url} ${db};
+      tar2mysql ${file} ${db};
     else
       echo "--> gz file detected"
-      gz2mysql ${file} ${url} ${db};
+      gz2mysql ${file} ${db};
     fi
   else
     echo "error: unrecognised file format";

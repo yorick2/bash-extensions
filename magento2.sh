@@ -460,11 +460,11 @@ function importMage2mysql(){
   # if sql file
   if [[ ${fileextension} == "sql" ]]; then
     echo "--> sql file detected"
-    sql2mysql ${file} ${url} ${db};
+    sql2mysql ${file} ${db};
   # if ****.zip file
   elif [[ ${fileextension} == "zip" ]]; then
     echo "--> zip file detected"
-    zip2mysql ${file} ${url} ${db};
+    zip2mysql ${file} ${db};
   # if ****.gz file
   elif [[ ${fileextension} == "gz" ]]; then
     prevfileextension=${file%.gz};
@@ -472,10 +472,10 @@ function importMage2mysql(){
     # if tar.gz file
     if [[ ${prevfileextension} == "tar" ]]; then
       echo "--> tar.gz file detected"
-      tar2mysql ${file} ${url} ${db};
+      tar2mysql ${file} ${db};
     else
       echo "--> gz file detected"
-      gz2mysql ${file} ${url} ${db};
+      gz2mysql ${file} ${db};
     fi
   else
     echo "error: unrecognised file format";

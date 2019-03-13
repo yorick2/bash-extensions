@@ -8,8 +8,6 @@ _import2mysql(){
         # standard auto complete
         _minimal;
     elif [ $COMP_CWORD -eq 2 ]; then
-        _fromArrayAutoCompletion "$(listhosts)";
-    elif [ $COMP_CWORD -eq 3 ]; then
         _fromArrayAutoCompletion "$(listdbs)";
     fi
 }
