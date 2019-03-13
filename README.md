@@ -4,7 +4,7 @@ My bash extensions that speed up setting up and using local setups and git
 
 
 ## Command list
-[Commands List](commands.csv)
+[Commands List](commands.md)
 
 
 ## Installation
