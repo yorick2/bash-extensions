@@ -275,7 +275,6 @@ function get_vhost_location_file(){
 }
 
 # get vhost location
-######## needs work ########
 function getVhostLocation() {
    if [  -z $1  ] || [ "$1" = "--help" ]; then
      echo ;

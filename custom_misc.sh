@@ -41,7 +41,7 @@ function sites(){
 
 # stops the warning shown when using "mysql -uroot -proot"
 # "Warning: Using a password on the command line interface can be insecure."
-alias localMysqlConnection='mysql --defaults-extra-file=$(customBashExtensionsFolder)/mysql-connection-details.txt'
+alias localMysqlConnection='mysql --defaults-extra-file=$(customBashExtensionsFolder)/uses'
 
 function dbExists(){
     local dbexists=$(localMysqlConnection -e "show databases like '${1}';")
@@ -119,7 +119,7 @@ function safestring(){
     local str
     str="$*"
     if [ "${str}" == "--help" ]; then
-        echo 'returns a lower case string of the arguments passed, with spaces replaced with _s'
+        echo 'returns a lower case string of the arguments passed, with spaces replaced with _'
     fi
     str=${str,,} #lower case
     echo "${str//[\:\;\-\. ]/_}" # replace white space and special characters

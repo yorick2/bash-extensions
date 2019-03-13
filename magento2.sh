@@ -205,7 +205,7 @@ alias n982re="echoAndRun  n98-magerun2.phar indexer:reindex"
 alias n982st="echoAndRun n98-magerun2.phar cache:status"
 alias n982fl="echoAndRun n98-magerun2.phar cache:flush"
 alias n982en="echoAndRun n98-magerun2.phar cache:enable"
-alias n982dis="echoAndRun n98-magerun2.phar cache:disable"
+alias n982dis="echoAndRun n98-magerun2.phm2star cache:disable"
 
 alias m2="echoAndRun  php bin/magento"
 alias m2re="echoAndRun  php bin/magento indexer:reindex"
@@ -213,7 +213,7 @@ alias m2st="echoAndRun  php bin/magento cache:status"
 alias m2fl="echoAndRun  php bin/magento cache:flush"
 alias m2en="echoAndRun  php bin/magento cache:enable"
 alias m2dis="echoAndRun  php bin/magento cache:disable"
-alias m2dis_without_full_page="echoAndRun 'php bin/magento cache:enable && php bin/magento cache:disable full_page'"
+alias m2en_without_full_page="echoAndRun 'php bin/magento cache:enable && php bin/magento cache:disable full_page'"
 alias m2dev="echoAndRun 'php bin/magento deploy:mode:set developer'"
 alias m2prod="echoAndRun 'php bin/magento deploy:mode:set production'"
 alias m2modules="echoAndRun 'php bin/magento module:status'"
@@ -427,7 +427,7 @@ function updateMage2Db(){
 }
 
 
-# import sql file into sql database it creates
+# import sql file into sql database it creates and setup for magento
 function importMage2mysql(){
   if [  -z $2  ] || [ "$1" = "--help" ] ; then
     echo ;

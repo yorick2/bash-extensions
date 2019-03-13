@@ -91,7 +91,6 @@ function setupNewLocalMagento1(){
 
 
 # make vhost and setup magento
-######## needs work ########
 function setupLocalMagento1() {
   if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
