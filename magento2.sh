@@ -214,8 +214,8 @@ alias m2fl="echoAndRun  php bin/magento cache:flush"
 alias m2en="echoAndRun  php bin/magento cache:enable"
 alias m2dis="echoAndRun  php bin/magento cache:disable"
 alias m2dis_without_full_page="echoAndRun 'php bin/magento cache:enable && php bin/magento cache:disable full_page'"
-alias m2DevMode="echoAndRun 'php bin/magento deploy:mode:set developer'"
-alias m2ProdMode="echoAndRun 'php bin/magento deploy:mode:set production'"
+alias m2dev="echoAndRun 'php bin/magento deploy:mode:set developer'"
+alias m2prod="echoAndRun 'php bin/magento deploy:mode:set production'"
 alias m2modules="echoAndRun 'php bin/magento module:status'"
 
 alias m2composerupdate="echoAndRun 'composer update --no-dev &&\
@@ -356,6 +356,13 @@ function n982nu () {
   ###
   echo running n98-magerun2.phar admin:user:create "$@";
   n98-magerun2.phar admin:user:create "$@"
+}
+
+function n982hintsEnable () {
+    n98-magerun2.phar db:query 'update `core_config_data` set value = null where path = "dev/restrict/allow_ips"; update `core_config_data` set value = 1 where path = "dev/debug/template_hints_storefront";'
+}
+function n982hintsDisable () {
+    n98-magerun2.phar db:query 'update `core_config_data` set value = 1 where path = "dev/debug/template_hints_storefront";'
 }
 
 function updateMage2Db(){
@@ -542,3 +549,4 @@ function importMage2mysql(){
   echo '-->import complete'
   echo "your database name is ${db}"
 }
+
