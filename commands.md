@@ -1,5 +1,5 @@
-Git||||
-||||
+Git
+
 |command|details|example|requirements
 |-------------|-------------|-------------|-------------
 |git_current_branch | return current branch name |  |  
@@ -28,9 +28,9 @@ Git||||
 |grup| git remote update |  |  
 |gmt| git mergetool |  |  
 |gdf|show list of files that have conflicts ||
-||||
-Local Setup||||
-||||
+
+Local Setup
+
 | command | details | example | requirements 
 |-------------|-------------|-------------|-------------
 | listdbs | list dbs |  |  
@@ -39,9 +39,9 @@ Local Setup||||
 | listhosts | list vhosts on your local (that have 127.0.0.1 as the ip in /etc/hosts)  |  |  
 |createDatabaseName|create a valid sql database name from a string||
 |getVhostLocation|get vhost folder location from a url||
-||||
-Magento 1||||
-||||
+
+Magento 1
+
 |command|details|example|requirements
 |-------------|-------------|-------------|-------------
 |echoHtaccessMage1| echo .htaccess template content |  |  
@@ -61,9 +61,9 @@ Magento 1||||
 |rmcache| empties cache and session "rm -rf var/cache/* var/session/*" |  |  
 |setupMage1|setup a new magento site. Downloading a repo, importing a database, setting up a vhost and getting ready for development use|  |  
 |updateMage1Db|import a new database for a magento 1 which is already setup||
-||||
-Magento 2||||
-||||
+
+Magento 2
+
 |command|details|example|requirements
 |-------------|-------------|-------------|-------------
 |update_envphp|update the env.php file|  |  
@@ -101,9 +101,10 @@ Magento 2||||
 |n982st|cache status||
 |n982en|enable cache||
 |n982dis| disable cache |  |  
-||||
-Misc||||
-||||
+
+
+Misc
+
 |command|details|example|requirements
 |-------------|-------------|-------------|-------------
 | phpDebug | run file with php with xdebug | phpDebug index.php | php must be able to be run from the terminal with the command 'php' 
