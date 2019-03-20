@@ -359,10 +359,12 @@ function n982nu () {
 }
 
 function n982hintsEnable () {
-    n98-magerun2.phar db:query 'update `core_config_data` set value = null where path = "dev/restrict/allow_ips"; update `core_config_data` set value = 1 where path = "dev/debug/template_hints_storefront";'
+    n98-magerun2.phar db:query 'insert IGNORE into `core_config_data` (path,value) values ("dev/debug/template_hints_storefront",1); update `core_config_data` set value = null where path = "dev/restrict/allow_ips"; update `core_config_data` set value = 1 where path = "dev/debug/template_hints_storefront";'
+    n98-magerun2.phar cache:flush
 }
 function n982hintsDisable () {
     n98-magerun2.phar db:query 'update `core_config_data` set value = 0 where path = "dev/debug/template_hints_storefront";'
+    n98-magerun2.phar cache:flush
 }
 
 function updateMage2Db(){
