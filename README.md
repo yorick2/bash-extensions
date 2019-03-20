@@ -24,6 +24,8 @@ if [ -d <<<you repo location>>>/bash-completion ]; then
     done
 fi
 ```
+update the mysql-connection-details.txt file with your mysql login details
+
 ### Terminal Git Prompt
 ![](bash_prompt.png)
 
