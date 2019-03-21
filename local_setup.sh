@@ -194,7 +194,7 @@ function sql2mysql() {
 
 # import sql file into sql database it creates
 function import2mysql(){
-  if [  -z $2  ] || [ "$1" = "--help" ] ; then
+  if [  -z $1  ] || [ "$1" = "--help" ] ; then
     echo ;
     echo 'arguments missing';
     echo 'import2mysql <<db file>> or import2mysql <db file>> <<db>>';
