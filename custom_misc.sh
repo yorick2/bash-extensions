@@ -135,6 +135,12 @@ function listCustomCommands(){
         grep alias ${DIR}/gitextension.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ' ;
         echo
         echo
+  elif [ "${1}" = "docker" ] ; then
+        echo
+        grep function ${DIR}/docker.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
+        grep alias ${DIR}/docker.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
+        echo
+        echo
   elif [ "${1}" = "local"  ] ; then
         echo
         grep function ${DIR}/local_setup.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
@@ -175,6 +181,13 @@ function listCustomCommands(){
         } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
+        echo "-- Docker --"
+        { \
+          grep function ${DIR}/docker.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
+          grep alias ${DIR}/docker.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
+        } | grep -i "${1}" | tr '\n' ' ';
+        echo
+        echo
         echo "-- Local Setup --"
         { \
           grep function ${DIR}/local_setup.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
@@ -196,7 +209,7 @@ function listCustomCommands(){
         } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
-        echo "-- Misc --"
+		echo "-- Misc --"
         { \
           grep function ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
           grep alias ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
