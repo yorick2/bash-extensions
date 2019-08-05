@@ -36,5 +36,9 @@ function dockerDestroyAllContainersAndImages(){
         sudo docker rmi -f $(sudo docker images -q -a);
     fi
 }
+function dockerComposeUpNoCache(){
+    echo running "sudo docker-compose build --force-rm --no-cache; sudo docker-compose up --abort-on-container-exit"
+    sudo docker-compose build --force-rm --no-cache; sudo docker-compose up --abort-on-container-exit
+}
 
 
