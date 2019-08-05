@@ -30,12 +30,10 @@ function dockerDestroyAllContainersAndImages(){
         read destroyImages;
     done;
     if [[ ${destroyContainers} == "y" ]] ; then
-        containers=$(sudo docker ps -a -q);
-        if [ -n "$containers" ]; then sudo docker rm -f -v $containers; fi;
+        docker rm -f -v $(docker ps -a -q);
     fi
     if [[ ${destroyImages} == "y" ]] ; then
-        images=$(sudo docker images -q -a);
-        if [ -n "$images" ]; then sudo docker rmi -f $images; fi;
+        docker rmi -f $(docker images -q -a);
     fi
 }
 
