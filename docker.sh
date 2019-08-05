@@ -1,4 +1,4 @@
-alias listdocker="echo running \"docker ps\";echo ; docker ps"
+alias listdocker="echo running \"sudo docker ps\";echo ; sudo docker ps"
 
 function dockerssh(){
     if [  -z $1  ] || [ "$1" = "--help" ] ; then
@@ -9,9 +9,9 @@ function dockerssh(){
         echo 'please try again';
         return;
     fi
-    echo running \"docker exec -it ${1} /bin/bash\";
+    echo running \"sudo docker exec -it ${1} /bin/bash\";
     echo ;
-    docker exec -it ${1} /bin/bash;
+    sudo docker exec -it ${1} /bin/bash;
 }
 function dockerDestroyAllContainersAndImages(){
     if [ "$1" = "-help" ]
@@ -30,10 +30,10 @@ function dockerDestroyAllContainersAndImages(){
         read destroyImages;
     done;
     if [[ ${destroyContainers} == "y" ]] ; then
-        docker rm -f -v $(docker ps -a -q);
+        sudo docker rm -f -v $(sudo docker ps -a -q);
     fi
     if [[ ${destroyImages} == "y" ]] ; then
-        docker rmi -f $(docker images -q -a);
+        sudo docker rmi -f $(sudo docker images -q -a);
     fi
 }
 
