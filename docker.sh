@@ -1,4 +1,4 @@
-alias listdocker="echo running \"sudo docker ps\";echo ; sudo docker ps"
+alias listdocker="echoAndRun sudo docker ps"
 
 function dockerssh(){
     if [  -z $1  ] || [ "$1" = "--help" ] ; then
@@ -37,8 +37,7 @@ function dockerDestroyAllContainersAndImages(){
     fi
 }
 function dockerComposeUpNoCache(){
-    echo running "sudo docker-compose build --force-rm --no-cache; sudo docker-compose up --abort-on-container-exit"
-    sudo docker-compose build --force-rm --no-cache; sudo docker-compose up --abort-on-container-exit
+    echoAndRun "sudo docker-compose build --force-rm --no-cache && sudo docker-compose up --abort-on-container-exit"
 }
 
 

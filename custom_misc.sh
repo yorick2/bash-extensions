@@ -6,9 +6,14 @@ function customBashExtensionsFolder(){
 }
 
 # echo the command and run it
-echoAndRun() {
+function echoAndRun() {
     echo "\$\$  $@" ;
     eval "$@" ;
+}
+
+## access the an online cheat sheet for the linux terminal
+function cheat(){
+ echoAndRun "curl cheat.sh/$@"
 }
 
 ## required for local setups
