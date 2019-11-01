@@ -11,14 +11,19 @@ function branch_data() {
         echo " (${status_output#### })";
         return 1;
     fi
-    curr_branch=$(git rev-parse --abbrev-ref HEAD);
-    curr_remote=$(git config branch.$curr_branch.remote);
-    tags=$(git tag --points-at HEAD | tr '\r\n' ' ');
     if [[ -z $(git status -s) ]]; then
         uncommitedFlag=""
     else
         uncommitedFlag="! "
     fi
+    curr_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null);
+    # if on a detached head
+    if [[ "$curr_branch" = "HEAD" ]]; then
+        echo " (${curr_branch}) ${uncommitedFlag}[] ";
+        return 1;
+    fi;
+    curr_remote=$(git config branch.$curr_branch.remote);
+    tags=$(git tag --points-at HEAD | tr '\r\n' ' ');
     branch_data=$(git branch -vv | grep '*');
     if [[ ${branch_data} != *"["* ]]; then
         echo " (${curr_branch}) ${uncommitedFlag}[${curr_remote}] ${tags}";
