@@ -14,6 +14,29 @@ function dockerssh(){
     sudo docker exec -it ${1} /bin/bash;
 }
 function dockerDestroyAllContainersAndImages(){
+    if [ "$1" = "-help" ]
+    then
+        echo "destroy all containers and images completely"
+        return
+    fi
+    destroyContainers=''
+    while [[ "${destroyContainers}" != "y" && "${destroyContainers}" != "n" ]] ; do
+        echo 'Destroy all containers? [y/n]';
+        read destroyContainers;
+    done;
+    destroyImages=''
+    while [[ "${destroyImages}" != "y" && "${destroyImages}" != "n" ]] ; do
+        echo 'Destroy all images? [y/n]';
+        read destroyImages;
+    done;
+    if [[ ${destroyContainers} == "y" ]] ; then
+        sudo docker rm -f -v $(sudo docker ps -a -q);
+    fi
+    if [[ ${destroyImages} == "y" ]] ; then
+        sudo docker rmi -f $(sudo docker images -q -a);
+    fi
+}
+function dockerDestroyAllUnused(){
     echo "docker system prune --all --force --volumes"
     docker system prune --all --force --volumes
 }
