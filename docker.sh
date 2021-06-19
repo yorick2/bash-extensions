@@ -13,6 +13,7 @@ function dockerssh(){
     echo ;
     sudo docker exec -it ${1} /bin/bash;
 }
+
 function dockerDestroyAllContainersAndImages(){
     if [ "$1" = "-help" ]
     then
@@ -35,6 +36,10 @@ function dockerDestroyAllContainersAndImages(){
     if [[ ${destroyImages} == "y" ]] ; then
         sudo docker rmi -f $(sudo docker images -q -a);
     fi
+    echo 'Dont forget docker volumes may be storing data and may need destorying!!!'
+}
+function dockerDestroyAllVolumesNotUsed(){
+    docker volume prune;
 }
 function dockerDestroyAllUnused(){
     echo "docker system prune --all --force --volumes"
