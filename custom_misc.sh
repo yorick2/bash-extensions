@@ -134,7 +134,13 @@ alias listcustomcommands="listCustomCommands"
 
 function listCustomCommands(){
   local DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-  if [ "${1}" = "git"  ] ; then
+  if [ "${1}" = "prompt"  ] ; then
+        echo
+        grep function ${DIR}/gitprompt.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
+        grep alias ${DIR}/gitprompt.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ' ;
+        echo
+        echo
+  elif [ "${1}" = "git"  ] ; then
         echo
         grep function ${DIR}/gitextension.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
         grep alias ${DIR}/gitextension.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ' ;
@@ -152,10 +158,16 @@ function listCustomCommands(){
         grep alias ${DIR}/local_setup.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
         echo
         echo
-  elif [ "${1}" = "custom"  ] ; then
+  elif [ "${1}" = "custom"  ] || [ "${1}" = "misc" ]  ; then
         echo
         grep function ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
         grep alias ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
+        echo
+        echo
+  elif [ "${1}" = "laravel" ] ; then
+        echo
+        grep function ${DIR}/laravel.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" | tr '\n' ' ';
+        grep alias ${DIR}/laravel.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" | tr '\n' ' ';
         echo
         echo
   elif [ "${1}" = "mage1" ] || [ "${1}" = "magento1" ] ; then
@@ -179,6 +191,13 @@ function listCustomCommands(){
             echo
         fi
     else
+        echo "-- Git Prompt --"
+        { \
+            grep function ${DIR}/gitprompt.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
+            grep alias ${DIR}/gitprompt.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
+        } | grep -i "${1}" | tr '\n' ' ';
+        echo
+        echo
         echo "-- Git --"
         { \
             grep function ${DIR}/gitextension.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
@@ -200,6 +219,13 @@ function listCustomCommands(){
         } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
+        echo "-- Laravel --"
+        { \
+          grep function ${DIR}/laravel.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
+          grep alias ${DIR}/laravel.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \
+        } | grep -i "${1}" | tr '\n' ' ';
+        echo
+        echo
         echo "-- Magento 1 --"
         { \
           grep function ${DIR}/magento1.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
@@ -214,7 +240,7 @@ function listCustomCommands(){
         } | grep -i "${1}" | tr '\n' ' ';
         echo
         echo
-		echo "-- Misc --"
+		    echo "-- Misc --"
         { \
           grep function ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*function\s*//' | cut -f1 -d"(" ; \
           grep alias ${DIR}/custom_misc.sh | grep -v 'grep' | sed -e's/\s*alias\s*//' | cut -f1 -d"=" ; \

@@ -39,6 +39,14 @@ function branch_data() {
     fi
 }
 
+function enableGitPrompt(){
+    force_git_prompt=true
+    reloadGitPrompt
+}
+function disableGitPrompt(){
+    unset force_git_prompt
+    reloadGitPrompt
+}
 
 PS1_original="$PS1"
 function reloadGitPrompt(){
@@ -60,12 +68,5 @@ function reloadGitPrompt(){
 	fi
 	export PS1="$PS1_original"
 }
-function enableGitPrompt(){
-	force_git_prompt=true
-	reloadGitPrompt
-}
-function disableGitPrompt(){
-	unset force_git_prompt
-	reloadGitPrompt
-}
+# run git prompt (if force_git_prompt set)
 reloadGitPrompt
