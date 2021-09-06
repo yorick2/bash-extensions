@@ -38,12 +38,21 @@ Shows the below information:
 
 add to ~/.bashrc before the above code
 ```bash
-force_git_prompt=yes
+yorick_prompt=true # true|false
+yorick_color_prompt=true # true|false
+yorick_git_prompt=true # true|false
+yorick_time_prompt=true # true|false
 ```
-and also the below line to allow the colour version
-```bash
-force_git_color_prompt=yes
-```
+
+#### settings
+set to true or false
+
+| Command                 |                     |
+| ----------------------- |:-------------------:|
+| yorick_color_prompt     | use colour          |
+| yorick_git_prompt       | show git details    |
+| yorick_time_prompt      | show the time       |
+
 
 #### Vhosts
 make a vhosts file called httpd-vhosts.conf in your apache installation
