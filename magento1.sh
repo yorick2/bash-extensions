@@ -1,39 +1,81 @@
 #!/usr/bin/env bash
 
-############ magento 1 #########
+
+#######################################
 # n98-magerun.phar
-alias n98='echoAndRun  n98-magerun.phar'
-alias n98fl='echoAndRun  n98-magerun.phar cache:flush'
-alias n98list='echoAndRun  n98-magerun.phar admin:user:list'
-alias n98nu='echoAndRun  n98-magerun.phar admin:user:create'
-alias n98pass='echoAndRun  n98-magerun.phar admin:user:change-password'
-alias n98re='echoAndRun  n98-magerun.phar index:reindex:all'
-alias n98dis='echoAndRun  n98-magerun.phar cache:disable'
+#######################################
+alias n98='n98-magerun.phar'
 
+#######################################
+# flush cache
+#######################################
+alias n98fl='n98-magerun.phar cache:flush'
 
+#######################################
+# list admin users
+#######################################
+alias n98list='n98-magerun.phar admin:user:list'
+
+#######################################
+# create user
+#######################################
+alias n98nu='n98-magerun.phar admin:user:create'
+
+#######################################
+# change poassword
+#######################################
+alias n98pass='n98-magerun.phar admin:user:change-password'
+
+#######################################
+# reindex
+#######################################
+alias n98re='n98-magerun.phar index:reindex:all'
+
+#######################################
+# disable cache
+#######################################
+alias n98dis='n98-magerun.phar cache:disable'
+
+#######################################
+# clear cache manually (using rm -rf)
+#######################################
 alias rmcache='echo "rm -rf var/cache/* var/session/*"; rm -rf var/cache/* var/session/*'
 
+#######################################
+# show htaccess template code
+#######################################
 function echoHtaccessMage1() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/htaccess
 }
 
+#######################################
+# copy htaccess template to clipboard
+#######################################
 function copyHtaccessMage1() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/htaccess | xclip -selection clipboard
 }
 
+#######################################
+# show local.xml template code
+#######################################
 function echoLocalXmlTemplate() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/local.xml
 }
 
+#######################################
+# copy local.xml template to clipboard
+#######################################
 function copyLocalXmlTemplate() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/local.xml | xclip -selection clipboard
 }
 
+#######################################
 # update local.xml with new db details (for magento 1.**)
+#######################################
 function update_localxml() {
    if [  -z $2 ] || [ "$1" = "--help" ] ; then
      echo ;
@@ -48,7 +90,9 @@ function update_localxml() {
   fi
 }
 
-
+#######################################
+# setup new local magento 1 vhost development environment
+#######################################
 function setupNewLocalMagento1(){
   if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
@@ -89,8 +133,9 @@ function setupNewLocalMagento1(){
     fi
 }
 
-
-# make vhost and setup magento
+#######################################
+# import database, make into vhost, add .htaccess, copy local.xml
+#######################################
 function setupLocalMagento1() {
   if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
@@ -214,8 +259,14 @@ function setupLocalMagento1() {
       echo 'mamp users: please restart mamp'
     fi
 }
+#######################################
+# see setupLocalMagento1
+#######################################
 alias setupMage1='setupLocalMagento1';
 
+#######################################
+# update  magento 1 environment with a new database
+#######################################
 function updateMage1Db(){
      if [  -z $2 ] || [ "$1" = "--help" ]; then
           echo ;

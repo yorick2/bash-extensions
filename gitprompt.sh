@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#######################################
+# get branch data
+#######################################
 function branch_data() {
   local curr_remote curr_branch tags uncommitedFlag branch_data aheadbehind
     if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" != "true" ]; then # 2>/dev/null to stop errors showing if not in git folder
@@ -39,17 +42,27 @@ function branch_data() {
     fi
 }
 
+#######################################
+# enable showing git details in shell prompt
+#######################################
 function enableGitPrompt(){
     yorick_git_prompt=true
-    reloadGitPrompt
+    reloadYorickPrompt
 }
+
+#######################################
+# disable showing git details in shell prompt
+#######################################
 function disableGitPrompt(){
-    unset yorick_git_prompt
-    reloadGitPrompt
+    yorick_git_prompt=false
+    reloadYorickPrompt
 }
 
 PS1_original="$PS1"
-function reloadGitPrompt(){
+#######################################
+# reload yorick shell prompt with new settings
+#######################################
+function reloadYorickPrompt(){
     if [ -z "${yorick_prompt}" ] || [ "${yorick_prompt}" != true ]; then
         export PS1="$PS1_original"
         return 1;
@@ -86,4 +99,4 @@ function reloadGitPrompt(){
     return 1
 }
 # run git prompt (if yorick_prompt set)
-reloadGitPrompt
+reloadYorickPrompt

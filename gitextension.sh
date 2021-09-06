@@ -1,36 +1,98 @@
 #!/usr/bin/env bash
 
+#######################################
+# git
+#######################################
 alias g='git'
+
+#######################################
+# git add
+#######################################
 alias ga='git add'
+
+#######################################
+# git commit
+#######################################
 alias gc='git commit'
+
+#######################################
+# git checkout master
+#######################################
 alias gcm='git checkout master'
+
+#######################################
+# git checkout develop
+#######################################
 alias gcd='git checkout develop'
+
+#######################################
+# git checkout staging
+#######################################
 alias gcs='git checkout staging'
+
+#######################################
+# git cherry-pick
+#######################################
 alias gcp='git cherry-pick'
+
+#######################################
+# git branch
+#######################################
 alias gb='git branch'
+
+#######################################
+# git status
+#######################################
 alias gst='git status'
+
+#######################################
+# git pull
+#######################################
 alias gl='git pull'
+
+#######################################
+# git merge --no-ff 
+#######################################
 alias gm='echoAndRun git merge --no-ff '
+
+#######################################
+# git remote update
+#######################################
 alias grup='git remote update'
+
+#######################################
+# git mergetool
+#######################################
 alias gmt='git mergetool'
-alias gref="echoAndRun git rev-parse --verify HEAD"
 
-export PATH="/usr/local/mysql/bin:$PATH"
+#######################################
+# git commit reference
+#######################################
+alias gref='echoAndRun git rev-parse --verify HEAD'
 
+#######################################
+# git checkout develop
+#######################################
 alias gcd='git checkout develop'
 
+#######################################
 # show list of files that have conflicts
+#######################################
 alias gdf="git diff --name-only --diff-filter=U"
 
+#######################################
 # display current branch name e.g. master
+#######################################
 function git_current_branch(){
   git symbolic-ref --short HEAD
 }
 
+#######################################
 # remove remote from name and echo out result
 # expected formats :
 # remotes/....
 # /remotes....
+#######################################
 function git_branch_name_without_remote(){
   if  [[ "${1}" == \/remotes* ]] ; then
     echo "${1#\/remotes\/[a-zA-Z]*?\/}"
@@ -41,6 +103,10 @@ function git_branch_name_without_remote(){
   fi
 }
 
+
+#######################################
+# git checkout
+#######################################
 function gco () {
   local arguments lastArgument branch
   arguments="";
@@ -56,7 +122,9 @@ function gco () {
   git checkout ${arguments} ${branch};
 }
 
-# pull and merge a branch into another branch
+#######################################
+# pull and merge a branch into another branch, updating remotes
+#######################################
 function git_merge_branchs() {
   git rev-parse --show-toplevel #first line has to be a git command for auto complete o work
   if [ -z $2 ] || [ "$1" = "--help" ]
@@ -80,6 +148,10 @@ function git_merge_branchs() {
     && git merge --no-ff $1
   fi
 }
+
+#######################################
+# pull and merge a branch into another branch, updating remotes
+#######################################
 function gm2b(){
   if [ -z $2 ] || [ "$1" = "--help" ]
   then
@@ -110,7 +182,9 @@ function gm2b(){
   fi
 }
 
+#######################################
 # pull branch specified and merge to master
+#######################################
 function gmm (){
   if [ "$1" = "-help" ]
   then
@@ -148,7 +222,9 @@ function gmm (){
   fi
 }
 
+#######################################
 # pull branch specified and merge to develop
+#######################################
 function gmd (){
   if [ "$1" = "-help" ]
   then
@@ -186,7 +262,9 @@ function gmd (){
   fi
 }
 
-# remote update and open gitk
+#######################################
+# remote update and open gitk showing all branches
+#######################################
 function gk() {
   if [ -z $1 ]
   then
@@ -204,7 +282,9 @@ function gk() {
   fi
 }
 
+#######################################
 # remote update and open gitx
+#######################################
 function gx() {
   if [ -z $1 ]
   then
@@ -222,7 +302,9 @@ function gx() {
   fi
 }
 
-
+#######################################
+# transfer whole repo to new repo, from two remote sources
+#######################################
 function gitMoveToNewRepo(){
   if [ -z $2 ] || [ "$1" = "--help" ]
   then
@@ -240,6 +322,9 @@ function gitMoveToNewRepo(){
   fi
 }
 
+#######################################
+# checkout a new git branch with a name, which is sanitized here
+#######################################
 function gcob(){
  if [[ -z $1 ]] || [[ "$1" = "--help" ]]
   then

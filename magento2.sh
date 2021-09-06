@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-# update local.xml with new db details (for magento 2.**)
+#######################################
+# update env.php with new db details (for magento 2.**)
+#######################################
 function update_envphp() {
    if [  -z $2 ] || [ "$1" = "--help" ] ; then
      echo ;
@@ -26,6 +28,9 @@ function update_envphp() {
   fi
 }
 
+#######################################
+# git clone, import database, make into vhost, copy env.php & config.php
+#######################################
 function setupNewLocalMagento2(){
   if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
@@ -69,10 +74,13 @@ function setupNewLocalMagento2(){
     fi
 }
 
+#######################################
+# import database, make into vhost, copy env.php & config.php
+#######################################
 function setupLocalMagento2() {
   if [  -z $3 ] || [ "$1" = "--help" ] ; then
       echo ;
-      echo 'git clone, import database, make into vhost, copy env.php & config.php'
+      echo 'import database, make into vhost, copy env.php & config.php'
       echo ''
       echo 'arguments missing'
       echo 'setupLocalMagento1 <<git url>> <<db file>> <<url>>'
@@ -177,59 +185,153 @@ function setupLocalMagento2() {
     fi
 }
 
+#######################################
+# see setupLocalMagento2
+#######################################
 alias setupMage2='setupLocalMagento2';
 
+#######################################
+# show config.php template code
+#######################################
 function echoConfigMage2() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/config.php
 }
 
+#######################################
+# copy config.php template code to clipboard
+#######################################
 function copyConfigMage2() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/config.php | xclip -selection clipboard
 }
 
+#######################################
+# show env.php template code
+#######################################
 function echoEnvMage2() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/env.php
 }
 
+#######################################
+# copy env.php template code to clipboard
+#######################################
 function copyEnvMage2() {
   local scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )";
   cat ${scriptDir}/local_setup_files/magento2/env.php | xclip -selection clipboard
 }
 
+
+#######################################
+# n98-magerun2.phar
+#######################################
 alias n982="echoAndRun n98-magerun2.phar"
+
+#######################################
+# n98: change user password
+#######################################
 alias n982pass="echoAndRun n98-magerun2.phar admin:user:change-password"
+
+#######################################
+# n98: reindex
+#######################################
 alias n982re="echoAndRun  n98-magerun2.phar indexer:reindex"
+
+#######################################
+# n98: cache status
+#######################################
 alias n982st="echoAndRun n98-magerun2.phar cache:status"
+
+#######################################
+# n98: flush cache
+#######################################
 alias n982fl="echoAndRun n98-magerun2.phar cache:flush"
+
+#######################################
+# n98: enable cache
+#######################################
 alias n982en="echoAndRun n98-magerun2.phar cache:enable"
+
+#######################################
+# n98: disable cache
+#######################################
 alias n982dis="echoAndRun n98-magerun2.phm2star cache:disable"
 
+
+#######################################
+# php bin/magento
+#######################################
 alias m2="echoAndRun  php bin/magento"
+
+#######################################
+# bin/magento: indexer:reindex
+#######################################
 alias m2re="echoAndRun  php bin/magento indexer:reindex"
+
+#######################################
+# bin/magento: cache status
+#######################################
 alias m2st="echoAndRun  php bin/magento cache:status"
+
+#######################################
+# bin/magento: flush cache
+#######################################
 alias m2fl="echoAndRun  php bin/magento cache:flush"
+
+#######################################
+# bin/magento: enable cache
+#######################################
 alias m2en="echoAndRun  php bin/magento cache:enable"
+
+#######################################
+# bin/magento: disable cache
+#######################################
 alias m2dis="echoAndRun  php bin/magento cache:disable"
+
+#######################################
+# bin/magento: enable cache, except full_page cache
+#######################################
 alias m2en_without_full_page="echoAndRun 'php bin/magento cache:enable && php bin/magento cache:disable full_page'"
+
+#######################################
+# bin/magento: set developer mode
+#######################################
 alias m2dev="echoAndRun 'php bin/magento deploy:mode:set developer'"
+
+#######################################
+# bin/magento: set production mode
+#######################################
 alias m2prod="echoAndRun 'php bin/magento deploy:mode:set production'"
+
+#######################################
+# bin/magento: module status list
+#######################################
 alias m2modules="echoAndRun 'php bin/magento module:status'"
 
+#######################################
+# composer update, compile & clear caches
+#######################################
 alias m2composerupdate="echoAndRun 'composer update --no-dev &&\
  php bin/magento setup:upgrade && \
  php bin/magento setup:di:compile && \
  touch pub/static/deployed_version.txt && \
  m2static && \
  php bin/magento cache:clean'"
+
+#######################################
+# composer install, compile & clear caches 
+#######################################
 alias m2composerinstall="echoAndRun 'composer install --no-dev &&\
  php bin/magento setup:upgrade && \
  php bin/magento setup:di:compile && \
  touch pub/static/deployed_version.txt && \
  m2static && \
  php bin/magento cache:clean'"
+
+#######################################
+# composer update/install
+#######################################
 function m2composer(){
     echo 'Composer update or install?'
     echo 'install [i]'
@@ -251,18 +353,31 @@ function m2composer(){
     echo 'answer not recognised, please try again';
 }
 
+
+#######################################
+# compile
+#######################################
 alias m2compile="echoAndRun 'php bin/magento setup:di:compile; \
 touch pub/static/deployed_version.txt; \
  php bin/magento cache:clean'"
+
+#######################################
+# upgrade setup
+#######################################
 alias m2upgrade="echoAndRun 'php bin/magento setup:upgrade \
  && php bin/magento cache:clean \
  && php bin/magento setup:di:compile \
  && touch pub/static/deployed_version.txt'"
+
+#######################################
 # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
+#######################################
 alias m2upgradeNstatic="echoAndRun 'php bin/magento setup:upgrade \
  && m2static '"
 
- # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
+#######################################
+# newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
+#######################################
 function m2static(){
     if [ "$1" = "--help" ] ; then
       echo ;
@@ -312,7 +427,9 @@ function m2static(){
     fi
 }
 
- # newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
+#######################################
+# newer versions claim static deploy is not required but it dosnt work, so we need to run with -f to force it to run
+#######################################
 function m2staticAll(){
     local test languages
     # --quite stops it returning anything unless there is an error
@@ -339,11 +456,14 @@ function m2staticAll(){
     fi
 }
 
+#######################################
+# n98: create new user
+#######################################
 function n982nu () {
   if [  -z $1  ] || [ "$1" = "--help" ] ; then
     echo 'arguments missing'
     echo 'e.g.'
-    echo '  n98-magerun2.phar admin:user:create --admin-user="my_user_name" --admin-email="example@example.com" --admin-password="mypassword" --admin-firstname="paul" --admin-lastname="test"'
+    echo 'n982nu --admin-user="my_user_name" --admin-email="example@example.com" --admin-password="mypassword" --admin-firstname="paul" --admin-lastname="test"'
     return;
   fi
   # a bug caused by n98 dump with --strip=@development
@@ -358,15 +478,25 @@ function n982nu () {
   n98-magerun2.phar admin:user:create "$@"
 }
 
+#######################################
+# enable store front hints 
+#######################################
 function n982hintsEnable () {
     n98-magerun2.phar db:query 'insert IGNORE into `core_config_data` (path,value) values ("dev/debug/template_hints_storefront",1); update `core_config_data` set value = null where path = "dev/restrict/allow_ips"; update `core_config_data` set value = 1 where path = "dev/debug/template_hints_storefront";'
     n98-magerun2.phar cache:flush
 }
+
+#######################################
+# disable store front hints
+#######################################
 function n982hintsDisable () {
     n98-magerun2.phar db:query 'update `core_config_data` set value = 0 where path = "dev/debug/template_hints_storefront";'
     n98-magerun2.phar cache:flush
 }
 
+#######################################
+# import database and set to current database in magento setting file
+#######################################
 function updateMage2Db(){
      if [  -z $2 ] || [ "$1" = "--help" ]; then
         echo ;
@@ -429,7 +559,9 @@ function updateMage2Db(){
 }
 
 
+#######################################
 # import sql file into sql database it creates and setup for magento
+#######################################
 function importMage2mysql(){
   if [  -z $2  ] || [ "$1" = "--help" ] ; then
     echo ;

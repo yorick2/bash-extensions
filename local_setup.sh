@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+#######################################
 #  get the name of the current folder without full folder path
+#######################################
 function getCurrentFolderName(){
     echo "${PWD##*/}";
 }
 
+#######################################
+# create safe db name from filename
+#######################################
 function createDatabaseName(){
     if [  -z $1  ] || [ "$1" = "--help" ] ; then
         echo 'create safe db name from filename';
@@ -27,6 +32,9 @@ function createDatabaseName(){
     echo "${dbname}"
 }
 
+#######################################
+# lists databases in mysql
+#######################################
 function listdbs() {
   if [ "$1" = "--help" ] ; then
     echo "lists databases in mysql"
@@ -42,6 +50,9 @@ function listdbs() {
   localMysqlConnection -e'show databases' | grep "${1}"
 }
 
+#######################################
+# test an ssh connection
+#######################################
 testSshConnection () {
     if [  -z $1  ] || [ "$1" = "--help" ] ; then
         echo ;
@@ -60,8 +71,9 @@ testSshConnection () {
     echo 'true';
 }
 
-# import sql file inside a tar.gz file into sql database it creates
-# only works fro ***.tar.gz files not ***.sql.tar.gz
+#######################################
+# import sql file inside a tar.gz file into sql database it creates (only works for ***.tar.gz files not ***.sql.tar.gz)
+#######################################
 function tar2mysql() {
   if [  -z $1 ] || [ "$1" = "--help" ] ; then
     echo ;
@@ -85,7 +97,9 @@ function tar2mysql() {
   fi
 }
 
+#######################################
 # import sql file inside a gz file into sql database it creates
+#######################################
 function gz2mysql() {
   if [  -z $1 ] || [ "$1" = "--help" ] ; then
     echo ;
@@ -107,7 +121,9 @@ function gz2mysql() {
   fi
 }
 
+#######################################
 # import sql file inside a gz file into sql database it creates
+#######################################
 function zip2mysql() {
   if [  -z $1 ] || [ "$1" = "--help" ] ; then
     echo ;
@@ -130,6 +146,9 @@ function zip2mysql() {
   fi
 }
 
+#######################################
+# attempts  to fix known (sanitize) sql issues in a file ready to import
+#######################################
 function sanitizeSqlFile() {
     if [  -z $1 ] || [ "$1" = "--help" ] ; then
         echo ;
@@ -157,7 +176,9 @@ function sanitizeSqlFile() {
     echo "${file}"
 }
 
+#######################################
 # import sql file into sql database it creates
+#######################################
 function sql2mysql() {
     if [  -z $1 ] || [ "$1" = "--help" ] ; then
       echo ;
@@ -192,7 +213,9 @@ function sql2mysql() {
     fi
 }
 
+#######################################
 # import sql file into sql database it creates
+#######################################
 function import2mysql(){
   if [  -z $1  ] || [ "$1" = "--help" ] ; then
     echo ;
@@ -254,6 +277,9 @@ function import2mysql(){
   fi
 }
 
+#######################################
+# attempt to find vhost file
+#######################################
 function get_vhost_location_file(){
   if [  -z $1  ] || [ "$1" = "--help" ] ; then
     echo ;
@@ -274,7 +300,9 @@ function get_vhost_location_file(){
   echo ${vhost_file_location}
 }
 
+#######################################
 # get vhost location
+#######################################
 function getVhostLocation() {
    if [  -z $1  ] || [ "$1" = "--help" ]; then
      echo ;
@@ -311,9 +339,9 @@ function getVhostLocation() {
   echo ${documentRoot};
 }
 
-
-
-# make vhost but dont setup magento
+#######################################
+# make vhost
+#######################################
 function mkvhost() {
     if [  -z $2 ] || [ "$1" = "--help" ] ; then
       echo ;
@@ -435,7 +463,9 @@ function mkvhost() {
     fi  
 }
 
+#######################################
 # list all my vhosts in hosts file that are local
+#######################################
 function listhosts(){
   local hosts_file_location string
   hosts_file_location='/etc/hosts';
