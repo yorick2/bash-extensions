@@ -62,9 +62,10 @@ function reloadGitPrompt(){
 	            return 1
 	        fi
 	    fi
-	    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(branch_data)\$ '
-	    export PS1="[$(date +%H:%M:%S)] ${PS1}" # add time to line
+	    customPlainBashPrompt='${debian_chroot:+($debian_chroot)}\u@\h:\w$(branch_data)\$ '
+	    export PS1="[$(date +%H:%M:%S)] ${customPlainBashPrompt}" # add time to line
 	    unset color_prompt
+        return 1
 	fi
 	export PS1="$PS1_original"
 }
