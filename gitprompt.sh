@@ -67,7 +67,7 @@ function reloadGitPrompt(){
         local datePrompt=''
     fi
 	if [ "$yorick_git_prompt" != "false" ]; then
-        branchData="$(branch_data)"
+        branchData='$(branch_data)'
     else
         branchData=''
     fi;
@@ -77,7 +77,7 @@ function reloadGitPrompt(){
             # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
             # a case would tend to support setf rather than setaf.)
             color_prompt=yes
-            export PS1="${datePrompt}${greenText}${userPrompt}${noColourText}:${blueText}${locationPrompt} ${redText}$(branch_data)${noColourText}"
+            export PS1="${datePrompt}${greenText}${userPrompt}${noColourText}:${blueText}${locationPrompt} ${redText}${branchData}${noColourText}"
             return 1
         fi
     fi
