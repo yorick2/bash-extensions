@@ -9,6 +9,7 @@ function getCurrentFolderName(){
 
 #######################################
 # create safe db name from filename
+# example: folder/myWebsite-name.database.tar.gz
 #######################################
 function createDatabaseName(){
     if [  -z $1  ] || [ "$1" = "--help" ] ; then
@@ -34,6 +35,7 @@ function createDatabaseName(){
 
 #######################################
 # lists databases in mysql
+# example: listdbs example.c
 #######################################
 function listdbs() {
   if [ "$1" = "--help" ] ; then

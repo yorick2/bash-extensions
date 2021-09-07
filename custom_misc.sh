@@ -9,6 +9,7 @@ function customBashExtensionsFolder(){
 
 #######################################
 # echo the command and run it
+# example: echoAndRun ls some/folder/path
 #######################################
 function echoAndRun() {
     echo "\$\$  $@" ;
@@ -17,6 +18,7 @@ function echoAndRun() {
 
 #######################################
 # access the an online cheat sheet for the linux terminal
+# example: cheat curl
 #######################################
 function cheat(){
  echoAndRun "curl cheat.sh/$@"
@@ -43,6 +45,7 @@ alias repoLocation='echo ~/Documents/Repositories'
 # sites folder (~/Documents/Repositories/sites)
 #######################################
 alias sitesLocation='echo ~/Documents/Repositories/sites'
+
 array=( $(dbsLocation) $(repoLocation) $(sitesLocation) )
 for i in "${array[@]}"; do
   #check folders exist
@@ -60,6 +63,7 @@ function dbs(){
 
 #######################################
 # go to repositories folder
+# example: repo myrepo
 #######################################
 function repo(){
    cd $(repoLocation)/${1}
@@ -67,6 +71,7 @@ function repo(){
 
 #######################################
 # go to sites folder
+# example: sites mysite
 #######################################
 function sites(){
    cd $(sitesLocation)/${1}
@@ -170,6 +175,8 @@ function dbTablesSizes(){
 
 #######################################
 # run php through a shell for xdebug
+# example: phpDebug index.php
+# requirements: php must be able to be run from the terminal with the command 'php' 
 #######################################
 alias phpDebug="php -dxdebug.remote_enable=1 -dxdebug.remote_autostart=On"
 
@@ -178,6 +185,8 @@ shopt -s autocd
 
 #######################################
 # open folder in nautilus
+# example: open folder/name
+# requirements: nautilus
 #######################################
 function open(){
 	nautilus ${1} 
@@ -330,5 +339,3 @@ function listCustomCommands(){
       echo
   fi 
 }
-
-

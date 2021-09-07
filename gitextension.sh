@@ -32,6 +32,7 @@ alias gcs='git checkout staging'
 
 #######################################
 # git cherry-pick
+# example: gcp 7f9ead6b5c3ec
 #######################################
 alias gcp='git cherry-pick'
 
@@ -92,6 +93,7 @@ function git_current_branch(){
 # expected formats :
 # remotes/....
 # /remotes....
+# example: git_branch_name_without_remote remotes/origin/master
 #######################################
 function git_branch_name_without_remote(){
   if  [[ "${1}" == \/remotes* ]] ; then
@@ -106,6 +108,7 @@ function git_branch_name_without_remote(){
 
 #######################################
 # git checkout
+# example: gco develop
 #######################################
 function gco () {
   local arguments lastArgument branch
@@ -151,6 +154,7 @@ function git_merge_branchs() {
 
 #######################################
 # pull and merge a branch into another branch, updating remotes
+# example: gm2b feature-1 master
 #######################################
 function gm2b(){
   if [ -z $2 ] || [ "$1" = "--help" ]
@@ -184,6 +188,7 @@ function gm2b(){
 
 #######################################
 # pull branch specified and merge to master
+# example: gmm feature-1
 #######################################
 function gmm (){
   if [ "$1" = "-help" ]
@@ -224,6 +229,7 @@ function gmm (){
 
 #######################################
 # pull branch specified and merge to develop
+# example: gmd feature-1
 #######################################
 function gmd (){
   if [ "$1" = "-help" ]
@@ -304,6 +310,7 @@ function gx() {
 
 #######################################
 # transfer whole repo to new repo, from two remote sources
+# example: gitMoveToNewRepo git@bitbucket.org:test/myoldrepo.git git@bitbucket.org:test/myrepo.git
 #######################################
 function gitMoveToNewRepo(){
   if [ -z $2 ] || [ "$1" = "--help" ]
@@ -324,13 +331,14 @@ function gitMoveToNewRepo(){
 
 #######################################
 # checkout a new git branch with a name, which is sanitized here
+# example: gcob feature-1
 #######################################
 function gcob(){
  if [[ -z $1 ]] || [[ "$1" = "--help" ]]
   then
     echo "checkout a new git branch with a name, which is sanitized here"
-    echo "gnb <<<branch name>>>"
-    echo "e.g. gcob"
+    echo "gcob <<<branch name>>>"
+    echo "e.g. gcob feature-1"
   else
     local string="$@" # all argruments
     string="${string## }" # trim start
